@@ -15,6 +15,8 @@
  */
 package com.sjsu.rollbits.datasync.server.resources;
 
+import routing.Pipe;
+
 /**
  * template for route handlers
  * 
@@ -38,5 +40,5 @@ public interface RouteResource {
 	 *            the string representation of the request
 	 * @return The string representation of the response
 	 */
-	String process(String body);
+	String process(Pipe.Route msg);
 }

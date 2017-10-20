@@ -24,7 +24,8 @@ import java.util.HashMap;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.sjsu.rollbits.datasync.container.RoutingConf;
+
+import gash.router.container.RoutingConf;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
@@ -110,7 +111,9 @@ public class MessageServer {
 
 	/**
 	 * initialize netty communication
-	 *
+	 * 
+	 * @param port
+	 *            The port to listen to
 	 */
 	private static class StartCommunication implements Runnable {
 		RoutingConf conf;
@@ -138,6 +141,7 @@ public class MessageServer {
 
 				boolean compressComm = false;
 				b.childHandler(new ServerInit(conf, compressComm));
+				b.childOption(ChannelOption.SO_KEEPALIVE, true);
 
 				// Start the server.
 				logger.info("Starting server, listening on port = " + conf.getPort());

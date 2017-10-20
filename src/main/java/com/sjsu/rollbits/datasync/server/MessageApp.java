@@ -27,12 +27,12 @@ public class MessageApp {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		if (args.length == 0) {
-			System.out.println("usage: server <config file>");
-			System.exit(1);
-		}
+//		if (args.length == 0) {
+//			System.out.println("usage: server <config file>");
+//			System.exit(1);
+//		}
 
-		File cf = new File(args[0]);
+		File cf = new File("/Users/rashmisharma/Documents/SJSU/FALL_2017/275-Enterprise_Distributed/netty-pipe2/resources/routing.conf");
 		try {
 			MessageServer svr = new MessageServer(cf);
 			svr.startServer();

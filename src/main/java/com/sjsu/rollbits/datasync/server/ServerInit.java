@@ -1,6 +1,6 @@
 package com.sjsu.rollbits.datasync.server;
 
-import com.sjsu.rollbits.datasync.container.RoutingConf;
+import gash.router.container.RoutingConf;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;

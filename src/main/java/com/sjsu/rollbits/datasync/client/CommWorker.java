@@ -3,8 +3,6 @@ package com.sjsu.rollbits.datasync.client;
 import io.netty.channel.Channel;
 import routing.Pipe.Route;
 
-import gash.router.app.DemoApp;
-
 /**
  * queues outgoing messages - this provides surge protection if the client
  * creates large numbers of messages.
@@ -25,33 +23,12 @@ public class CommWorker extends Thread {
 
 	@Override
 	public void run() {
-
-		boolean tryc=false;
 		System.out.println("--> starting worker thread");
 		System.out.flush();
-		Channel ch=null;
-		try {
-			 ch = conn.connect();
 
-		}catch(Exception e){
-tryc=true;
-		}
-
+		Channel ch = conn.connect();
 		if (ch == null || !ch.isOpen() || !ch.isActive()) {
 			CommConnection.logger.error("connection missing, no outbound communication");
-			for(ServerDetail d: DemoApp.sv) {
-
-				try {
-					CommConnection.initConnection(d.host, d.port);
-					ch=conn.connect();
-					break;
-				}catch(Exception e){
-					System.out.println("Connection faield yto"+d.host);
-					continue;
-				}
-			}
-
-
 			return;
 		}
 
@@ -71,30 +48,6 @@ tryc=true;
 					System.out.flush();
 				} else {
 					System.out.println("--> channel not writable- tossing out msg!");
-
-					for(ServerDetail d: DemoApp.sv) {
-
-						try {
-							CommConnection.initConnection(d.host, d.port);
-							ch=conn.connect();
-
-						System.out.println("sending message to "+d.host);
-							if (ch.isWritable()) {
-								if (!conn.write(msg)) {
-									conn.outbound.putFirst(msg);
-								}
-							}
-
-
-							break;
-						}catch(Exception e){
-							System.out.println("Connection faield yto    "+d.host);
-							continue;
-						}
-					}
-
-					System.out.flush();
-
 
 					// conn.outbound.putFirst(msg);
 				}

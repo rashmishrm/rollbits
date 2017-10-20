@@ -17,6 +17,7 @@ package com.sjsu.rollbits.datasync.server.resources;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import routing.Pipe;
 
 /**
  * responds to request for pinging the service
@@ -27,13 +28,16 @@ import org.slf4j.LoggerFactory;
 public class PingResource implements RouteResource {
 	protected static Logger logger = LoggerFactory.getLogger("ping");
 
+	@Override
 	public String getPath() {
 		return "/ping";
 	}
 
-	public String process(String body) {
-		logger.info(body);
+	@Override
+	public String process(Pipe.Route body) {
+		logger.info(body.getPayload());
 		return "success";
 	}
+
 
 }

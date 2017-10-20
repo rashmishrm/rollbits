@@ -1,0 +1,10 @@
+
+option optimize_for = SPEED;
+option java_package = "routing";
+
+message Route {
+    // a node should not have a value though this is not enforced
+    required int64 id = 1;
+    required string path = 2;
+    optional string payload = 3;
+}

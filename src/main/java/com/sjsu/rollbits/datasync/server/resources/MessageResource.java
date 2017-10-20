@@ -17,6 +17,7 @@ package com.sjsu.rollbits.datasync.server.resources;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import routing.Pipe;
 
 /**
  * processes requests of message passing - demonstration
@@ -27,11 +28,14 @@ import org.slf4j.LoggerFactory;
 public class MessageResource implements RouteResource {
 	protected static Logger logger = LoggerFactory.getLogger("message");
 
+	@Override
 	public String getPath() {
 		return "/message";
 	}
 
-	public String process(String body) {
+	@Override
+	public String process(Pipe.Route msg) {
+		String body=msg.getPayload();
 		if (body == null || body.trim().length() == 0)
 			throw new RuntimeException("Missing/Null data");
 

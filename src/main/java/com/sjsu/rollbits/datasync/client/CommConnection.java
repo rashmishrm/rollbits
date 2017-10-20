@@ -63,14 +63,14 @@ public class CommConnection {
 	 * @param host
 	 * @param port
 	 */
-	protected CommConnection(String host, int port) throws Exception{
+	protected CommConnection(String host, int port) {
 		this.host = host;
 		this.port = port;
 
 		init();
 	}
 
-	public static CommConnection initConnection(String host, int port) throws Exception{
+	public static CommConnection initConnection(String host, int port) {
 		instance.compareAndSet(null, new CommConnection(host, port));
 		return instance.get();
 	}
@@ -90,15 +90,7 @@ public class CommConnection {
 		group.shutdownGracefully();
 	}
 
-	/**
-	 * enqueue a message to write - note this is asynchronous. This allows us to
-	 * inject behavior, routing, and optimization
-	 * 
-	 * @param req
-	 *            The request
-	 * @exception An
-	 *                exception is raised if the message cannot be enqueued.
-	 */
+
 	public void enqueue(Route req) throws Exception {
 		// enqueue message
 		outbound.put(req);
@@ -114,7 +106,7 @@ public class CommConnection {
 	 * @param msg
 	 * @return
 	 */
-	public boolean write(Route msg) throws Exception{
+	public boolean write(Route msg) {
 		if (msg == null)
 			return false;
 		else if (channel == null)
@@ -136,22 +128,22 @@ public class CommConnection {
 	 * 
 	 * @param listener
 	 */
-	public void addListener(CommListener listener) throws Exception{
+	public void addListener(CommListener listener) {
 		CommHandler handler = connect().pipeline().get(CommHandler.class);
 		if (handler != null)
 			handler.addListener(listener);
 	}
 
-	private void init() throws Exception{
-
+	private void init() {
 		System.out.println("--> initializing connection to " + host + ":" + port);
 
 		// the queue to support client-side surging
 		outbound = new LinkedBlockingDeque<Route>();
 
 		group = new NioEventLoopGroup();
+		try {
 
-			ServerInit si = new ServerInit(null, false);
+			 CommInit si = new CommInit( false);
 			Bootstrap b = new Bootstrap();
 			b.group(group).channel(NioSocketChannel.class).handler(si);
 			b.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
@@ -169,7 +161,10 @@ public class CommConnection {
 			System.out.println(channel.channel().localAddress() + " -> open: " + channel.channel().isOpen()
 					+ ", write: " + channel.channel().isWritable() + ", reg: " + channel.channel().isRegistered());
 
-
+		} catch (Throwable ex) {
+			logger.error("failed to initialize the client connection", ex);
+			ex.printStackTrace();
+		}
 
 		// start outbound message processor
 		worker = new CommWorker(this);
@@ -182,7 +177,7 @@ public class CommConnection {
 	 * 
 	 * @return
 	 */
-	protected Channel connect() throws Exception{
+	protected Channel connect() {
 		// Start the connection attempt.
 		if (channel == null) {
 			init();
@@ -190,10 +185,8 @@ public class CommConnection {
 
 		if (channel != null && channel.isSuccess() && channel.channel().isWritable())
 			return channel.channel();
-		else {
-			System.out.println("here in error why???? "+channel + channel.isSuccess() + channel.channel().isWritable());
+		else
 			throw new RuntimeException("Not able to establish connection to server");
-		}
 	}
 
 	/**

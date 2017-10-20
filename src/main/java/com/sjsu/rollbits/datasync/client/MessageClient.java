@@ -15,8 +15,8 @@
  */
 package com.sjsu.rollbits.datasync.client;
 
+import routing.Pipe;
 import routing.Pipe.Route;
-import java.util.List;
 
 /**
  * front-end (proxy) to our service - functional-based
@@ -28,33 +28,16 @@ public class MessageClient {
 	// track requests
 	private long curID = 0;
 
-	public MessageClient(List<ServerDetail> list) {
-		init(list);
+	public MessageClient(String host, int port) {
+		init(host, port);
 	}
 
-	private void init(List<ServerDetail> list) {
-
-	for(ServerDetail d: list) {
-
-		try {
-			CommConnection.initConnection(d.host, d.port);
-			break;
-		}catch(Exception e){
-			System.out.println("Connection faield yto"+d.host);
-			continue;
-		}
-	}
-
-
-
+	private void init(String host, int port) {
+		CommConnection.initConnection(host, port);
 	}
 
 	public void addListener(CommListener listener) {
-		try {
-			CommConnection.getInstance().addListener(listener);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+		CommConnection.getInstance().addListener(listener);
 	}
 
 	public void ping() {
@@ -82,12 +65,36 @@ public class MessageClient {
 		rb.setPath("/message");
 		rb.setPayload(msg);
 
+
+
 		try {
 			CommConnection.getInstance().enqueue(rb.build());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+
+	public void addUser(String name, String email) {
+		// construct the message to send
+		Route.Builder rb = Route.newBuilder();
+		rb.setId(nextId());
+		rb.setPath("/user");
+		rb.setAction(Route.actionType.PUT);
+		Pipe.User.Builder ub=Pipe.User.newBuilder();
+		ub.setEmail(email);
+		ub.setUname(name);
+
+		rb.setUser(ub);
+
+
+
+		try {
+			CommConnection.getInstance().enqueue(rb.build());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 
 	public void release() {
 		CommConnection.getInstance().release();
