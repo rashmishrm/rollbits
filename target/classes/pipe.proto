@@ -1,0 +1,39 @@
+syntax = "proto2";
+option optimize_for = SPEED;
+option java_package = "routing";
+
+message Route {
+    // a node should not have a value though this is not enforced
+    required int64 id = 1;
+    required string path = 2;
+     enum actionType{
+    PUT=0;
+    POST=1;
+    DELETE=2;
+    GET=3;
+    }
+    required actionType action =3 [default =GET];
+    optional string payload = 4;
+    optional User user = 5;
+    optional Message message = 6;
+
+}
+
+message User {
+     // a node should not have a value though this is not enforced
+     required string uname=1;
+     required string email=2;
+
+
+
+ }
+
+ message Message {
+     // a node should not have a value though this is not enforced
+     required string fromuname = 1;
+     required string message = 2;
+     optional string touname = 3;
+     optional string togname = 4;
+
+
+ }
