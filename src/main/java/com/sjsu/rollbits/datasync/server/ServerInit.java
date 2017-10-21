@@ -1,6 +1,6 @@
 package com.sjsu.rollbits.datasync.server;
 
-import gash.router.container.RoutingConf;
+import com.sjsu.rollbits.datasync.container.RoutingConf;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -15,6 +15,7 @@ import routing.Pipe.Route;
 public class ServerInit extends ChannelInitializer<SocketChannel> {
 	boolean compress = false;
 	RoutingConf conf;
+
 
 	public ServerInit(RoutingConf conf, boolean enableCompression) {
 		super();

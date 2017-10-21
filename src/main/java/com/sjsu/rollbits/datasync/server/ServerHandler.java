@@ -21,8 +21,8 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gash.router.container.RoutingConf;
-import gash.router.server.resources.RouteResource;
+import com.sjsu.rollbits.datasync.container.RoutingConf;
+import com.sjsu.rollbits.datasync.server.resources.RouteResource;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
