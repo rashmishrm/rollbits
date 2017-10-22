@@ -3,28 +3,41 @@ option optimize_for = SPEED;
 option java_package = "routing";
 
 message Route {
+	enum Path {
+    NETWORK_DISCOVERY=0;
+    NETWORK_DISCOVERY_RESPONSE=1;
+    USER=2;
+    MESSAGE=3;
+    GROUP=4;
+    PING=5;
+    MESSAGE=6;
+}
+
     // a node should not have a value though this is not enforced
     required int64 id = 1;
-    required string path = 2;
-     enum actionType{
+    required Path path = 2;
+     
+    optional string payload = 3;
+    optional NetworkDiscoveryPacket = 4;
+    optional ServerNodeDiscoveryResponse = 5;
+    optional User user = 6;
+    optional Message message = 7;
+
+}
+
+enum actionType {
     PUT=0;
     POST=1;
     DELETE=2;
     GET=3;
-    }
-    required actionType action =3 [default =GET];
-    optional string payload = 4;
-    optional User user = 5;
-    optional Message message = 6;
-
+    
 }
 
 message User {
      // a node should not have a value though this is not enforced
      required string uname=1;
      required string email=2;
-
-
+	 required actionType action =3 [default =GET];
 
  }
 
@@ -32,8 +45,29 @@ message User {
      // a node should not have a value though this is not enforced
      required string fromuname = 1;
      required string message = 2;
-     optional string touname = 3;
-     optional string togname = 4;
+     optional string touname = 3; //required only if message is for a single user, else not required.
+     optional string togname = 4; //required only if message is for a group and NOT for a single user, else not required. 
+	 required actionType action =5 [default =GET];
 
-
+ }
+ 
+ message NetworkDiscoveryPacket{
+ 	
+ 	enum Sender{
+    SERVER_NODE=0;
+    END_USER_CLIENT=1;
+    }
+    
+    optional string group = 1; //If sender is a server node, then this field can contain its group id. If sender is end user client, then this field is not required.
+    required string nodeid; //node id of the sender
+    required Sender sender =2 [default = SERVER_NODE]; 
+ 
+ }
+ 
+ message ServerNodeDiscoveryResponse{
+ 	
+    required string group = 1;
+    required string ip = 2;
+ 	required string nodeid = 3;
+ 	
  }
