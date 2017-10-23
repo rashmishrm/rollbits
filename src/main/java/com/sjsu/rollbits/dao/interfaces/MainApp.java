@@ -25,7 +25,7 @@ public class App {
         int id1 = user1.getId();
 
         User another = Service.findById(id1);
-        System.out.println("Book found with id " + id1 + " is =>" + another.toString());
+        System.out.println("User found with id " + id1 + " is =>" + another.toString());
 
 
         String id3 = user3.getId();
@@ -34,7 +34,7 @@ public class App {
 
 
         List<User> users2 = Service.findAll();
-        System.out.println("Books found are :");
+        System.out.println("Users list :");
         for (User user : users2) {
             System.out.println("-" + user.toString());
         }
