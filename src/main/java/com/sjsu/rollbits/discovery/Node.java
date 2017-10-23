@@ -1,4 +1,4 @@
-package main.java.com.sjsu.rollbits.discovery;
+package com.sjsu.rollbits.discovery;
 
 public class Node {
   

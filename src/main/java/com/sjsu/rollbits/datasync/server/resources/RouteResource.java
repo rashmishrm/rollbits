@@ -30,7 +30,7 @@ public interface RouteResource {
 	 * 
 	 * @return
 	 */
-	String getPath();
+	Pipe.Route.Path getPath();
 
 	/**
 	 * processing of a request. Requests are delegated to this method by the

@@ -1,4 +1,4 @@
-package main.java.com.sjsu.rollbits.discovery;
+package com.sjsu.rollbits.discovery;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

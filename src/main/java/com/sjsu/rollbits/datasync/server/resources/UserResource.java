@@ -8,15 +8,15 @@ public class UserResource  implements RouteResource {
     protected static Logger logger = LoggerFactory.getLogger("user");
 
     @Override
-    public String getPath() {
-        return "/user";
+    public Pipe.Route.Path getPath() {
+        return Pipe.Route.Path.USER;
     }
 
     @Override
     public String process(Pipe.Route msg) {
 
 
-        routing.Pipe.Route.actionType option= msg.getAction();
+        Pipe.actionType option= msg.getUser().getAction();
 
         switch(option){
             case GET:
