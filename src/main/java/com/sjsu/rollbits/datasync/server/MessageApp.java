@@ -32,7 +32,7 @@ public class MessageApp {
 //			System.exit(1);
 //		}
 
-		File cf = new File("/Users/rashmisharma/Documents/SJSU/FALL_2017/275-Enterprise_Distributed/netty-pipe2/resources/routing.conf");
+		File cf = new File("/Users/nishantrathi/CMPE-275/project/rollbits/src/main/resources/routing.conf");
 		try {
 			MessageServer svr = new MessageServer(cf);
 			svr.startServer();

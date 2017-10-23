@@ -44,7 +44,7 @@ public class MessageClient {
 		// construct the message to send
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(nextId());
-		rb.setPath("/ping");
+		rb.setPath(Route.Path.PING);
 		rb.setPayload("ping");
 
 		try {
@@ -62,7 +62,7 @@ public class MessageClient {
 		// construct the message to send
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(nextId());
-		rb.setPath("/message");
+		rb.setPath(Route.Path.MSG);
 		rb.setPayload(msg);
 
 
@@ -78,12 +78,12 @@ public class MessageClient {
 		// construct the message to send
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(nextId());
-		rb.setPath("/user");
-		rb.setAction(Route.actionType.PUT);
+		rb.setPath(Route.Path.USER);
+		//rb.setAction(routing.Pipe.actionType.PUT);
 		Pipe.User.Builder ub=Pipe.User.newBuilder();
 		ub.setEmail(email);
 		ub.setUname(name);
-
+		ub.setAction(routing.Pipe.actionType.PUT);
 		rb.setUser(ub);
 
 

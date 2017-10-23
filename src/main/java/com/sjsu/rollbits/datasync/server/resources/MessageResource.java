@@ -29,8 +29,8 @@ public class MessageResource implements RouteResource {
 	protected static Logger logger = LoggerFactory.getLogger("message");
 
 	@Override
-	public String getPath() {
-		return "/message";
+	public Pipe.Route.Path getPath() {
+		return Pipe.Route.Path.MSG;
 	}
 
 	@Override

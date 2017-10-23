@@ -29,8 +29,8 @@ public class PingResource implements RouteResource {
 	protected static Logger logger = LoggerFactory.getLogger("ping");
 
 	@Override
-	public String getPath() {
-		return "/ping";
+	public Pipe.Route.Path getPath() {
+		return Pipe.Route.Path.PING;
 	}
 
 	@Override
