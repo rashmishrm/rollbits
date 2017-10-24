@@ -10,37 +10,37 @@ public class Service {
     public Service() {
         userDao = new UserDao();
     }
-    public void persist(User entity) {
+    public static void persist(User entity) {
         userDao.openCurrentSessionwithTransaction();
         userDao.persist(entity);
         userDao.closeCurrentSessionwithTransaction();
     }
-    public void update(User entity) {
+    public static void update(User entity) {
         userDao.openCurrentSessionwithTransaction();
         userDao.update(entity);
         userDao.closeCurrentSessionwithTransaction();
     }
 
-    public User findById(int id) {
+    public static User findById(int id) {
         userDao.openCurrentSession();
         User user = userDao.findById(id);
         userDao.closeCurrentSession();
         return user;
     }
-    public void delete(int id) {
+    public static void delete(int id) {
         userDao.openCurrentSessionwithTransaction();
         User User = userDao.findById(id);
         userDao.delete(User);
         userDao.closeCurrentSessionwithTransaction();
     }
 
-    public List<User> findAll() {
+    public static List<User> findAll() {
         userDao.openCurrentSession();
         List<User> Users = userDao.findAll();
         userDao.closeCurrentSession();
         return Users;
     }
-    public void deleteAll() {
+    public static void deleteAll() {
         userDao.openCurrentSessionwithTransaction();
         userDao.deleteAll();
         userDao.closeCurrentSessionwithTransaction();

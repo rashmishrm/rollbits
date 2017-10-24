@@ -1,8 +1,11 @@
 package com.sjsu.rollbits.dao.interfaces;
-import java.util.List;
 import com.sjsu.rollbits.dao.interfaces.model.User;
 import com.sjsu.rollbits.dao.interfaces.service.Service;
-public class App {
+
+import java.util.List;
+
+
+public class MainApp {
     public static void main(String[] args) {
         Service service = new Service();
         User user1 = new User(1, "abc", "abc@gmail.com");
@@ -28,7 +31,7 @@ public class App {
         System.out.println("User found with id " + id1 + " is =>" + another.toString());
 
 
-        String id3 = user3.getId();
+        int id3 = user3.getId();
         Service.delete(id3);
         System.out.println("Deleted user with id " + id3 + ".");
 

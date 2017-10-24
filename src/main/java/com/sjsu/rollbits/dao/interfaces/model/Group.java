@@ -1,4 +1,4 @@
-package com.sjsu.rollbits.dao.interfaces;
+package com.sjsu.rollbits.dao.interfaces.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -25,7 +25,7 @@ public class Group {
         this.id = id;
     }
 
-    public int getName() {
+    public String getName() {
         return name;
     }
 

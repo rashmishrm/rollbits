@@ -1,4 +1,4 @@
-package com.sjsu.rollbits.dao.interfaces;
+package com.sjsu.rollbits.dao.interfaces.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +13,7 @@ public class Messagetype {
     private int id;
     @Column(name = "type")
     private int type;
+
     public Messagetype(int id, int type) {
         this.id=id;
         this.type=type;

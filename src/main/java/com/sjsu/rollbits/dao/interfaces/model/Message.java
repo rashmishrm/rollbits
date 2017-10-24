@@ -1,8 +1,10 @@
-package com.sjsu.rollbits.dao.interfaces;
+package com.sjsu.rollbits.dao.interfaces.model;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 @Entity
 @Table(name = "Message")

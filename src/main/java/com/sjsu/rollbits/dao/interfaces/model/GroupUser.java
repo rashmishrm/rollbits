@@ -1,4 +1,4 @@
-package com.sjsu.rollbits.dao.interfaces;
+package com.sjsu.rollbits.dao.interfaces.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,6 +12,8 @@ public class GroupUser {
     private int groupid;
     @Column(name = "userid")
     private int userid;
+
+
     public GroupUser(int groupid, int userid) {
         this.groupid = groupid;
         this.userid=userid;

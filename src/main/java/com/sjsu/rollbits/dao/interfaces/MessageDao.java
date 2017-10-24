@@ -1,15 +1,17 @@
 package com.sjsu.rollbits.dao.interfaces;
 
-import java.util.List;
+import com.sjsu.rollbits.dao.interfaces.model.Message;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
+import java.util.List;
 
 
-public class MessageDao implements DaoInterface<Message, int> {
+
+public class MessageDao implements DaoInterface<Message, Integer> {
     private Session currentSession;
     private Transaction currentTransaction;
     public MessageDao() {
@@ -60,7 +62,9 @@ public class MessageDao implements DaoInterface<Message, int> {
         getCurrentSession().update(entity);
     }
 
-    public Message findById(int id) {
+
+
+    public Message findById(Integer id) {
         Message message = (Message) getCurrentSession().get(Message.class, id);
         return message;
     }
@@ -77,7 +81,7 @@ public class MessageDao implements DaoInterface<Message, int> {
 
     public void deleteAll() {
         List<Message> entityList = findAll();
-        for (Meesage entity : entityList) {
+        for (Message entity : entityList) {
             delete(entity);
         }
 
