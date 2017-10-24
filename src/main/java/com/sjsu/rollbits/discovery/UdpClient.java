@@ -1,4 +1,5 @@
-package main.java;
+package com.sjsu.rollbits.discovery;
+
 import java.io.IOException;
 import java.net.*;
 
