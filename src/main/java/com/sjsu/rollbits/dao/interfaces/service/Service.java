@@ -1,4 +1,8 @@
 package com.sjsu.rollbits.dao.interfaces.service;
+
+import com.sjsu.rollbits.dao.interfaces.model.User;
+import com.sjsu.rollbits.dao.interfaces.UserDao;
+
 import java.util.List;
 public class Service {
 
