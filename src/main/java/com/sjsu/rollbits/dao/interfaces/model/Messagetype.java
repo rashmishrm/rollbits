@@ -12,20 +12,21 @@ public class Messagetype {
     @Column(name = "id")
     private int id;
     @Column(name = "type")
-    private int userid;
-    public GroupUser(int groupid, int userid) {
-        this.groupid = groupid;
-        this.userid-userid;
+    private int type;
+    public Messagetype(int id, int type) {
+        this.id=id;
+        this.type=type;
     }
 
-    public int getGroupid() {
-        return groupid;
+    public int getId() {
+        return id;
     }
 
 
-    public int getUserid() {
-        return userid;
+    public int getType() {
+        return type;
     }
+    
 
 
 
