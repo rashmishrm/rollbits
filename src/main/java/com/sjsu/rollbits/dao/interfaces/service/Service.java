@@ -45,7 +45,7 @@ public class Service {
         userDao.deleteAll();
         userDao.closeCurrentSessionwithTransaction();
     }
-    public userDao UserDao() {
+    public UserDao UserDao() {
         return userDao;
 
     }
