@@ -14,7 +14,7 @@ public class GroupUser {
     private int userid;
     public GroupUser(int groupid, int userid) {
         this.groupid = groupid;
-        this.userid-userid;
+        this.userid=userid;
     }
 
     public int getGroupid() {
