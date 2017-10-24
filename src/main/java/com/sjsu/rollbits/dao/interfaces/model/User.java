@@ -1,4 +1,4 @@
-package com.sjsu.rollbits.dao.interfaces;
+package com.sjsu.rollbits.dao.interfaces.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +10,7 @@ import javax.persistence.Table;
 public class User {
     @Id
     @Column(name = "id")
-    private String id;
+    private int id;
     @Column(name = "name")
     private String name;
      @Column(name= "email")
@@ -19,13 +19,13 @@ public class User {
 
     public User(int id, String name, String email) {
         this.id = id;
-        this.title = title;
+        this.name = name;
         this.email = email;
     }
-    public String getId() {
+    public int getId() {
         return id;
     }
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
