@@ -17,8 +17,8 @@ public class UdpApp {
 
         File cf = new File("/Users/rashmisharma/Documents/GitHub/rollbits/src/main/resources/routing.conf");
         try {
-            UdpServer svr = new UdpServer(cf);
-            svr.startServer();
+          //  UdpServer svr = new UdpServer(cf);
+         //   svr.startServer();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

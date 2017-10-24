@@ -61,36 +61,7 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<Route> {
 
 		System.out.println("---> " + msg.getId() + ": " + msg.getPath() + ", " + msg.getPayload());
 
-		try {
-			String clazz = routing.get(msg.getPath().toString().toLowerCase());
-			if (clazz != null) {
-				RouteResource rsc = (RouteResource) Beans.instantiate(RouteResource.class.getClassLoader(), clazz);
-				try {
-					String reply = rsc.process(msg);
-					System.out.println("---> reply: " + reply);
-
-
-
-					if (reply != null) {
-						Route.Builder rb = Route.newBuilder(msg);
-						rb.setPayload(reply);
-						channel.writeAndFlush(rb.build());
-					}
-				} catch (Exception e) {
-					// TODO add logging
-					Route.Builder rb = Route.newBuilder(msg);
-					rb.setPayload("Error: " + e.getMessage());
-					channel.write(rb.build());
-				}
-			} else {
-				// TODO add logging
-				System.out.println("ERROR: unknown path - " + msg.getPath());
-			}
-		} catch (Exception ex) {
-			// TODO add logging
-			System.out.println("ERROR: processing request - " + ex.getMessage());
-		}
-
+		
 		System.out.flush();
 	}
 

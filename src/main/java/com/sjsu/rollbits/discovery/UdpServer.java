@@ -1,3 +1,5 @@
+package com.sjsu.rollbits.discovery;
+
 
 //import akka.actor.ActorRef;
 import io.netty.bootstrap.ServerBootstrap;
@@ -10,6 +12,11 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
+import routing.Pipe.Route;
 import io.netty.channel.ChannelPipeline;
 
 import java.net.InetAddress;
@@ -26,7 +33,6 @@ import java.util.Map;
 public class UdpServer {
 
     private int port;
-    ActorRef  serverActor = null;
     
 
     public UdpServer(int port) {
@@ -43,8 +49,17 @@ public class UdpServer {
                 @Override
                 public void initChannel(final NioDatagramChannel ch) throws Exception {
 
-                    ChannelPipeline p = ch.pipeline();
-                    p.addLast(new IncommingPacketHandler(serverActor));
+                    ChannelPipeline pipeline = ch.pipeline();
+                    pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(67108864, 0, 4, 0, 4));
+
+            		// decoder must be first
+            		pipeline.addLast("protobufDecoder", new ProtobufDecoder(Route.getDefaultInstance()));
+            		pipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
+            		pipeline.addLast("protobufEncoder", new ProtobufEncoder());
+
+
+            		// our server processor (new instance for each connection)
+            		pipeline.addLast("handler", new UdpServerHandler(null));
                 }
             });
 
@@ -60,7 +75,7 @@ public class UdpServer {
     }
 
     public static void main(String[] args) throws Exception {
-        int port =9956;
+        int port =8888;
         new UdpServer(port).run();
     }
 }
