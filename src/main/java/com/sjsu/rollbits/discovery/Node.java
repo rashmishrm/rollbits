@@ -1,10 +1,13 @@
 package com.sjsu.rollbits.discovery;
 
+
+import java.net.InetAddress;
+
 public class Node {
-  
-	private String nodeId;
+
+    private InetAddress nodeId;
 	
-	public Node(String id){
-		nodeId = id;
-	}
+	public Node(InetAddress id){
+	  	nodeId = id;
+	} 
 }
