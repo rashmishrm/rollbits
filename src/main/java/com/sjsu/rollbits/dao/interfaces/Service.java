@@ -24,7 +24,7 @@ public class Service {
         UserDao.closeCurrentSession();
         return user;
     }
-    public void delete(String id) {
+    public void delete(int id) {
         UserDao.openCurrentSessionwithTransaction();
         User User = UserDao.findById(id);
         UserDao.delete(User);

@@ -1,12 +1,12 @@
 package com.sjsu.rollbits.dao.interfaces;
 
-import java.util.List;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+
+import java.util.List;
 
 
 
@@ -61,7 +61,7 @@ public class UserDao {
         getCurrentSession().update(entity);
     }
 
-    public User findById(String id) {
+    public User findById(int id) {
         User user = (User) getCurrentSession().get(User.class, id);
         return user;
     }

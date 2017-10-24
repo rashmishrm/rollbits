@@ -1,4 +1,4 @@
-package com.sjsu.rollbits.dao.interfaces;
+package com.sjsu.rollbits.dao.interfaces.service;
 import java.util.List;
 public class Service {
 
@@ -23,7 +23,7 @@ public class Service {
         userDao.closeCurrentSession();
         return user;
     }
-    public void delete(String id) {
+    public void delete(int id) {
         userDao.openCurrentSessionwithTransaction();
         User User = userDao.findById(id);
         userDao.delete(User);
