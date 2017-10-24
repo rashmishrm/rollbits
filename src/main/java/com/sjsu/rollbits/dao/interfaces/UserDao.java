@@ -1,4 +1,7 @@
+package com.sjsu.rollbits.dao.interfaces;
+
 import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -7,7 +10,7 @@ import org.hibernate.cfg.Configuration;
 
 
 
-public class UserDao implements DaoInterface<User, String> {
+public class UserDao {
     private Session currentSession;
     private Transaction currentTransaction;
     public UserDao() {
