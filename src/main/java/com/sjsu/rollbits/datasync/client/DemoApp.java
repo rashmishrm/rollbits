@@ -15,9 +15,7 @@
  */
 package com.sjsu.rollbits.datasync.client;
 
-import gash.router.client.CommConnection;
-import gash.router.client.CommListener;
-import gash.router.client.MessageClient;
+
 import routing.Pipe.Route;
 
 public class DemoApp implements CommListener {
