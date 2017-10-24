@@ -31,6 +31,15 @@ public class UserResource  implements RouteResource {
             case PUT:
                 Pipe.User user= msg.getUser();
                 System.out.println(user.getUname());
+                // save to database
+
+
+                //send request for sync to other intra cluster nodes
+
+                //wait for result
+                //send response back
+
+                //Does it have to be blocking?
 
                 break;
 

@@ -12,7 +12,7 @@ import org.hibernate.cfg.Configuration;
 public class MessageDao implements DaoInterface<Message, int> {
     private Session currentSession;
     private Transaction currentTransaction;
-    public MeesageDao() {
+    public MessageDao() {
     }
     public Session openCurrentSession() {
         currentSession = getSessionFactory().openSession();

@@ -7,7 +7,7 @@ public class App {
         Service service = new Service();
         User user1 = new User(1, "abc", "abc@gmail.com");
         User user2 = new User(2, "xyz", "xyz@yahoo.com");
-        User user3 = new User(3, "pqr", "pqr@hotmail.com")
+        User user3 = new User(3, "pqr", "pqr@hotmail.com");
         Service.persist(user1);
         Service.persist(user2);
         Service.persist(user3);
