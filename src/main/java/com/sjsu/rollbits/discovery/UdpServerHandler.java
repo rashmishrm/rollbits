@@ -11,6 +11,8 @@ import io.netty.util.CharsetUtil;
 
 import java.net.Inet4Address;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import io.netty.util.internal.SocketUtils;
@@ -20,15 +22,25 @@ import routing.Pipe.ServerNodeDiscoveryResponse;
 public class UdpServerHandler extends SimpleChannelInboundHandler<NetworkDiscoveryPacket> {
 
     private static final Random random = new Random();
-
+    Map<String, Node> mp = new HashMap<>();
+	Map<String, Map<String, Node>> mpMaps = new HashMap<String, Map<String, Node>>();
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, NetworkDiscoveryPacket request) throws Exception {
         System.err.println("In channel read");
 
-        System.err.println(request.getGroup());
-        System.err.println(request.getNodeid());
-
+       // System.err.println(request.getGroup());
+       // System.err.println(request.getNodeid());
+        mp.put(request.getNodeid(), new Node(request.getNodeid()));
+        mpMaps.put(request.getGroup(), mp);
+        
+        for(String key: mpMaps.keySet()){
+        	System.out.println("Group ID: "+key);
+        }
+        
+        for(String key: mp.keySet()){
+        	System.out.println("Node ID: "+key);
+        }
 //
         System.err.println(ctx.channel().attr(UdpServer.attkey).get());
         String clientIpPort = ctx.channel().attr(UdpServer.attkey).get();
