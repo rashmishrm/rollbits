@@ -16,6 +16,7 @@
 package com.sjsu.rollbits.datasync.client;
 
 
+import routing.Pipe;
 import routing.Pipe.Route;
 
 public class DemoApp implements CommListener {
@@ -70,7 +71,7 @@ public class DemoApp implements CommListener {
 
 	@Override
 	public void onMessage(Route msg) {
-		System.out.println("---> " + msg);
+		System.out.println("---here1---> " + msg);
 	}
 
 	/**
@@ -81,7 +82,7 @@ public class DemoApp implements CommListener {
 	public static void main(String[] args) {
 		String host = "127.0.0.1";
 		int port = 4567;
-
+		System.out.println(Pipe.Route.Path.USER);
 		try {
 			MessageClient mc = new MessageClient(host, port);
 			//DemoApp da = new DemoApp(mc);

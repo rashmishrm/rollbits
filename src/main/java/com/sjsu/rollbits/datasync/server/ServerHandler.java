@@ -54,6 +54,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Route> {
 	 * @param msg
 	 */
 	public void handleMessage(Route msg, Channel channel) {
+		System.out.println("Hello world!");
 		if (msg == null) {
 			// TODO add logging
 			System.out.println("ERROR: Unexpected content - " + msg);
@@ -61,9 +62,9 @@ public class ServerHandler extends SimpleChannelInboundHandler<Route> {
 		}
 
 		System.out.println("---> " + msg.getId() + ": " + msg.getPath() + ", " + msg.getPayload());
-
+		System.out.println("all key set--->"+routing.keySet());
 		try {
-			String clazz = routing.get(msg.getPath().toString().toLowerCase());
+			String clazz = routing.get(msg.getPath().toString());
 			if (clazz != null) {
 				RouteResource rsc = (RouteResource) Beans.instantiate(RouteResource.class.getClassLoader(), clazz);
 				try {
@@ -104,7 +105,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Route> {
 	 */
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, Route msg) throws Exception {
-		System.out.println("------------");
+		System.out.println("------here23------"+msg);
 		handleMessage(msg, ctx.channel());
 	}
 

@@ -11,6 +11,7 @@ message Route {
     GROUP=4;
     PING=5;
     MSG=6;
+    RAFT_MSG =7;
 }
 
     // a node should not have a value though this is not enforced
@@ -30,6 +31,28 @@ enum actionType {
     DELETE=2;
     GET=3;
     
+}
+
+message RaftNode{
+	enum RaftState{
+    Candidate=0;
+    Leader=1;
+    Follower=2;
+    }
+	required string nodeid=1;
+	required RaftState raftState=2;
+}
+
+message RaftMessage{
+	enum RaftMsgType{
+    Append=0;
+    RequestVote=1;
+    VoteResponse=2;
+    Leader=3;
+    }
+	required RaftMsgType type=1;
+	required string senderNodeid=2;
+	
 }
 
 message User {
