@@ -29,6 +29,9 @@ public class BullyTest {
 		if (!bw.isAlive())
 			bw.start();
 
+		
+		
+		
 		for (int n = 0; n < 10; n++) {
 			BullyNode node = new BullyNode(n);
 			b.addNode(node);
