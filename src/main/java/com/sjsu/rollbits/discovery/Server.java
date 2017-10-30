@@ -31,7 +31,7 @@ public class Server implements Runnable {
 	        byte[] recvBuf = new byte[15000];
 	        DatagramPacket packet = new DatagramPacket(recvBuf, recvBuf.length);
 	        socket.receive(packet);
-            mp.put(packet.getAddress().getHostAddress(), new Node(packet.getAddress().getHostAddress()));
+       //     mp.put(packet.getAddress().getHostAddress(), new Node(packet.getAddress().getHostAddress()));
 	        mpMaps.put(new String(packet.getData()), mp);
 	       
 	        //Packet received

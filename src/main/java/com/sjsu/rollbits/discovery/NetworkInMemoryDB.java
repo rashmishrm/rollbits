@@ -27,15 +27,15 @@ public class NetworkInMemoryDB {
 	
 	
 	public static void addNode(NetworkDiscoveryPacket packet){
-		Node node = new Node(packet.getNodeid(), "", packet.getGroup());
-		mp.put(packet.getNodeid(), node);
-		if(mpMaps.containsKey(packet.getGroup())){
-			mpMaps.get(packet.getGroup()).put(packet.getNodeid(),node);
-		} else {
-			Map<String,Node> map = new HashMap<String,Node>();
-			map.put(packet.getNodeid(),node);
-			mpMaps.put(packet.getGroup(), map);
-		}
+//		Node node = new Node(packet.getNodeid(), "", packet.getGroup());
+//		mp.put(packet.getNodeid(), node);
+//		if(mpMaps.containsKey(packet.getGroup())){
+//			mpMaps.get(packet.getGroup()).put(packet.getNodeid(),node);
+//		} else {
+//			Map<String,Node> map = new HashMap<String,Node>();
+//			map.put(packet.getNodeid(),node);
+//			mpMaps.put(packet.getGroup(), map);
+//		}
 		
 	}
 	

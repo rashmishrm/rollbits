@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import routing.Pipe.Route;
 
 import java.beans.Beans;
+import java.net.DatagramPacket;
 import java.util.HashMap;
 
 /**
@@ -35,7 +36,7 @@ import java.util.HashMap;
  * @author gash
  * 
  */
-public class UdpServerHandler extends SimpleChannelInboundHandler<Route> {
+public class UdpServerHandler extends   SimpleChannelInboundHandler<DatagramPacket>  {
 	protected static Logger logger = LoggerFactory.getLogger("connect");
 
 	private HashMap<String, String> routing;
@@ -45,41 +46,8 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<Route> {
 			routing = conf.asHashMap();
 	}
 
-	/**
-	 * override this method to provide processing behavior. This implementation
-	 * mimics the routing we see in annotating classes to support a RESTful-like
-	 * behavior (e.g., jax-rs).
-	 * 
-	 * @param msg
-	 */
-	public void handleMessage(Route msg, Channel channel) {
-		if (msg == null) {
-			// TODO add logging
-			System.out.println("ERROR: Unexpected content - " + msg);
-			return;
-		}
 
-		System.out.println("---> " + msg.getId() + ": " + msg.getPath() + ", " + msg.getPayload());
 
-		
-		System.out.flush();
-	}
-
-	/**
-	 * a message was received from the server. Here we dispatch the message to
-	 * the client's thread pool to minimize the time it takes to process other
-	 * messages.
-	 * 
-	 * @param ctx
-	 *            The channel the message was received from
-	 * @param msg
-	 *            The message
-	 */
-	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, Route msg) throws Exception {
-		System.out.println("------------");
-		handleMessage(msg, ctx.channel());
-	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
@@ -87,4 +55,8 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<Route> {
 		ctx.close();
 	}
 
+	@Override
+	protected void channelRead0(ChannelHandlerContext channelHandlerContext, DatagramPacket datagramPacket) throws Exception {
+
+	}
 }

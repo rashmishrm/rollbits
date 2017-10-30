@@ -31,6 +31,11 @@ public class IncommingPacketHandler extends  SimpleChannelInboundHandler<Datagra
     }
 
     @Override
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, DatagramPacket datagramPacket) throws Exception {
+
+    }
+
+
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, DatagramPacket packet) throws Exception {
         final InetAddress srcAddr = packet.sender().getAddress();
         final ByteBuf buf = packet.content();

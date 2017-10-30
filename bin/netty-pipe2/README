@@ -1,0 +1,10 @@
+This is an example of a basic client server setup using 
+netty and protobuf for the transport and serialization.
+
+Your task is to get the code to build and run through
+two terminals (a client and a server).
+
+Technologies introduced:
+1. Netty
+2. Protobuf
+3. JAXB
