@@ -1,8 +1,6 @@
-
 *.class
 *.xml
 /target/
 *.class
 *.jar
-*.class
 *.class
