@@ -2753,9 +2753,9 @@ public final class Pipe {
     public enum RaftMsgType
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
-       * <code>Append = 0;</code>
+       * <code>LeaderHeartBeat = 0;</code>
        */
-      Append(0),
+      LeaderHeartBeat(0),
       /**
        * <code>RequestVote = 1;</code>
        */
@@ -2765,15 +2765,15 @@ public final class Pipe {
        */
       VoteResponse(2),
       /**
-       * <code>Leader = 3;</code>
+       * <code>LeaderElectionResult = 3;</code>
        */
-      Leader(3),
+      LeaderElectionResult(3),
       ;
 
       /**
-       * <code>Append = 0;</code>
+       * <code>LeaderHeartBeat = 0;</code>
        */
-      public static final int Append_VALUE = 0;
+      public static final int LeaderHeartBeat_VALUE = 0;
       /**
        * <code>RequestVote = 1;</code>
        */
@@ -2783,9 +2783,9 @@ public final class Pipe {
        */
       public static final int VoteResponse_VALUE = 2;
       /**
-       * <code>Leader = 3;</code>
+       * <code>LeaderElectionResult = 3;</code>
        */
-      public static final int Leader_VALUE = 3;
+      public static final int LeaderElectionResult_VALUE = 3;
 
 
       public final int getNumber() {
@@ -2802,10 +2802,10 @@ public final class Pipe {
 
       public static RaftMsgType forNumber(int value) {
         switch (value) {
-          case 0: return Append;
+          case 0: return LeaderHeartBeat;
           case 1: return RequestVote;
           case 2: return VoteResponse;
-          case 3: return Leader;
+          case 3: return LeaderElectionResult;
           default: return null;
         }
       }
@@ -2869,7 +2869,7 @@ public final class Pipe {
      */
     public routing.Pipe.RaftMessage.RaftMsgType getType() {
       routing.Pipe.RaftMessage.RaftMsgType result = routing.Pipe.RaftMessage.RaftMsgType.valueOf(type_);
-      return result == null ? routing.Pipe.RaftMessage.RaftMsgType.Append : result;
+      return result == null ? routing.Pipe.RaftMessage.RaftMsgType.LeaderHeartBeat : result;
     }
 
     public static final int SENDERNODEID_FIELD_NUMBER = 2;
@@ -3250,7 +3250,7 @@ public final class Pipe {
        */
       public routing.Pipe.RaftMessage.RaftMsgType getType() {
         routing.Pipe.RaftMessage.RaftMsgType result = routing.Pipe.RaftMessage.RaftMsgType.valueOf(type_);
-        return result == null ? routing.Pipe.RaftMessage.RaftMsgType.Append : result;
+        return result == null ? routing.Pipe.RaftMessage.RaftMsgType.LeaderHeartBeat : result;
       }
       /**
        * <code>required .RaftMessage.RaftMsgType type = 1;</code>
@@ -7531,23 +7531,24 @@ public final class Pipe {
       "PING\020\005\022\007\n\003MSG\020\006\022\014\n\010RAFT_MSG\020\007\"x\n\010RaftNod",
       "e\022\016\n\006nodeid\030\001 \002(\t\022&\n\traftState\030\002 \002(\0162\023.R" +
       "aftNode.RaftState\"4\n\tRaftState\022\r\n\tCandid" +
-      "ate\020\000\022\n\n\006Leader\020\001\022\014\n\010Follower\020\002\"\225\001\n\013Raft" +
+      "ate\020\000\022\n\n\006Leader\020\001\022\014\n\010Follower\020\002\"\254\001\n\013Raft" +
       "Message\022&\n\004type\030\001 \002(\0162\030.RaftMessage.Raft" +
-      "MsgType\022\024\n\014senderNodeid\030\002 \002(\t\"H\n\013RaftMsg" +
-      "Type\022\n\n\006Append\020\000\022\017\n\013RequestVote\020\001\022\020\n\014Vot" +
-      "eResponse\020\002\022\n\n\006Leader\020\003\"F\n\004User\022\r\n\005uname" +
-      "\030\001 \002(\t\022\r\n\005email\030\002 \002(\t\022 \n\006action\030\003 \002(\0162\013." +
-      "actionType:\003GET\"q\n\007Message\022\021\n\tfromuname\030" +
-      "\001 \002(\t\022\017\n\007message\030\002 \002(\t\022\017\n\007touname\030\003 \001(\t\022",
-      "\017\n\007togname\030\004 \001(\t\022 \n\006action\030\005 \002(\0162\013.actio" +
-      "nType:\003GET\"\244\001\n\026NetworkDiscoveryPacket\022\r\n" +
-      "\005group\030\001 \001(\t\022\016\n\006nodeid\030\002 \002(\t\022;\n\006sender\030\003" +
-      " \002(\0162\036.NetworkDiscoveryPacket.Sender:\013SE" +
-      "RVER_NODE\".\n\006Sender\022\017\n\013SERVER_NODE\020\000\022\023\n\017" +
-      "END_USER_CLIENT\020\001\"H\n\033ServerNodeDiscovery" +
-      "Response\022\r\n\005group\030\001 \002(\t\022\n\n\002ip\030\002 \002(\t\022\016\n\006n" +
-      "odeid\030\003 \002(\t*4\n\nactionType\022\007\n\003PUT\020\000\022\010\n\004PO" +
-      "ST\020\001\022\n\n\006DELETE\020\002\022\007\n\003GET\020\003B\013\n\007routingH\001"
+      "MsgType\022\024\n\014senderNodeid\030\002 \002(\t\"_\n\013RaftMsg" +
+      "Type\022\023\n\017LeaderHeartBeat\020\000\022\017\n\013RequestVote" +
+      "\020\001\022\020\n\014VoteResponse\020\002\022\030\n\024LeaderElectionRe" +
+      "sult\020\003\"F\n\004User\022\r\n\005uname\030\001 \002(\t\022\r\n\005email\030\002" +
+      " \002(\t\022 \n\006action\030\003 \002(\0162\013.actionType:\003GET\"q" +
+      "\n\007Message\022\021\n\tfromuname\030\001 \002(\t\022\017\n\007message\030",
+      "\002 \002(\t\022\017\n\007touname\030\003 \001(\t\022\017\n\007togname\030\004 \001(\t\022" +
+      " \n\006action\030\005 \002(\0162\013.actionType:\003GET\"\244\001\n\026Ne" +
+      "tworkDiscoveryPacket\022\r\n\005group\030\001 \001(\t\022\016\n\006n" +
+      "odeid\030\002 \002(\t\022;\n\006sender\030\003 \002(\0162\036.NetworkDis" +
+      "coveryPacket.Sender:\013SERVER_NODE\".\n\006Send" +
+      "er\022\017\n\013SERVER_NODE\020\000\022\023\n\017END_USER_CLIENT\020\001" +
+      "\"H\n\033ServerNodeDiscoveryResponse\022\r\n\005group" +
+      "\030\001 \002(\t\022\n\n\002ip\030\002 \002(\t\022\016\n\006nodeid\030\003 \002(\t*4\n\nac" +
+      "tionType\022\007\n\003PUT\020\000\022\010\n\004POST\020\001\022\n\n\006DELETE\020\002\022" +
+      "\007\n\003GET\020\003B\013\n\007routingH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

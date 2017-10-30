@@ -46,10 +46,10 @@ message RaftNode{
 
 message RaftMessage{
 	enum RaftMsgType{
-    Append=0;
+    LeaderHeartBeat=0;
     RequestVote=1;
     VoteResponse=2;
-    Leader=3;
+    LeaderElectionResult=3;
     }
 	required RaftMsgType type=1;
 	required string senderNodeid=2;
