@@ -22,6 +22,7 @@ message Route {
     optional NetworkDiscoveryPacket networkDiscoveryPacket = 4;
     optional ServerNodeDiscoveryResponse serverNodeDiscoveryResponse= 5;
     optional User user = 6;
+    optional RaftMessage raftMessage=7;
 
 }
 

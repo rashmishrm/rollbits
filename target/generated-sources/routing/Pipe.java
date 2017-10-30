@@ -204,6 +204,19 @@ public final class Pipe {
      * <code>optional .User user = 6;</code>
      */
     routing.Pipe.UserOrBuilder getUserOrBuilder();
+
+    /**
+     * <code>optional .RaftMessage raftMessage = 7;</code>
+     */
+    boolean hasRaftMessage();
+    /**
+     * <code>optional .RaftMessage raftMessage = 7;</code>
+     */
+    routing.Pipe.RaftMessage getRaftMessage();
+    /**
+     * <code>optional .RaftMessage raftMessage = 7;</code>
+     */
+    routing.Pipe.RaftMessageOrBuilder getRaftMessageOrBuilder();
   }
   /**
    * Protobuf type {@code Route}
@@ -309,6 +322,19 @@ public final class Pipe {
                 user_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000020;
+              break;
+            }
+            case 58: {
+              routing.Pipe.RaftMessage.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000040) == 0x00000040)) {
+                subBuilder = raftMessage_.toBuilder();
+              }
+              raftMessage_ = input.readMessage(routing.Pipe.RaftMessage.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(raftMessage_);
+                raftMessage_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000040;
               break;
             }
           }
@@ -624,6 +650,27 @@ public final class Pipe {
       return user_ == null ? routing.Pipe.User.getDefaultInstance() : user_;
     }
 
+    public static final int RAFTMESSAGE_FIELD_NUMBER = 7;
+    private routing.Pipe.RaftMessage raftMessage_;
+    /**
+     * <code>optional .RaftMessage raftMessage = 7;</code>
+     */
+    public boolean hasRaftMessage() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional .RaftMessage raftMessage = 7;</code>
+     */
+    public routing.Pipe.RaftMessage getRaftMessage() {
+      return raftMessage_ == null ? routing.Pipe.RaftMessage.getDefaultInstance() : raftMessage_;
+    }
+    /**
+     * <code>optional .RaftMessage raftMessage = 7;</code>
+     */
+    public routing.Pipe.RaftMessageOrBuilder getRaftMessageOrBuilder() {
+      return raftMessage_ == null ? routing.Pipe.RaftMessage.getDefaultInstance() : raftMessage_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -656,6 +703,12 @@ public final class Pipe {
           return false;
         }
       }
+      if (hasRaftMessage()) {
+        if (!getRaftMessage().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -679,6 +732,9 @@ public final class Pipe {
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeMessage(6, getUser());
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeMessage(7, getRaftMessage());
       }
       unknownFields.writeTo(output);
     }
@@ -710,6 +766,10 @@ public final class Pipe {
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(6, getUser());
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(7, getRaftMessage());
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -757,6 +817,11 @@ public final class Pipe {
         result = result && getUser()
             .equals(other.getUser());
       }
+      result = result && (hasRaftMessage() == other.hasRaftMessage());
+      if (hasRaftMessage()) {
+        result = result && getRaftMessage()
+            .equals(other.getRaftMessage());
+      }
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -792,6 +857,10 @@ public final class Pipe {
       if (hasUser()) {
         hash = (37 * hash) + USER_FIELD_NUMBER;
         hash = (53 * hash) + getUser().hashCode();
+      }
+      if (hasRaftMessage()) {
+        hash = (37 * hash) + RAFTMESSAGE_FIELD_NUMBER;
+        hash = (53 * hash) + getRaftMessage().hashCode();
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -910,6 +979,7 @@ public final class Pipe {
           getNetworkDiscoveryPacketFieldBuilder();
           getServerNodeDiscoveryResponseFieldBuilder();
           getUserFieldBuilder();
+          getRaftMessageFieldBuilder();
         }
       }
       public Builder clear() {
@@ -938,6 +1008,12 @@ public final class Pipe {
           userBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000020);
+        if (raftMessageBuilder_ == null) {
+          raftMessage_ = null;
+        } else {
+          raftMessageBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
 
@@ -997,6 +1073,14 @@ public final class Pipe {
           result.user_ = user_;
         } else {
           result.user_ = userBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        if (raftMessageBuilder_ == null) {
+          result.raftMessage_ = raftMessage_;
+        } else {
+          result.raftMessage_ = raftMessageBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -1060,6 +1144,9 @@ public final class Pipe {
         if (other.hasUser()) {
           mergeUser(other.getUser());
         }
+        if (other.hasRaftMessage()) {
+          mergeRaftMessage(other.getRaftMessage());
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -1084,6 +1171,11 @@ public final class Pipe {
         }
         if (hasUser()) {
           if (!getUser().isInitialized()) {
+            return false;
+          }
+        }
+        if (hasRaftMessage()) {
+          if (!getRaftMessage().isInitialized()) {
             return false;
           }
         }
@@ -1621,6 +1713,124 @@ public final class Pipe {
           user_ = null;
         }
         return userBuilder_;
+      }
+
+      private routing.Pipe.RaftMessage raftMessage_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          routing.Pipe.RaftMessage, routing.Pipe.RaftMessage.Builder, routing.Pipe.RaftMessageOrBuilder> raftMessageBuilder_;
+      /**
+       * <code>optional .RaftMessage raftMessage = 7;</code>
+       */
+      public boolean hasRaftMessage() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional .RaftMessage raftMessage = 7;</code>
+       */
+      public routing.Pipe.RaftMessage getRaftMessage() {
+        if (raftMessageBuilder_ == null) {
+          return raftMessage_ == null ? routing.Pipe.RaftMessage.getDefaultInstance() : raftMessage_;
+        } else {
+          return raftMessageBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .RaftMessage raftMessage = 7;</code>
+       */
+      public Builder setRaftMessage(routing.Pipe.RaftMessage value) {
+        if (raftMessageBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          raftMessage_ = value;
+          onChanged();
+        } else {
+          raftMessageBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      /**
+       * <code>optional .RaftMessage raftMessage = 7;</code>
+       */
+      public Builder setRaftMessage(
+          routing.Pipe.RaftMessage.Builder builderForValue) {
+        if (raftMessageBuilder_ == null) {
+          raftMessage_ = builderForValue.build();
+          onChanged();
+        } else {
+          raftMessageBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      /**
+       * <code>optional .RaftMessage raftMessage = 7;</code>
+       */
+      public Builder mergeRaftMessage(routing.Pipe.RaftMessage value) {
+        if (raftMessageBuilder_ == null) {
+          if (((bitField0_ & 0x00000040) == 0x00000040) &&
+              raftMessage_ != null &&
+              raftMessage_ != routing.Pipe.RaftMessage.getDefaultInstance()) {
+            raftMessage_ =
+              routing.Pipe.RaftMessage.newBuilder(raftMessage_).mergeFrom(value).buildPartial();
+          } else {
+            raftMessage_ = value;
+          }
+          onChanged();
+        } else {
+          raftMessageBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      /**
+       * <code>optional .RaftMessage raftMessage = 7;</code>
+       */
+      public Builder clearRaftMessage() {
+        if (raftMessageBuilder_ == null) {
+          raftMessage_ = null;
+          onChanged();
+        } else {
+          raftMessageBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000040);
+        return this;
+      }
+      /**
+       * <code>optional .RaftMessage raftMessage = 7;</code>
+       */
+      public routing.Pipe.RaftMessage.Builder getRaftMessageBuilder() {
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return getRaftMessageFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .RaftMessage raftMessage = 7;</code>
+       */
+      public routing.Pipe.RaftMessageOrBuilder getRaftMessageOrBuilder() {
+        if (raftMessageBuilder_ != null) {
+          return raftMessageBuilder_.getMessageOrBuilder();
+        } else {
+          return raftMessage_ == null ?
+              routing.Pipe.RaftMessage.getDefaultInstance() : raftMessage_;
+        }
+      }
+      /**
+       * <code>optional .RaftMessage raftMessage = 7;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          routing.Pipe.RaftMessage, routing.Pipe.RaftMessage.Builder, routing.Pipe.RaftMessageOrBuilder> 
+          getRaftMessageFieldBuilder() {
+        if (raftMessageBuilder_ == null) {
+          raftMessageBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              routing.Pipe.RaftMessage, routing.Pipe.RaftMessage.Builder, routing.Pipe.RaftMessageOrBuilder>(
+                  getRaftMessage(),
+                  getParentForChildren(),
+                  isClean());
+          raftMessage_ = null;
+        }
+        return raftMessageBuilder_;
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -7309,35 +7519,35 @@ public final class Pipe {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\npipe.proto\"\323\002\n\005Route\022\n\n\002id\030\001 \002(\003\022\031\n\004pa" +
+      "\n\npipe.proto\"\366\002\n\005Route\022\n\n\002id\030\001 \002(\003\022\031\n\004pa" +
       "th\030\002 \002(\0162\013.Route.Path\022\017\n\007payload\030\003 \001(\t\0227" +
       "\n\026networkDiscoveryPacket\030\004 \001(\0132\027.Network" +
       "DiscoveryPacket\022A\n\033serverNodeDiscoveryRe" +
       "sponse\030\005 \001(\0132\034.ServerNodeDiscoveryRespon" +
-      "se\022\023\n\004user\030\006 \001(\0132\005.User\"\200\001\n\004Path\022\025\n\021NETW" +
-      "ORK_DISCOVERY\020\000\022\036\n\032NETWORK_DISCOVERY_RES" +
-      "PONSE\020\001\022\010\n\004USER\020\002\022\013\n\007MESSAGE\020\003\022\t\n\005GROUP\020" +
-      "\004\022\010\n\004PING\020\005\022\007\n\003MSG\020\006\022\014\n\010RAFT_MSG\020\007\"x\n\010Ra" +
-      "ftNode\022\016\n\006nodeid\030\001 \002(\t\022&\n\traftState\030\002 \002(",
-      "\0162\023.RaftNode.RaftState\"4\n\tRaftState\022\r\n\tC" +
-      "andidate\020\000\022\n\n\006Leader\020\001\022\014\n\010Follower\020\002\"\225\001\n" +
-      "\013RaftMessage\022&\n\004type\030\001 \002(\0162\030.RaftMessage" +
-      ".RaftMsgType\022\024\n\014senderNodeid\030\002 \002(\t\"H\n\013Ra" +
-      "ftMsgType\022\n\n\006Append\020\000\022\017\n\013RequestVote\020\001\022\020" +
-      "\n\014VoteResponse\020\002\022\n\n\006Leader\020\003\"F\n\004User\022\r\n\005" +
-      "uname\030\001 \002(\t\022\r\n\005email\030\002 \002(\t\022 \n\006action\030\003 \002" +
-      "(\0162\013.actionType:\003GET\"q\n\007Message\022\021\n\tfromu" +
-      "name\030\001 \002(\t\022\017\n\007message\030\002 \002(\t\022\017\n\007touname\030\003" +
-      " \001(\t\022\017\n\007togname\030\004 \001(\t\022 \n\006action\030\005 \002(\0162\013.",
-      "actionType:\003GET\"\244\001\n\026NetworkDiscoveryPack" +
-      "et\022\r\n\005group\030\001 \001(\t\022\016\n\006nodeid\030\002 \002(\t\022;\n\006sen" +
-      "der\030\003 \002(\0162\036.NetworkDiscoveryPacket.Sende" +
-      "r:\013SERVER_NODE\".\n\006Sender\022\017\n\013SERVER_NODE\020" +
-      "\000\022\023\n\017END_USER_CLIENT\020\001\"H\n\033ServerNodeDisc" +
-      "overyResponse\022\r\n\005group\030\001 \002(\t\022\n\n\002ip\030\002 \002(\t" +
-      "\022\016\n\006nodeid\030\003 \002(\t*4\n\nactionType\022\007\n\003PUT\020\000\022" +
-      "\010\n\004POST\020\001\022\n\n\006DELETE\020\002\022\007\n\003GET\020\003B\013\n\007routin" +
-      "gH\001"
+      "se\022\023\n\004user\030\006 \001(\0132\005.User\022!\n\013raftMessage\030\007" +
+      " \001(\0132\014.RaftMessage\"\200\001\n\004Path\022\025\n\021NETWORK_D" +
+      "ISCOVERY\020\000\022\036\n\032NETWORK_DISCOVERY_RESPONSE" +
+      "\020\001\022\010\n\004USER\020\002\022\013\n\007MESSAGE\020\003\022\t\n\005GROUP\020\004\022\010\n\004" +
+      "PING\020\005\022\007\n\003MSG\020\006\022\014\n\010RAFT_MSG\020\007\"x\n\010RaftNod",
+      "e\022\016\n\006nodeid\030\001 \002(\t\022&\n\traftState\030\002 \002(\0162\023.R" +
+      "aftNode.RaftState\"4\n\tRaftState\022\r\n\tCandid" +
+      "ate\020\000\022\n\n\006Leader\020\001\022\014\n\010Follower\020\002\"\225\001\n\013Raft" +
+      "Message\022&\n\004type\030\001 \002(\0162\030.RaftMessage.Raft" +
+      "MsgType\022\024\n\014senderNodeid\030\002 \002(\t\"H\n\013RaftMsg" +
+      "Type\022\n\n\006Append\020\000\022\017\n\013RequestVote\020\001\022\020\n\014Vot" +
+      "eResponse\020\002\022\n\n\006Leader\020\003\"F\n\004User\022\r\n\005uname" +
+      "\030\001 \002(\t\022\r\n\005email\030\002 \002(\t\022 \n\006action\030\003 \002(\0162\013." +
+      "actionType:\003GET\"q\n\007Message\022\021\n\tfromuname\030" +
+      "\001 \002(\t\022\017\n\007message\030\002 \002(\t\022\017\n\007touname\030\003 \001(\t\022",
+      "\017\n\007togname\030\004 \001(\t\022 \n\006action\030\005 \002(\0162\013.actio" +
+      "nType:\003GET\"\244\001\n\026NetworkDiscoveryPacket\022\r\n" +
+      "\005group\030\001 \001(\t\022\016\n\006nodeid\030\002 \002(\t\022;\n\006sender\030\003" +
+      " \002(\0162\036.NetworkDiscoveryPacket.Sender:\013SE" +
+      "RVER_NODE\".\n\006Sender\022\017\n\013SERVER_NODE\020\000\022\023\n\017" +
+      "END_USER_CLIENT\020\001\"H\n\033ServerNodeDiscovery" +
+      "Response\022\r\n\005group\030\001 \002(\t\022\n\n\002ip\030\002 \002(\t\022\016\n\006n" +
+      "odeid\030\003 \002(\t*4\n\nactionType\022\007\n\003PUT\020\000\022\010\n\004PO" +
+      "ST\020\001\022\n\n\006DELETE\020\002\022\007\n\003GET\020\003B\013\n\007routingH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -7356,7 +7566,7 @@ public final class Pipe {
     internal_static_Route_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Route_descriptor,
-        new java.lang.String[] { "Id", "Path", "Payload", "NetworkDiscoveryPacket", "ServerNodeDiscoveryResponse", "User", });
+        new java.lang.String[] { "Id", "Path", "Payload", "NetworkDiscoveryPacket", "ServerNodeDiscoveryResponse", "User", "RaftMessage", });
     internal_static_RaftNode_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_RaftNode_fieldAccessorTable = new
