@@ -1,62 +1,65 @@
-/**
- * Copyright 2016 Gash.
- *
- * This file and intellectual content is protected under the Apache License, version 2.0
- * (the "License"); you may not use this file except in compliance with the
- * License.  You may obtain a copy of the License at:
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
- * License for the specific language governing permissions and limitations
- * under the License.
- */
 package com.sjsu.rollbits.discovery;
 
-import com.sjsu.rollbits.datasync.container.RoutingConf;
-import com.sjsu.rollbits.datasync.server.resources.RouteResource;
-import io.netty.channel.Channel;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import routing.Pipe.Route;
+import io.netty.channel.socket.DatagramPacket;
+import io.netty.util.CharsetUtil;
 
-import java.beans.Beans;
-import java.net.DatagramPacket;
-import java.util.HashMap;
+import java.net.Inet4Address;
+import java.nio.ByteBuffer;
+import java.util.Random;
 
-/**
- * The message handler processes json messages that are delimited by a 'newline'
- * 
- * TODO replace println with logging!
- * 
- * @author gash
- * 
- */
-public class UdpServerHandler extends   SimpleChannelInboundHandler<DatagramPacket>  {
-	protected static Logger logger = LoggerFactory.getLogger("connect");
+import io.netty.util.internal.SocketUtils;
+import routing.Pipe.NetworkDiscoveryPacket;
+import routing.Pipe.ServerNodeDiscoveryResponse;
 
-	private HashMap<String, String> routing;
+public class UdpServerHandler extends SimpleChannelInboundHandler<NetworkDiscoveryPacket> {
 
-	public UdpServerHandler(RoutingConf conf) {
-		if (conf != null)
-			routing = conf.asHashMap();
-	}
+    private static final Random random = new Random();
 
 
+    @Override
+    public void channelRead0(ChannelHandlerContext ctx, NetworkDiscoveryPacket request) throws Exception {
+        System.err.println("In channel read");
+
+        System.err.println(request.getGroup());
+        System.err.println(request.getNodeid());
+
+//
+        System.err.println(ctx.channel().attr(UdpServer.attkey).get());
+        String clientIpPort = ctx.channel().attr(UdpServer.attkey).get();
+        String clientIp = clientIpPort.split(":")[0];
+        String clientPort = clientIpPort.split(":")[1];
+
+        try {
+            ServerNodeDiscoveryResponse.Builder toSend = ServerNodeDiscoveryResponse.newBuilder();
+            toSend.setGroup("Group 1");
+
+            toSend.setNodeid("NodeId");
+            toSend.setIp("ServerIP");
+
+            ServerNodeDiscoveryResponse myResponse = toSend.build();
+            ByteBuf buf = Unpooled.copiedBuffer(myResponse.toByteArray());
+            ctx.writeAndFlush(new DatagramPacket(buf, SocketUtils.socketAddress(clientIp.substring(1, clientIp.length()), Integer.parseInt(clientPort)))).sync();
+        } catch (Exception e) {
+            System.err.println("Exception received");
+            e.printStackTrace();
+        }
+    }
 
 
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		logger.error("Unexpected exception from downstream.", cause);
-		ctx.close();
-	}
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) {
+        ctx.flush();
+    }
 
-	@Override
-	protected void channelRead0(ChannelHandlerContext channelHandlerContext, DatagramPacket datagramPacket) throws Exception {
-
-	}
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+            cause.printStackTrace();
+        // We don't close the channel because we can keep serving requests.
+    }
 }
