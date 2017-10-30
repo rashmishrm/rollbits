@@ -32,6 +32,13 @@
         <version>4.1.1.Final</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/io.netty/netty-common -->
+    <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-common</artifactId>
+        <version>4.1.10.Final</version>
+    </dependency>
+         
     <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
     <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
