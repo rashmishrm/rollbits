@@ -75,6 +75,14 @@ public class RaftCandidateState implements RaftState {
 			raftContext.setRaftState(raftState);
 			raftContext.setLeaderNodeId(RaftHelper.getMyNodeId());
 			
+			Route.Builder routeBuilder = Route.newBuilder();
+			routeBuilder.setPath(Path.RAFT_MSG);
+			RaftMessage.Builder raftMessageBuilder = RaftMessage.newBuilder();
+			raftMessageBuilder.setType(RaftMsgType.LeaderElectionResult);
+			raftMessageBuilder.setSenderNodeid(RaftHelper.getMyNodeId());
+			RaftMessage raftMessage = raftMessageBuilder.build();
+			routeBuilder.setRaftMessage(raftMessage);
+			RaftHelper.broadcast(routeBuilder.build());
 		}
 
 	}
