@@ -25,11 +25,12 @@ public class RaftHeartBeatEngine implements Runnable {
 
 	@Override
 	public void run() {
-		try {
-			RaftContext raftContext = RaftContext.getInstance();
-			while(true){
+		while (true) {
+			try {
 				Thread.sleep(RaftContext.HEARTBEAT_TIMER);
-				if(RaftState.Leader.equals(raftContext.getRaftState().getRaftState())){
+				RaftContext raftContext = RaftContext.getInstance();
+
+				if (RaftState.Leader.equals(raftContext.getRaftState().getRaftState())) {
 					Route.Builder routeBuilder = Route.newBuilder();
 					routeBuilder.setPath(Path.RAFT_MSG);
 					RaftMessage.Builder raftMessageBuilder = RaftMessage.newBuilder();
@@ -40,12 +41,13 @@ public class RaftHeartBeatEngine implements Runnable {
 					RaftHelper.broadcast(routeBuilder.build());
 					raftContext.setLAST_RECIEVED(System.currentTimeMillis());
 				}
+
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
 	}
 
