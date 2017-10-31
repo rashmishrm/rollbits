@@ -3,11 +3,23 @@
  */
 package com.sjsu.rollbits.raft;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import routing.Pipe.RaftMessage;
+import routing.Pipe.Route;
+import routing.Pipe.RaftMessage.RaftMsgType;
+import routing.Pipe.Route.Path;
+
 /**
  * @author nishantrathi
  *
  */
 public class RaftCandidateState implements RaftState {
+	
+	private Integer voteCount = 0;
+	private List<String> voterList = new ArrayList<>();
+	
 
 	/**
 	 * 
@@ -21,35 +33,64 @@ public class RaftCandidateState implements RaftState {
 	 */
 	@Override
 	public void doAction(RaftContext raftContext) {
-		raftContext.setRaftState(this);
+		synchronized (voteCount) {
+			voteCount = 0;
+		}
+		synchronized (voterList) {
+			voterList.clear();
+		}
+		Route.Builder routeBuilder = Route.newBuilder();
+		routeBuilder.setPath(Path.RAFT_MSG);
+		RaftMessage.Builder raftMessageBuilder = RaftMessage.newBuilder();
+		raftMessageBuilder.setType(RaftMsgType.RequestVote);
+		raftMessageBuilder.setSenderNodeid(RaftHelper.getMyNodeId());
+		RaftMessage raftMessage = raftMessageBuilder.build();
+		routeBuilder.setRaftMessage(raftMessage);
+		RaftHelper.broadcast(routeBuilder.build());
 	}
 
 	@Override
-	public routing.Pipe.RaftNode.RaftState getRaftState(RaftContext raftContext) {
+	public routing.Pipe.RaftNode.RaftState getRaftState() {
 		return routing.Pipe.RaftNode.RaftState.Candidate;
 	}
 
 	@Override
 	public void handleVoteRequest(String senderNodeId) {
-		// TODO Auto-generated method stub
+		//Do nothing as you are yourself a candidate
 		
 	}
 
 	@Override
 	public void handleVoteResponse(String senderNodeId) {
-		// TODO Auto-generated method stub
-		
+		synchronized (voteCount) {
+			voteCount++;
+		}
+		synchronized (voterList) {
+			voterList.add(senderNodeId);
+		}
+		if (voteCount >= RaftHelper.requiredMajorityCount()) {
+			//Declare itself as leader
+			RaftContext raftContext = RaftContext.getInstance();
+			RaftState raftState = new RaftLeaderState();
+			raftContext.setRaftState(raftState);
+			raftContext.setLeaderNodeId(RaftHelper.getMyNodeId());
+			
+		}
+
 	}
 
 	@Override
 	public void handleLeaderElectionResult(String senderNodeId) {
-		// TODO Auto-generated method stub
-		
+		RaftContext raftContext = RaftContext.getInstance();
+		RaftState raftState = new RaftFollowerState();
+		raftContext.setRaftState(raftState);
+		raftContext.setLAST_RECIEVED(System.currentTimeMillis());
+		raftContext.setLeaderNodeId(senderNodeId);
 	}
 
 	@Override
 	public void handleLeaderHeartBeat(String senderNodeId) {
-		// TODO Auto-generated method stub
+		//This scenario ideally not possible. Hence, do nothing.
 		
 	}
 

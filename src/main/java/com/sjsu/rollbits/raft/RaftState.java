@@ -10,7 +10,7 @@ package com.sjsu.rollbits.raft;
 public interface RaftState {
 	public void doAction(RaftContext raftContext);
 	
-	public routing.Pipe.RaftNode.RaftState getRaftState(RaftContext raftContext);
+	public routing.Pipe.RaftNode.RaftState getRaftState();
 	
 	public void handleVoteRequest(String senderNodeId);
 	

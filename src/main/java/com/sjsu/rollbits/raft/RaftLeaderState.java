@@ -21,35 +21,35 @@ public class RaftLeaderState implements RaftState {
 	 */
 	@Override
 	public void doAction(RaftContext raftContext) {
-		raftContext.setRaftState(this);
+		//Do Nothing
 	}
 
 	@Override
-	public routing.Pipe.RaftNode.RaftState getRaftState(RaftContext raftContext) {
+	public routing.Pipe.RaftNode.RaftState getRaftState() {
 		return routing.Pipe.RaftNode.RaftState.Leader;
 	}
 
 	@Override
 	public void handleVoteRequest(String senderNodeId) {
-		// TODO Auto-generated method stub
+		//Do Nothing
 		
 	}
 
 	@Override
 	public void handleVoteResponse(String senderNodeId) {
-		// TODO Auto-generated method stub
+		//Do Nothing
 		
 	}
 
 	@Override
 	public void handleLeaderElectionResult(String senderNodeId) {
-		// TODO Auto-generated method stub
+		//Do Nothing
 		
 	}
 
 	@Override
 	public void handleLeaderHeartBeat(String senderNodeId) {
-		// TODO Auto-generated method stub
+		//Do Nothing
 		
 	}
 

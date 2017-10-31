@@ -26,6 +26,18 @@ public class RaftHelper {
 	public static String getMyNodeId(){
 		return "MyLaptop";
 	}
+
+
+	public static Integer requiredMajorityCount() {
+		// TODO Auto-generated method stub
+		return 3;
+	}
+
+
+	public static void sendMessageToNode(String senderNodeId, Route build) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }

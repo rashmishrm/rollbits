@@ -11,8 +11,10 @@ public class RaftContext {
 	
 	private static RaftContext raftContext;
 	private RaftState raftState;
-	private routing.Pipe.RaftNode.RaftState raftStateProtoBuff;
-
+	public static Long HEARTBEAT_TIMER = 1 * 60 * 1000L;
+	public static Long RAFT_TIMER = 5 * 60 * 1000L;
+	private Long LAST_RECIEVED = -1L;
+	private String leaderNodeId;
 	/**
 	 * Making this as singleton
 	 */
@@ -25,7 +27,6 @@ public class RaftContext {
 	            if(raftContext == null){
 	            	raftContext = new RaftContext();
 	            	raftContext.setRaftState(new RaftFollowerState());
-	            	raftContext.setRaftStateProtoBuff(routing.Pipe.RaftNode.RaftState.Follower);
 	            }
 	        }
 	    }
@@ -46,20 +47,21 @@ public class RaftContext {
 		this.raftState = raftState;
 	}
 
-	/**
-	 * @return the raftStateProtoBuff
-	 */
-	public routing.Pipe.RaftNode.RaftState getRaftStateProtoBuff() {
-		return raftStateProtoBuff;
+	public Long getLAST_RECIEVED() {
+		return LAST_RECIEVED;
 	}
 
-	/**
-	 * @param raftStateProtoBuff the raftStateProtoBuff to set
-	 */
-	public void setRaftStateProtoBuff(routing.Pipe.RaftNode.RaftState raftStateProtoBuff) {
-		this.raftStateProtoBuff = raftStateProtoBuff;
+	public void setLAST_RECIEVED(Long lAST_RECIEVED) {
+		synchronized (LAST_RECIEVED) {
+			LAST_RECIEVED = lAST_RECIEVED;
+		}
 	}
-	
+
+	public void setLeaderNodeId(String leaderNodeId) {
+		this.leaderNodeId = leaderNodeId;
+		
+	}
+
 	
 
 }
