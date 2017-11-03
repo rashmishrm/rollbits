@@ -40,9 +40,6 @@ public final class UdpServer {
 
                         }});
 
-
-
-
             b.bind(PORT).sync().channel().closeFuture().await();
         } finally {
             group.shutdownGracefully();
