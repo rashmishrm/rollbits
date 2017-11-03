@@ -83,7 +83,8 @@ message User {
     
     optional string group = 1; //If sender is a server node, then this field can contain its group id. If sender is end user client, then this field is not required.
     required string nodeid = 2; //node id of the sender
-    required Sender sender =3 [default = SERVER_NODE]; 
+    optional string ip = 3;
+    required Sender sender =4 [default = SERVER_NODE]; 
  
  }
  

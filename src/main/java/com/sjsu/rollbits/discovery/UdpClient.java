@@ -1,15 +1,19 @@
 package com.sjsu.rollbits.discovery;
 
+import java.net.InetAddress;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
-import io.netty.handler.codec.MessageToByteEncoder;
-import io.netty.util.CharsetUtil;
 import io.netty.util.internal.SocketUtils;
 import routing.Pipe.NetworkDiscoveryPacket;
 
@@ -22,7 +26,10 @@ public final class UdpClient {
         NetworkDiscoveryPacket.Builder builder = NetworkDiscoveryPacket.newBuilder();
         builder.setGroup("ClientGroup");
         builder.setSender(NetworkDiscoveryPacket.Sender.END_USER_CLIENT);
-        builder.setNodeid("NODEID");
+        builder.setNodeid("nishant");
+        builder.setIp(InetAddress.getLocalHost().getHostAddress());
+        System.out.println("******"+InetAddress.getLocalHost().getHostAddress());
+        
  
         NetworkDiscoveryPacket request = builder.build();//build() builds the stream, transitioning this builder to the built state.
 

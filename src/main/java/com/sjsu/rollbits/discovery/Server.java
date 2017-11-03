@@ -14,8 +14,8 @@ import java.util.logging.Logger;
 
 public class Server implements Runnable {
 	DatagramSocket socket;
-    Map<String, Node> mp = new HashMap<>();
-	Map<String, Map<String, Node>> mpMaps = new HashMap<String, Map<String, Node>>();
+    private static Map<String, Node> mp = new HashMap<>();
+	private static Map<String, Map<String, Node>> mpMaps = new HashMap<String, Map<String, Node>>();
 	  @Override
 	  public void run() {
 	    try {
@@ -70,6 +70,32 @@ public static Server getInstance() {
 private static class ServerHolder {
 
   private static final Server INSTANCE = new Server();
+}
+
+
+
+public DatagramSocket getSocket() {
+	return socket;
+}
+
+public void setSocket(DatagramSocket socket) {
+	this.socket = socket;
+}
+
+public static Map<String, Node> getMp() {
+	return mp;
+}
+
+public static void setMp(Map<String, Node> mp) {
+	Server.mp = mp;
+}
+
+public static Map<String, Map<String, Node>> getMpMaps() {
+	return mpMaps;
+}
+
+public static void setMpMaps(Map<String, Map<String, Node>> mpMaps) {
+	Server.mpMaps = mpMaps;
 }
 
 public static void main(String[] args){

@@ -5631,11 +5631,25 @@ public final class Pipe {
         getNodeidBytes();
 
     /**
-     * <code>required .NetworkDiscoveryPacket.Sender sender = 3 [default = SERVER_NODE];</code>
+     * <code>optional string ip = 3;</code>
+     */
+    boolean hasIp();
+    /**
+     * <code>optional string ip = 3;</code>
+     */
+    java.lang.String getIp();
+    /**
+     * <code>optional string ip = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getIpBytes();
+
+    /**
+     * <code>required .NetworkDiscoveryPacket.Sender sender = 4 [default = SERVER_NODE];</code>
      */
     boolean hasSender();
     /**
-     * <code>required .NetworkDiscoveryPacket.Sender sender = 3 [default = SERVER_NODE];</code>
+     * <code>required .NetworkDiscoveryPacket.Sender sender = 4 [default = SERVER_NODE];</code>
      */
     routing.Pipe.NetworkDiscoveryPacket.Sender getSender();
   }
@@ -5653,6 +5667,7 @@ public final class Pipe {
     private NetworkDiscoveryPacket() {
       group_ = "";
       nodeid_ = "";
+      ip_ = "";
       sender_ = 0;
     }
 
@@ -5696,13 +5711,19 @@ public final class Pipe {
               nodeid_ = bs;
               break;
             }
-            case 24: {
+            case 26: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000004;
+              ip_ = bs;
+              break;
+            }
+            case 32: {
               int rawValue = input.readEnum();
               routing.Pipe.NetworkDiscoveryPacket.Sender value = routing.Pipe.NetworkDiscoveryPacket.Sender.valueOf(rawValue);
               if (value == null) {
-                unknownFields.mergeVarintField(3, rawValue);
+                unknownFields.mergeVarintField(4, rawValue);
               } else {
-                bitField0_ |= 0x00000004;
+                bitField0_ |= 0x00000008;
                 sender_ = rawValue;
               }
               break;
@@ -5930,16 +5951,58 @@ public final class Pipe {
       }
     }
 
-    public static final int SENDER_FIELD_NUMBER = 3;
-    private int sender_;
+    public static final int IP_FIELD_NUMBER = 3;
+    private volatile java.lang.Object ip_;
     /**
-     * <code>required .NetworkDiscoveryPacket.Sender sender = 3 [default = SERVER_NODE];</code>
+     * <code>optional string ip = 3;</code>
      */
-    public boolean hasSender() {
+    public boolean hasIp() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required .NetworkDiscoveryPacket.Sender sender = 3 [default = SERVER_NODE];</code>
+     * <code>optional string ip = 3;</code>
+     */
+    public java.lang.String getIp() {
+      java.lang.Object ref = ip_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          ip_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string ip = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getIpBytes() {
+      java.lang.Object ref = ip_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        ip_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int SENDER_FIELD_NUMBER = 4;
+    private int sender_;
+    /**
+     * <code>required .NetworkDiscoveryPacket.Sender sender = 4 [default = SERVER_NODE];</code>
+     */
+    public boolean hasSender() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>required .NetworkDiscoveryPacket.Sender sender = 4 [default = SERVER_NODE];</code>
      */
     public routing.Pipe.NetworkDiscoveryPacket.Sender getSender() {
       routing.Pipe.NetworkDiscoveryPacket.Sender result = routing.Pipe.NetworkDiscoveryPacket.Sender.valueOf(sender_);
@@ -5973,7 +6036,10 @@ public final class Pipe {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, nodeid_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeEnum(3, sender_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, ip_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeEnum(4, sender_);
       }
       unknownFields.writeTo(output);
     }
@@ -5990,8 +6056,11 @@ public final class Pipe {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, nodeid_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, ip_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(3, sender_);
+          .computeEnumSize(4, sender_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -6020,6 +6089,11 @@ public final class Pipe {
         result = result && getNodeid()
             .equals(other.getNodeid());
       }
+      result = result && (hasIp() == other.hasIp());
+      if (hasIp()) {
+        result = result && getIp()
+            .equals(other.getIp());
+      }
       result = result && (hasSender() == other.hasSender());
       if (hasSender()) {
         result = result && sender_ == other.sender_;
@@ -6042,6 +6116,10 @@ public final class Pipe {
       if (hasNodeid()) {
         hash = (37 * hash) + NODEID_FIELD_NUMBER;
         hash = (53 * hash) + getNodeid().hashCode();
+      }
+      if (hasIp()) {
+        hash = (37 * hash) + IP_FIELD_NUMBER;
+        hash = (53 * hash) + getIp().hashCode();
       }
       if (hasSender()) {
         hash = (37 * hash) + SENDER_FIELD_NUMBER;
@@ -6169,8 +6247,10 @@ public final class Pipe {
         bitField0_ = (bitField0_ & ~0x00000001);
         nodeid_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        sender_ = 0;
+        ip_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
+        sender_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -6205,6 +6285,10 @@ public final class Pipe {
         result.nodeid_ = nodeid_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
+        }
+        result.ip_ = ip_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
         }
         result.sender_ = sender_;
         result.bitField0_ = to_bitField0_;
@@ -6257,6 +6341,11 @@ public final class Pipe {
         if (other.hasNodeid()) {
           bitField0_ |= 0x00000002;
           nodeid_ = other.nodeid_;
+          onChanged();
+        }
+        if (other.hasIp()) {
+          bitField0_ |= 0x00000004;
+          ip_ = other.ip_;
           onChanged();
         }
         if (other.hasSender()) {
@@ -6496,37 +6585,113 @@ public final class Pipe {
         return this;
       }
 
-      private int sender_ = 0;
+      private java.lang.Object ip_ = "";
       /**
-       * <code>required .NetworkDiscoveryPacket.Sender sender = 3 [default = SERVER_NODE];</code>
+       * <code>optional string ip = 3;</code>
        */
-      public boolean hasSender() {
+      public boolean hasIp() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required .NetworkDiscoveryPacket.Sender sender = 3 [default = SERVER_NODE];</code>
+       * <code>optional string ip = 3;</code>
+       */
+      public java.lang.String getIp() {
+        java.lang.Object ref = ip_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            ip_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string ip = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getIpBytes() {
+        java.lang.Object ref = ip_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          ip_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string ip = 3;</code>
+       */
+      public Builder setIp(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        ip_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string ip = 3;</code>
+       */
+      public Builder clearIp() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        ip_ = getDefaultInstance().getIp();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string ip = 3;</code>
+       */
+      public Builder setIpBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        ip_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int sender_ = 0;
+      /**
+       * <code>required .NetworkDiscoveryPacket.Sender sender = 4 [default = SERVER_NODE];</code>
+       */
+      public boolean hasSender() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>required .NetworkDiscoveryPacket.Sender sender = 4 [default = SERVER_NODE];</code>
        */
       public routing.Pipe.NetworkDiscoveryPacket.Sender getSender() {
         routing.Pipe.NetworkDiscoveryPacket.Sender result = routing.Pipe.NetworkDiscoveryPacket.Sender.valueOf(sender_);
         return result == null ? routing.Pipe.NetworkDiscoveryPacket.Sender.SERVER_NODE : result;
       }
       /**
-       * <code>required .NetworkDiscoveryPacket.Sender sender = 3 [default = SERVER_NODE];</code>
+       * <code>required .NetworkDiscoveryPacket.Sender sender = 4 [default = SERVER_NODE];</code>
        */
       public Builder setSender(routing.Pipe.NetworkDiscoveryPacket.Sender value) {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000008;
         sender_ = value.getNumber();
         onChanged();
         return this;
       }
       /**
-       * <code>required .NetworkDiscoveryPacket.Sender sender = 3 [default = SERVER_NODE];</code>
+       * <code>required .NetworkDiscoveryPacket.Sender sender = 4 [default = SERVER_NODE];</code>
        */
       public Builder clearSender() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000008);
         sender_ = 0;
         onChanged();
         return this;
@@ -7540,15 +7705,15 @@ public final class Pipe {
       " \002(\t\022 \n\006action\030\003 \002(\0162\013.actionType:\003GET\"q" +
       "\n\007Message\022\021\n\tfromuname\030\001 \002(\t\022\017\n\007message\030",
       "\002 \002(\t\022\017\n\007touname\030\003 \001(\t\022\017\n\007togname\030\004 \001(\t\022" +
-      " \n\006action\030\005 \002(\0162\013.actionType:\003GET\"\244\001\n\026Ne" +
+      " \n\006action\030\005 \002(\0162\013.actionType:\003GET\"\260\001\n\026Ne" +
       "tworkDiscoveryPacket\022\r\n\005group\030\001 \001(\t\022\016\n\006n" +
-      "odeid\030\002 \002(\t\022;\n\006sender\030\003 \002(\0162\036.NetworkDis" +
-      "coveryPacket.Sender:\013SERVER_NODE\".\n\006Send" +
-      "er\022\017\n\013SERVER_NODE\020\000\022\023\n\017END_USER_CLIENT\020\001" +
-      "\"H\n\033ServerNodeDiscoveryResponse\022\r\n\005group" +
-      "\030\001 \002(\t\022\n\n\002ip\030\002 \002(\t\022\016\n\006nodeid\030\003 \002(\t*4\n\nac" +
-      "tionType\022\007\n\003PUT\020\000\022\010\n\004POST\020\001\022\n\n\006DELETE\020\002\022" +
-      "\007\n\003GET\020\003B\013\n\007routingH\001"
+      "odeid\030\002 \002(\t\022\n\n\002ip\030\003 \001(\t\022;\n\006sender\030\004 \002(\0162" +
+      "\036.NetworkDiscoveryPacket.Sender:\013SERVER_" +
+      "NODE\".\n\006Sender\022\017\n\013SERVER_NODE\020\000\022\023\n\017END_U" +
+      "SER_CLIENT\020\001\"H\n\033ServerNodeDiscoveryRespo" +
+      "nse\022\r\n\005group\030\001 \002(\t\022\n\n\002ip\030\002 \002(\t\022\016\n\006nodeid" +
+      "\030\003 \002(\t*4\n\nactionType\022\007\n\003PUT\020\000\022\010\n\004POST\020\001\022" +
+      "\n\n\006DELETE\020\002\022\007\n\003GET\020\003B\013\n\007routingH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -7597,7 +7762,7 @@ public final class Pipe {
     internal_static_NetworkDiscoveryPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_NetworkDiscoveryPacket_descriptor,
-        new java.lang.String[] { "Group", "Nodeid", "Sender", });
+        new java.lang.String[] { "Group", "Nodeid", "Ip", "Sender", });
     internal_static_ServerNodeDiscoveryResponse_descriptor =
       getDescriptor().getMessageTypes().get(6);
     internal_static_ServerNodeDiscoveryResponse_fieldAccessorTable = new
