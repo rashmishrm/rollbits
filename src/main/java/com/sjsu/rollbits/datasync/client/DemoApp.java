@@ -15,7 +15,6 @@
  */
 package com.sjsu.rollbits.datasync.client;
 
-
 import routing.Pipe;
 import routing.Pipe.Route;
 
@@ -85,11 +84,11 @@ public class DemoApp implements CommListener {
 		System.out.println(Pipe.Route.Path.USER);
 		try {
 			MessageClient mc = new MessageClient(host, port);
-			//DemoApp da = new DemoApp(mc);
-			mc.addUser("rashmi","275");
+			// DemoApp da = new DemoApp(mc);
+			mc.addUser("rashmi", "275", false);
 
 			// do stuff w/ the connection
-			//da.ping(4000);
+			// da.ping(4000);
 
 			System.out.println("\n** exiting in 10 seconds. **");
 			System.out.flush();

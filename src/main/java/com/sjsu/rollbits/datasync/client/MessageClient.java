@@ -65,8 +65,6 @@ public class MessageClient {
 		rb.setPath(Route.Path.MSG);
 		rb.setPayload(msg);
 
-
-
 		try {
 			CommConnection.getInstance().enqueue(rb.build());
 		} catch (Exception e) {
@@ -74,19 +72,29 @@ public class MessageClient {
 		}
 	}
 
-	public void addUser(String name, String email) {
+	public void addUser(String name, String email, boolean replica) {
 		// construct the message to send
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(nextId());
 		rb.setPath(Route.Path.USER);
-		//rb.setAction(routing.Pipe.actionType.PUT);
-		Pipe.User.Builder ub=Pipe.User.newBuilder();
+		// rb.setAction(routing.Pipe.actionType.PUT);
+		Pipe.User.Builder ub = Pipe.User.newBuilder();
 		ub.setEmail(email);
 		ub.setUname(name);
 		ub.setAction(routing.Pipe.actionType.PUT);
 		rb.setUser(ub);
 
+		Pipe.Header.Builder header = Pipe.Header.newBuilder();
 
+		if (replica) {
+			header.setType("REPLICA");
+
+		} else {
+			header.setType("ORIGINAL");
+
+		}
+
+		rb.setHeader(header);
 
 		try {
 			CommConnection.getInstance().enqueue(rb.build());
@@ -94,15 +102,14 @@ public class MessageClient {
 			e.printStackTrace();
 		}
 	}
-
 
 	public void release() {
 		CommConnection.getInstance().release();
 	}
 
 	/**
-	 * Since the service/server is asychronous we need a unique ID to associate
-	 * our requests with the server's reply
+	 * Since the service/server is asychronous we need a unique ID to associate our
+	 * requests with the server's reply
 	 * 
 	 * @return
 	 */

@@ -12,6 +12,8 @@ message Route {
     PING=5;
     MSG=6;
     RAFT_MSG =7;
+    
+    
 }
 
     // a node should not have a value though this is not enforced
@@ -23,6 +25,9 @@ message Route {
     optional ServerNodeDiscoveryResponse serverNodeDiscoveryResponse= 5;
     optional User user = 6;
     optional RaftMessage raftMessage=7;
+    
+    
+    optional Header header=8;
 
 }
 
@@ -86,6 +91,10 @@ message User {
     optional string ip = 3;
     required Sender sender =4 [default = SERVER_NODE]; 
  
+ }
+ 
+ message Header{
+ 	required string type=1;
  }
  
  message ServerNodeDiscoveryResponse{

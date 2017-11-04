@@ -10,10 +10,11 @@ public class RNode {
 		// TODO Auto-generated constructor stub
 	}
 
-	public RNode(String nodeId, Type type, String ipAddress) {
+	public RNode(String nodeId, Type type, String ipAddress, int port) {
 		this.nodeId = nodeId;
 		this.type = type;
 		this.ipAddress = ipAddress;
+		this.port = port;
 	}
 
 	public RNode(String nodeId, String ipAddress) {
@@ -52,6 +53,8 @@ public class RNode {
 	public void setPort(int port) {
 		this.port = port;
 	}
+	
+	
 
 }
 

@@ -38,21 +38,30 @@ public class UserResource implements RouteResource {
 
 		case PUT:
 			Pipe.User user = msg.getUser();
-			System.out.println(user.getUname());
-			
-			List<RNode> nodes = shardingService.getNodes(new Message(user.getUname()));
 
-			// save to database
+			Pipe.Header header = msg.getHeader();
 
-			for(RNode node:nodes) {
+			if (header.getType() != null && !header.getType().equals("REPLICA")) {
+
+				System.out.println(user.getUname());
+
+				List<RNode> nodes = shardingService.getNodes(new Message(user.getUname()));
+
+				// save to database
+
+				for (RNode node : nodes) {
+
+					MessageClient mc = new MessageClient(node.getIpAddress(), node.getPort());
+					mc.addUser(user.getUname(), user.getEmail(), true);
+
+				}
+
+			} else {
 				
-				MessageClient mc = new MessageClient(node.getIpAddress(), node.getPort());
-				mc.addUser(user.getUname(), user.getEmail());
+				//save in databse
 
 			}
-			
-			
-			
+
 			// below line can be moved to client
 
 			// send request for sync to other intra cluster nodes

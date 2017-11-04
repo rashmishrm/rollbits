@@ -27,12 +27,12 @@ public class MessageApp {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-//		if (args.length == 0) {
+//		if (args.length == 0) {  
 //			System.out.println("usage: server <config file>");
 //			System.exit(1);
 //		}
 
-		File cf = new File("/Users/nishantrathi/CMPE-275/project/rollbits/src/main/resources/routing.conf");
+		File cf = new File("/Users/rashmisharma/Documents/GitHub/rollbits/src/main/resources/routing.conf");
 		try {
 			MessageServer svr = new MessageServer(cf);
 			svr.startServer();
