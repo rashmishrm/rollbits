@@ -2,6 +2,8 @@ package com.sjsu.rollbits.dao.interfaces.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
@@ -10,6 +12,8 @@ import java.util.Date;
 @Table(name = "Message")
 public class Message {
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+
     @Column(name = "id")
     private int id;
     @Column(name = "type_id")
@@ -27,6 +31,9 @@ public class Message {
     private String message;
     String email;
 
+    public Message() {
+		// TODO Auto-generated constructor stub
+	}
 
 
     public Message(int id, int typeid,Date timestamp, int fromuserid,int touserid,int togroupid,String message) {

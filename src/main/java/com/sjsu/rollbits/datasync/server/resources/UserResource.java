@@ -5,6 +5,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sjsu.rollbits.dao.interfaces.model.User;
+import com.sjsu.rollbits.dao.interfaces.service.Service;
 import com.sjsu.rollbits.datasync.client.MessageClient;
 import com.sjsu.rollbits.sharding.hashing.Message;
 import com.sjsu.rollbits.sharding.hashing.RNode;
@@ -17,8 +19,11 @@ public class UserResource implements RouteResource {
 
 	private ShardingService shardingService;
 
+	private Service dbService = null;
+
 	public UserResource() {
 		shardingService = ShardingService.getInstance();
+		dbService = new Service();
 	}
 
 	@Override
@@ -63,8 +68,9 @@ public class UserResource implements RouteResource {
 			} else {
 
 				System.out.println("Adding to database!!!!!");
+				User dbuser = new User(user.getUname(), user.getEmail());
 
-				// save in databse
+				dbService.persist(dbuser);
 
 			}
 
