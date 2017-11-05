@@ -72,8 +72,9 @@ public class MessageClient {
 		}
 	}
 
-	public void addUser(String name, String email, boolean internal, boolean async) {
+	public boolean addUser(String name, String email, boolean internal, boolean async) {
 		// construct the message to send
+		boolean added = false;
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(nextId());
 		rb.setPath(Route.Path.USER);
@@ -94,20 +95,27 @@ public class MessageClient {
 
 		}
 		rb.setHeader(header);
+		CommConnection conn = CommConnection.getInstance();
 
 		try {
 			if (async)
-				CommConnection.getInstance().enqueue(rb.build());
+				conn.enqueue(rb.build());
 			else
-				CommConnection.getInstance().write(rb.build());
+				added = conn.write(rb.build());
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			conn.release();
+
 		}
+		return added;
 	}
 
-	public void sendMessage(String fromUserId, String toUserId, int type, String message, boolean internal,
+	public boolean sendMessage(String fromUserId, String toUserId, int type, String message, boolean internal,
 			boolean async) {
 		// construct the message to send
+		boolean added = false;
+
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(nextId());
 		rb.setPath(Route.Path.MESSAGE);
@@ -133,13 +141,15 @@ public class MessageClient {
 			if (async)
 				conn.enqueue(rb.build());
 			else
-				conn.write(rb.build());
+				added = conn.write(rb.build());
 		} catch (Exception e) {
 			e.printStackTrace();
 
 		} finally {
 			conn.release();
 		}
+		return added;
+
 	}
 
 	public void release() {

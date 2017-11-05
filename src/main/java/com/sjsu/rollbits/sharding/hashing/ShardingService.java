@@ -33,6 +33,9 @@ public class ShardingService {
 
 	public List<RNode> getNodes(Message message) {
 		// RNode node = hash.get(message.getUniqueKey());
+		
+		//TODO
+		//Remove own ip from list
 
 		List<RNode> list = new ArrayList<>();
 		list.add(new RNode("Node1", RNode.Type.PRIMARY, "10.0.0.2", 4567));

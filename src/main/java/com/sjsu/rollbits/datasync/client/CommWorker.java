@@ -42,7 +42,7 @@ public class CommWorker extends Thread {
 				Route msg = conn.outbound.take();
 				if (ch.isWritable()) {
 					if (!conn.write(msg)) {
-						conn.outbound.putFirst(msg);
+						//conn.outbound.putFirst(msg);
 					}
 
 					System.out.flush();
