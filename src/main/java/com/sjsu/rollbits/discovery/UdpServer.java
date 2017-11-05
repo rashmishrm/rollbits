@@ -24,7 +24,8 @@ public final class UdpServer {
     
 
     public static void main(String[] args) throws Exception {
-        EventLoopGroup group = new NioEventLoopGroup();
+    	System.out.println("Server running at port 8080");
+    	EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
             b.group(group)
