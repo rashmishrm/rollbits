@@ -72,7 +72,7 @@ public class MessageClient {
 		}
 	}
 
-	public void addUser(String name, String email, boolean replica) {
+	public void addUser(String name, String email, boolean internal, boolean async) {
 		// construct the message to send
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(nextId());
@@ -86,20 +86,59 @@ public class MessageClient {
 
 		Pipe.Header.Builder header = Pipe.Header.newBuilder();
 
-		if (replica) {
-			header.setType("REPLICA");
+		if (internal) {
+			header.setType("INTERNAL");
 
 		} else {
-			header.setType("ORIGINAL");
+			header.setType("EXTERNAL");
 
 		}
-
 		rb.setHeader(header);
 
 		try {
-			CommConnection.getInstance().enqueue(rb.build());
+			if (async)
+				CommConnection.getInstance().enqueue(rb.build());
+			else
+				CommConnection.getInstance().write(rb.build());
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void sendMessage(String fromUserId, String toUserId, int type, String message, boolean internal,
+			boolean async) {
+		// construct the message to send
+		Route.Builder rb = Route.newBuilder();
+		rb.setId(nextId());
+		rb.setPath(Route.Path.MESSAGE);
+		Pipe.Message.Builder msg = Pipe.Message.newBuilder();
+		msg.setMessage(message);
+		msg.setFromuname(fromUserId);
+		msg.setTouname(toUserId);
+
+		msg.setAction(routing.Pipe.actionType.PUT);
+
+		Pipe.Header.Builder header = Pipe.Header.newBuilder();
+
+		if (internal) {
+			header.setType("INTERNAL");
+
+		} else {
+			header.setType("EXTERNAL");
+
+		}
+		rb.setHeader(header);
+		CommConnection conn = CommConnection.getInstance();
+		try {
+			if (async)
+				conn.enqueue(rb.build());
+			else
+				conn.write(rb.build());
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			conn.release();
 		}
 	}
 

@@ -41,7 +41,7 @@ public class UserResource implements RouteResource {
 
 			Pipe.Header header = msg.getHeader();
 
-			if (header.getType() != null && !header.getType().equals("REPLICA")) {
+			if (header.getType() != null && !header.getType().equals("INTERNAL")) {
 
 				System.out.println(user.getUname());
 
@@ -50,15 +50,21 @@ public class UserResource implements RouteResource {
 				// save to database
 
 				for (RNode node : nodes) {
-
 					MessageClient mc = new MessageClient(node.getIpAddress(), node.getPort());
-					mc.addUser(user.getUname(), user.getEmail(), true);
+					if (node.getType().equals(RNode.Type.REPLICA)) {
+						mc.addUser(user.getUname(), user.getEmail(), true, true);
+					} else {
+						mc.addUser(user.getUname(), user.getEmail(), true, false);
+
+					}
 
 				}
 
 			} else {
-				
-				//save in databse
+
+				System.out.println("Adding to database!!!!!");
+
+				// save in databse
 
 			}
 

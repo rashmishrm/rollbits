@@ -5,6 +5,11 @@ public class RNode {
 	private Type type;
 	private String ipAddress;
 	private int port;
+	
+	public enum Type {
+		REPLICA, PRIMARY;
+
+	}
 
 	public RNode() {
 		// TODO Auto-generated constructor stub
@@ -58,7 +63,4 @@ public class RNode {
 
 }
 
-enum Type {
-	REPLICA, PRIMARY;
 
-}

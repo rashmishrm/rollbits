@@ -79,13 +79,13 @@ public class DemoApp implements CommListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String host = "127.0.0.1";
+		String host = "10.0.0.2";
 		int port = 4567;
 		System.out.println(Pipe.Route.Path.USER);
 		try {
 			MessageClient mc = new MessageClient(host, port);
 			// DemoApp da = new DemoApp(mc);
-			mc.addUser("rashmi", "275", false);
+			mc.addUser("rashmi", "275", false,true);
 
 			// do stuff w/ the connection
 			// da.ping(4000);

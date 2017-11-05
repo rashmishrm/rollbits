@@ -23,18 +23,20 @@ public class Message {
     @Column(name= "togroupid")
     private int togroupid;
 
-
+    @Column(name= "message")
+    private String message;
     String email;
 
 
 
-    public Message(int id, int typeid,Date timestamp, int fromuserid,int touserid,int togroupid) {
+    public Message(int id, int typeid,Date timestamp, int fromuserid,int touserid,int togroupid,String message) {
         this.id = id;
         this.typeid=typeid;
         this.timestamp=timestamp;
         this.fromuserid=fromuserid;
         this.touserid=touserid;
         this.togroupid=togroupid;
+        this.message=message;
     }
 
     public int getId() {
@@ -84,6 +86,18 @@ public class Message {
     public void setTogroupid(int togroupid) {
         this.togroupid = togroupid;
     }
+    
+    public String getEmail() {
+		return email;
+	}
+    
+    public String getMessage() {
+		return message;
+	}
+    
+     public void setMessage(String message) {
+		this.message = message;
+	}
 
 
     public String toString()

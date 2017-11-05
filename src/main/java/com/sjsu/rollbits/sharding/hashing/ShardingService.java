@@ -11,10 +11,10 @@ public class ShardingService {
 	private ShardingService() {
 		int numberOfReplicas = 2;
 		List<RNode> list = new ArrayList<>();
-		list.add(new RNode("Node1", Type.PRIMARY, "10.0.0.1", 4567));
-		list.add(new RNode("Node2", Type.PRIMARY, "10.0.0.2", 4567));
-		list.add(new RNode("Node3", Type.REPLICA, "10.0.0.3", 4567));
-		list.add(new RNode("Node4", Type.REPLICA, "10.0.0.4", 4567));
+		list.add(new RNode("Node1", RNode.Type.PRIMARY, "10.0.0.1", 4567));
+		list.add(new RNode("Node2", RNode.Type.PRIMARY, "10.0.0.2", 4567));
+		list.add(new RNode("Node3", RNode.Type.REPLICA, "10.0.0.3", 4567));
+		list.add(new RNode("Node4", RNode.Type.REPLICA, "10.0.0.4", 4567));
 		MurmurHash128 m = new MurmurHash128();
 		hash = new ConsistentHash<RNode>(m, numberOfReplicas, list);
 	}
@@ -35,9 +35,9 @@ public class ShardingService {
 		// RNode node = hash.get(message.getUniqueKey());
 
 		List<RNode> list = new ArrayList<>();
-		list.add(new RNode("Node1", Type.PRIMARY, "10.0.0.2", 4567));
-		list.add(new RNode("Node2", Type.REPLICA, "10.0.0.3", 4567));
-		list.add(new RNode("Node3", Type.REPLICA, "10.0.0.4", 4567));
+		list.add(new RNode("Node1", RNode.Type.PRIMARY, "10.0.0.2", 4567));
+		list.add(new RNode("Node2", RNode.Type.REPLICA, "10.0.0.3", 4567));
+		list.add(new RNode("Node3", RNode.Type.REPLICA, "10.0.0.4", 4567));
 
 		return list;
 	}
