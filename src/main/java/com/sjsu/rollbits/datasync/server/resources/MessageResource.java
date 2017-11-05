@@ -70,10 +70,13 @@ public class MessageResource implements RouteResource {
 					mc.sendMessage(message.getFromuname(),
 							message.getTouname() != null ? message.getTouname() : message.getTogname(),
 							1, //As of now, we are not using it. Will be used when we support Images and video messages
-							message.getMessage(), true, false);
+							message.getMessage(), true, true);
 				} else {
 					//mc.addUser(user.getUname(), user.getEmail(), true, false);
-					
+					mc.sendMessage(message.getFromuname(),
+							message.getTouname() != null ? message.getTouname() : message.getTogname(),
+							1, //As of now, we are not using it. Will be used when we support Images and video messages
+							message.getMessage(), true, false);
 				}
 
 			}
