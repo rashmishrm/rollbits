@@ -33,7 +33,7 @@ public class UserResource implements RouteResource {
 
 	@Override
 	public String process(Pipe.Route msg) {
-
+		boolean success = false;
 		Pipe.actionType option = msg.getUser().getAction();
 
 		switch (option) {
@@ -59,7 +59,7 @@ public class UserResource implements RouteResource {
 					if (node.getType().equals(RNode.Type.REPLICA)) {
 						mc.addUser(user.getUname(), user.getEmail(), true, true);
 					} else {
-						mc.addUser(user.getUname(), user.getEmail(), true, false);
+						success = mc.addUser(user.getUname(), user.getEmail(), true, false);
 
 					}
 
@@ -71,6 +71,7 @@ public class UserResource implements RouteResource {
 				User dbuser = new User(user.getUname(), user.getEmail());
 
 				dbService.persist(dbuser);
+				success = true;
 
 			}
 
@@ -87,7 +88,7 @@ public class UserResource implements RouteResource {
 
 		}
 
-		return "success";
+		return success ? "success" : "Failed";
 	}
 
 }
