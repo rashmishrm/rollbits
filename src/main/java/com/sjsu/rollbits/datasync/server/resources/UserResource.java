@@ -88,7 +88,7 @@ public class UserResource implements RouteResource {
 
 		}
 
-		return success ? "success" : "Failed";
+		return success ? "success" : "failed";
 	}
 
 }

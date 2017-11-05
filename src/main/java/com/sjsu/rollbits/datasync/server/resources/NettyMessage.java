@@ -21,7 +21,7 @@ public class NettyMessage implements NettyInterface {
                 {
                     Pipe.Route.Path path = build.getPath();
                     if (path.equals("/message")) {
-                        new MessageResource().process(build);
+                        new MsgResource().process(build);
                     }
 
                 }

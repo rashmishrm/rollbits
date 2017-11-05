@@ -13,7 +13,6 @@ import java.util.Date;
 public class Message {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-
     @Column(name = "id")
     private int id;
     @Column(name = "type_id")
@@ -21,11 +20,11 @@ public class Message {
     @Column(name= "timestamp")
     private Date timestamp;
     @Column(name="fromuserid" )
-    private int fromuserid;
+    private String fromuserid;
     @Column(name= "touserid")
-    private int touserid;
+    private String touserid;
     @Column(name= "togroupid")
-    private int togroupid;
+    private String togroupid;
 
     @Column(name= "message")
     private String message;
@@ -36,8 +35,17 @@ public class Message {
 	}
 
 
-    public Message(int id, int typeid,Date timestamp, int fromuserid,int touserid,int togroupid,String message) {
+    public Message(int id, int typeid,Date timestamp, String fromuserid,String touserid,String togroupid,String message) {
         this.id = id;
+        this.typeid=typeid;
+        this.timestamp=timestamp;
+        this.fromuserid=fromuserid;
+        this.touserid=touserid;
+        this.togroupid=togroupid;
+        this.message=message;
+    }
+    
+    public Message(int typeid,Date timestamp, String fromuserid,String touserid,String togroupid,String message) {
         this.typeid=typeid;
         this.timestamp=timestamp;
         this.fromuserid=fromuserid;
@@ -70,27 +78,27 @@ public class Message {
         this.timestamp = timestamp;
     }
 
-    public int getFromuserid() {
+    public String getFromuserid() {
         return fromuserid;
     }
 
-    public void setFromuserid(int fromuserid) {
+    public void setFromuserid(String fromuserid) {
         this.fromuserid = fromuserid;
     }
 
-    public int getTouserid() {
+    public String getTouserid() {
         return touserid;
     }
 
-    public void setTouserid(int touserid) {
+    public void setTouserid(String touserid) {
         this.touserid = touserid;
     }
 
-    public int getTogroupid() {
+    public String getTogroupid() {
         return togroupid;
     }
 
-    public void setTogroupid(int togroupid) {
+    public void setTogroupid(String togroupid) {
         this.togroupid = togroupid;
     }
     

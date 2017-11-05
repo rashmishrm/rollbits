@@ -15,8 +15,19 @@
  */
 package com.sjsu.rollbits.datasync.server.resources;
 
+import java.util.Date;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sjsu.rollbits.dao.interfaces.service.MessageService;
+import com.sjsu.rollbits.dao.interfaces.service.Service;
+import com.sjsu.rollbits.datasync.client.MessageClient;
+import com.sjsu.rollbits.sharding.hashing.Message;
+import com.sjsu.rollbits.sharding.hashing.RNode;
+import com.sjsu.rollbits.sharding.hashing.ShardingService;
+
 import routing.Pipe;
 
 /**
@@ -27,20 +38,55 @@ import routing.Pipe;
  */
 public class MessageResource implements RouteResource {
 	protected static Logger logger = LoggerFactory.getLogger("message");
+	private ShardingService shardingService;
+	private MessageService dbService = null;
 
+	public MessageResource() {
+		shardingService = ShardingService.getInstance();
+		dbService = new MessageService();
+	}
+	
 	@Override
 	public Pipe.Route.Path getPath() {
-		return Pipe.Route.Path.MSG;
+		return Pipe.Route.Path.MESSAGE;
 	}
 
 	@Override
 	public String process(Pipe.Route msg) {
-		String body=msg.getPayload();
-		if (body == null || body.trim().length() == 0)
-			throw new RuntimeException("Missing/Null data");
+		boolean isSuccess = false;
+		routing.Pipe.Message message = msg.getMessage();
+		
+		if (msg.getHeader()!=null && msg.getHeader().getType()!=null && "EXTERNAL".equals(msg.getHeader().getType())){
 
-		logger.info(body);
-		return "good";
+			System.out.println("Message recieved from :" + message.getFromuname());
+
+			List<RNode> nodes = shardingService.getNodes(new Message(message.getFromuname()));
+
+			// save to database
+
+			for (RNode node : nodes) {
+				MessageClient mc = new MessageClient(node.getIpAddress(), node.getPort());
+				if (node.getType().equals(RNode.Type.REPLICA)) {
+					mc.sendMessage(message.getFromuname(),
+							message.getTouname() != null ? message.getTouname() : message.getTogname(),
+							1, //As of now, we are not using it. Will be used when we support Images and video messages
+							message.getMessage(), true, false);
+				} else {
+					//mc.addUser(user.getUname(), user.getEmail(), true, false);
+					
+				}
+
+			}
+
+		} else {
+			System.out.println("Adding to database!!!!!");
+			//User dbuser = new User(user.getUname(), user.getEmail());
+			com.sjsu.rollbits.dao.interfaces.model.Message messageModel = new com.sjsu.rollbits.dao.interfaces.model.Message(1, new Date(), message.getFromuname(), message.getTouname(), message.getTogname(), message.getMessage() ); 
+			dbService.persist(messageModel);
+			isSuccess = true;
+		}
+		
+		return isSuccess?"sucess":"Failed";
 	}
 
 }
