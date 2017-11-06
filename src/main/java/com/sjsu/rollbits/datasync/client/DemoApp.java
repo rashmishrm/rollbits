@@ -80,19 +80,31 @@ public class DemoApp implements CommListener {
 	 */
 	public static void main(String[] args) {
 		String host = "10.0.0.2";
-		int port = 4567;
+		int port = 4568;
 		System.out.println(Pipe.Route.Path.USER);
+		long stime= System.currentTimeMillis();
+
 		try {
 			MessageClient mc = new MessageClient(host, port);
 			// DemoApp da = new DemoApp(mc);
-			mc.addUser("rashmi", "275", false,true);
+			
+			
+			for (int i = 214; i < 219; i++) {
 
-			// do stuff w/ the connection
-			// da.ping(4000);
+				mc.addUser("dhrumilia" + i, "abc@gmail.com", false, false);
 
-			System.out.println("\n** exiting in 10 seconds. **");
-			System.out.flush();
-			Thread.sleep(10 * 100000000);
+				// do stuff w/ the connection
+				// da.ping(4000);
+
+				Thread.sleep(10);
+			}
+
+			long etime= System.currentTimeMillis();
+			
+			System.out.println(etime-stime);
+
+			Thread.sleep(10);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

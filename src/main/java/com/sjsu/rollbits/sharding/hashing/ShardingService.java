@@ -31,16 +31,26 @@ public class ShardingService {
 
 	}
 
+	public static void main(String[] args) {
+		ShardingService service = ShardingService.getInstance();
+		List<RNode> nodes = service.getNodes(new Message("86699"));
+
+		for (RNode node : nodes) {
+			System.out.println(node.getIpAddress());
+		}
+
+	}
+
 	public List<RNode> getNodes(Message message) {
-		// RNode node = hash.get(message.getUniqueKey());
-		
-		//TODO
-		//Remove own ip from list
+		// List<RNode> list = hash.get(message.getUniqueKey());
+
+		// TODO
+		// Remove own ip from list
 
 		List<RNode> list = new ArrayList<>();
 		list.add(new RNode("Node1", RNode.Type.PRIMARY, "10.0.0.2", 4567));
-		list.add(new RNode("Node2", RNode.Type.REPLICA, "10.0.0.3", 4567));
-		list.add(new RNode("Node3", RNode.Type.REPLICA, "10.0.0.4", 4567));
+		// list.add(new RNode("Node2", RNode.Type.REPLICA, "10.0.0.3", 4567));
+		// list.add(new RNode("Node3", RNode.Type.REPLICA, "10.0.0.4", 4567));
 
 		return list;
 	}

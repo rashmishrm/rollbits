@@ -1,9 +1,10 @@
 package com.sjsu.rollbits.sharding.hashing;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
 
 public class ConsistentHash<T> {
 
@@ -33,8 +34,8 @@ public class ConsistentHash<T> {
 		}
 	}
 
-	public T get(Object key) {
-		
+	public List<T> get(Object key) {
+		List<T> list = new ArrayList<>();
 		System.out.println(circle.size());
 		if (circle.isEmpty()) {
 			return null;
@@ -44,7 +45,21 @@ public class ConsistentHash<T> {
 			SortedMap<Long, T> tailMap = circle.tailMap(hash);
 			hash = tailMap.isEmpty() ? circle.firstKey() : tailMap.firstKey();
 		}
-		return circle.get(hash);
+
+		T primary = circle.get(hash);
+		list.add(primary);
+		// get next nodes
+		SortedMap<Long, T> tailMap = circle.tailMap(hash);
+		int k = numberOfReplicas;
+		for (Long h : tailMap.keySet()) {
+			list.add(tailMap.get(h));
+			k--;
+			if (k == 0) {
+				break;
+			}
+		}
+
+		return list;
 	}
 
 }

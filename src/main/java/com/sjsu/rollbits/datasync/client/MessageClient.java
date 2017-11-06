@@ -105,7 +105,7 @@ public class MessageClient {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			conn.release();
+			//conn.release();
 
 		}
 		return added;
@@ -146,7 +146,7 @@ public class MessageClient {
 			e.printStackTrace();
 
 		} finally {
-			conn.release();
+			//conn.release();
 		}
 		return added;
 

@@ -71,6 +71,7 @@ public class CommConnection {
 
 	public static CommConnection initConnection(String host, int port) {
 		instance.compareAndSet(null, new CommConnection(host, port));
+		System.out.println(instance.get());
 		return instance.get();
 	}
 
