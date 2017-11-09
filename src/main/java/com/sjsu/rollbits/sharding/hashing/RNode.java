@@ -91,15 +91,16 @@ public class RNode implements Comparable<RNode> {
 
 	@Override
 	public int hashCode() {
-
+		// TODO Auto-generated method stub
 		return nodeId.hashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		RNode node = (RNode) obj;
 
-		RNode rnode = (RNode) obj;
-		return this.nodeId.equals(rnode.nodeId);
+		return this.equals(node);
 	}
 
 }

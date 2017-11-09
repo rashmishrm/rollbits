@@ -61,22 +61,26 @@ public class ConsistentHash {
 			hash = tailMap.isEmpty() ? circle.firstKey() : tailMap.firstKey();
 		}
 
-	
 		// get next nodes
 		SortedMap<Long, RNode> tailMap = circle.tailMap(hash);
+
+		if (tailMap.size() < numberOfReplicas) {
+
+			tailMap.putAll(circle.tailMap(circle.firstKey()));
+		}
+
 		int k = numberOfReplicas;
-		
+
 		for (Long h : tailMap.keySet()) {
-			RNode rnode=null;
-			 rnode=tailMap.get(h);
-			if(k==numberOfReplicas) {
-			
-				 rnode.setType(Type.PRIMARY);
+			RNode rnode = null;
+			rnode = tailMap.get(h);
+			if (k == numberOfReplicas) {
+
+				rnode.setType(Type.PRIMARY);
+			} else {
+				rnode.setType(Type.REPLICA);
 			}
-			else {
-				 rnode.setType(Type.REPLICA);
-			}
-			
+
 			list.add(tailMap.get(h));
 			k--;
 			if (k == 0) {

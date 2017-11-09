@@ -69,8 +69,20 @@ public class CommConnection {
 		init();
 	}
 
+	protected CommConnection(String host, int port, boolean check) {
+		this.host = host;
+		this.port = port;
+
+		// init();
+	}
+
 	public static CommConnection initConnection(String host, int port) {
 		instance.compareAndSet(null, new CommConnection(host, port));
+
+		if (!instance.equals(new CommConnection(host, port, true))) {
+			instance.set(new CommConnection(host, port));
+		}
+
 		System.out.println(instance.get());
 		return instance.get();
 	}
@@ -90,16 +102,15 @@ public class CommConnection {
 		group.shutdownGracefully();
 	}
 
-
 	public void enqueue(Route req) throws Exception {
 		// enqueue message
 		outbound.put(req);
 	}
 
 	/**
-	 * messages pass through this method (no queueing). We use a blackbox design
-	 * as much as possible to ensure we can replace the underlining
-	 * communication without affecting behavior.
+	 * messages pass through this method (no queueing). We use a blackbox design as
+	 * much as possible to ensure we can replace the underlining communication
+	 * without affecting behavior.
 	 * 
 	 * NOTE: Package level access scope
 	 * 
@@ -143,7 +154,7 @@ public class CommConnection {
 		group = new NioEventLoopGroup();
 		try {
 
-			 CommInit si = new CommInit( false);
+			CommInit si = new CommInit(false);
 			Bootstrap b = new Bootstrap();
 			b.group(group).channel(NioSocketChannel.class).handler(si);
 			b.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
@@ -214,5 +225,19 @@ public class CommConnection {
 
 			// @TODO if lost, try to re-establish the connection
 		}
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		CommConnection c = (CommConnection) obj;
+
+		return c.equals(this);
+	}
+
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		return host.hashCode();
 	}
 }

@@ -10,10 +10,15 @@
 		<!-- <property name="hibernate.connection.password">root</property> -->
 		<property name="hibernate.connection.password">your-password</property>
 
-		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="hibernate.hbm2ddl.auto">create</property>
 		<property name="show_sql">false</property>
 		<property name="hibernate.current_session_context_class">thread</property>
 		<mapping class="com.sjsu.rollbits.dao.interfaces.model.User" />
+		<mapping class="com.sjsu.rollbits.dao.interfaces.model.Message" />
+		<mapping class="com.sjsu.rollbits.dao.interfaces.model.Messagetype" />
+		<mapping class="com.sjsu.rollbits.dao.interfaces.model.User" />
+		<mapping class="com.sjsu.rollbits.dao.interfaces.model.Group" />
+		<mapping class="com.sjsu.rollbits.dao.interfaces.model.GroupUser" />
 	</session-factory>
 
 </hibernate-configuration>

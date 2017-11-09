@@ -79,8 +79,8 @@ public class DemoApp implements CommListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String host = "10.0.0.2";
-		int port = 4568;
+		String host = "10.0.0.1";
+		int port = 4567;
 		System.out.println(Pipe.Route.Path.USER);
 		long stime= System.currentTimeMillis();
 
@@ -89,12 +89,12 @@ public class DemoApp implements CommListener {
 			// DemoApp da = new DemoApp(mc);
 			
 			
-			mc.addUser("rashmishrm", "rashmishrm74@gmail.com", false, true);
-			mc.addUser("nishantrathi", "rashmishrm74@gmail.com", false, true);
+			//mc.addUser("seconduser", "abc", false, true);
+			//mc.addUser("nishantrathi", "rashmishrm74@gmail.com", false, true);
 			
 			
 			
-			mc.sendMessage("rashmishrm", "nishantrathi", 1, "Sending MEssage", false, true);
+			mc.sendMessage("akansha", "seconduser", 1, "Sending MEssage", false, true);
 		
 
 			long etime= System.currentTimeMillis();

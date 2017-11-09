@@ -50,7 +50,8 @@ public class UserResource implements RouteResource {
 
 				System.out.println(user.getUname());
 
-				List<RNode> nodes = shardingService.getNodes(new Message(user.getUname()));
+				//Set<RNode> nodes = new HashSet<>(shardingService.getNodes(new Message(user.getUname())));
+				List<RNode> nodes =shardingService.getNodes(new Message(user.getUname()));
 
 				// save to database
 

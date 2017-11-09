@@ -11,7 +11,7 @@ import java.util.List;
 
 
 
-public class MessageDao implements DaoInterface<Message, Integer> {
+public class MessageDao {
     private Session currentSession;
     private Transaction currentTransaction;
     public MessageDao() {

@@ -9,12 +9,12 @@ public class ShardingService {
 	public static ShardingService service;
 
 	private ShardingService() {
-		int numberOfReplicas = 3;
+		int numberOfReplicas = 2;
 		List<RNode> list = new ArrayList<>();
-		list.add(new RNode("A", RNode.Type.PRIMARY, "10.0.0.1", 4567));
-		list.add(new RNode("B", RNode.Type.PRIMARY, "10.0.0.2", 4567));
-		list.add(new RNode("C", RNode.Type.REPLICA, "10.0.0.3", 4567));
-		list.add(new RNode("D", RNode.Type.REPLICA, "10.0.0.4", 4567));
+		list.add(new RNode("ABC", RNode.Type.PRIMARY, "10.0.0.1", 4567));
+		list.add(new RNode("DEF", RNode.Type.PRIMARY, "10.0.0.2", 4567));
+		list.add(new RNode("GHI", RNode.Type.REPLICA, "10.0.0.3", 4567));
+		list.add(new RNode("JKL", RNode.Type.REPLICA, "10.0.0.4", 4567));
 		MurmurHash128 m = new MurmurHash128();
 		hash = new ConsistentHash(m, numberOfReplicas, list);
 	}
@@ -33,7 +33,7 @@ public class ShardingService {
 
 	public static void main(String[] args) {
 		ShardingService service = ShardingService.getInstance();
-		List<RNode> nodes = service.getNodes(new Message("86699"));
+		List<RNode> nodes = service.getNodes(new Message("nishantrathi"));
 
 		for (RNode node : nodes) {
 			System.out.println(node.getIpAddress());
@@ -43,7 +43,11 @@ public class ShardingService {
 
 	public List<RNode> getNodes(Message message) {
 		List<RNode> list = hash.get(message.getUniqueKey());
-
+		System.out.println(list);
+		
+		
+		
+		
 		// TODO
 		// Remove own ip from list
 

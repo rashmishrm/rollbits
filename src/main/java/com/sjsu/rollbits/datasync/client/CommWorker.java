@@ -23,7 +23,7 @@ public class CommWorker extends Thread {
 
 	@Override
 	public void run() {
-		System.out.println("--> starting worker thread");
+		System.out.println("--> running workerrrr");
 		System.out.flush();
 
 		Channel ch = conn.connect();
@@ -40,6 +40,9 @@ public class CommWorker extends Thread {
 				// block until a message is enqueued AND the outgoing
 				// channel is active
 				Route msg = conn.outbound.take();
+			
+				
+				
 				if (ch.isWritable()) {
 					if (!conn.write(msg)) {
 						//conn.outbound.putFirst(msg);
