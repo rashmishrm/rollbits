@@ -89,15 +89,13 @@ public class DemoApp implements CommListener {
 			// DemoApp da = new DemoApp(mc);
 			
 			
-			for (int i = 214; i < 219; i++) {
-
-				mc.addUser("dhrumilia" + i, "abc@gmail.com", false, false);
-
-				// do stuff w/ the connection
-				// da.ping(4000);
-
-				Thread.sleep(10);
-			}
+			mc.addUser("rashmishrm", "rashmishrm74@gmail.com", false, true);
+			mc.addUser("nishantrathi", "rashmishrm74@gmail.com", false, true);
+			
+			
+			
+			mc.sendMessage("rashmishrm", "nishantrathi", 1, "Sending MEssage", false, true);
+		
 
 			long etime= System.currentTimeMillis();
 			

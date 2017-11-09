@@ -16,13 +16,14 @@
 package com.sjsu.rollbits.datasync.server.resources;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sjsu.rollbits.dao.interfaces.service.MessageService;
-import com.sjsu.rollbits.dao.interfaces.service.Service;
 import com.sjsu.rollbits.datasync.client.MessageClient;
 import com.sjsu.rollbits.sharding.hashing.Message;
 import com.sjsu.rollbits.sharding.hashing.RNode;
@@ -45,7 +46,7 @@ public class MessageResource implements RouteResource {
 		shardingService = ShardingService.getInstance();
 		dbService = new MessageService();
 	}
-	
+
 	@Override
 	public Pipe.Route.Path getPath() {
 		return Pipe.Route.Path.MESSAGE;
@@ -55,27 +56,48 @@ public class MessageResource implements RouteResource {
 	public String process(Pipe.Route msg) {
 		boolean isSuccess = false;
 		routing.Pipe.Message message = msg.getMessage();
-		
-		if (msg.getHeader()!=null && msg.getHeader().getType()!=null && "EXTERNAL".equals(msg.getHeader().getType())){
+
+		if (msg.getHeader() != null && msg.getHeader().getType() != null
+				&& "EXTERNAL".equals(msg.getHeader().getType())) {
 
 			System.out.println("Message recieved from :" + message.getFromuname());
 
-			List<RNode> nodes = shardingService.getNodes(new Message(message.getFromuname()));
+			List<RNode> fromNames = shardingService.getNodes(new Message(message.getFromuname()));
+			List<RNode> toNames = shardingService.getNodes(new Message(message.getTogname()));
+			Set<RNode> set = new HashSet<RNode>();
+			set.addAll(fromNames);
+			set.addAll(toNames);
 
 			// save to database
 
-			for (RNode node : nodes) {
+			for (RNode node : set) {
 				MessageClient mc = new MessageClient(node.getIpAddress(), node.getPort());
 				if (node.getType().equals(RNode.Type.REPLICA)) {
 					mc.sendMessage(message.getFromuname(),
-							message.getTouname() != null ? message.getTouname() : message.getTogname(),
-							1, //As of now, we are not using it. Will be used when we support Images and video messages
+							message.getTouname() != null ? message.getTouname() : message.getTogname(), 1, // As of now,
+							// we are
+							// not using
+							// it. Will
+							// be used
+							// when we
+							// support
+							// Images
+							// and video
+							// messages
 							message.getMessage(), true, true);
 				} else {
-					//mc.addUser(user.getUname(), user.getEmail(), true, false);
+					// mc.addUser(user.getUname(), user.getEmail(), true, false);
 					mc.sendMessage(message.getFromuname(),
-							message.getTouname() != null ? message.getTouname() : message.getTogname(),
-							1, //As of now, we are not using it. Will be used when we support Images and video messages
+							message.getTouname() != null ? message.getTouname() : message.getTogname(), 1, // As of now,
+																											// we are
+																											// not using
+																											// it. Will
+																											// be used
+																											// when we
+																											// support
+																											// Images
+																											// and video
+																											// messages
 							message.getMessage(), true, false);
 				}
 
@@ -83,13 +105,15 @@ public class MessageResource implements RouteResource {
 
 		} else {
 			System.out.println("Adding to database!!!!!");
-			//User dbuser = new User(user.getUname(), user.getEmail());
-			com.sjsu.rollbits.dao.interfaces.model.Message messageModel = new com.sjsu.rollbits.dao.interfaces.model.Message(1, new Date(), message.getFromuname(), message.getTouname(), message.getTogname(), message.getMessage() ); 
+			// User dbuser = new User(user.getUname(), user.getEmail());
+			com.sjsu.rollbits.dao.interfaces.model.Message messageModel = new com.sjsu.rollbits.dao.interfaces.model.Message(
+					1, new Date(), message.getFromuname(), message.getTouname(), message.getTogname(),
+					message.getMessage());
 			dbService.persist(messageModel);
 			isSuccess = true;
 		}
-		
-		return isSuccess?"sucess":"Failed";
+
+		return isSuccess ? "sucess" : "Failed";
 	}
 
 }

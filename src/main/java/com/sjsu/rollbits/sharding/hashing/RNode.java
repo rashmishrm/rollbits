@@ -1,6 +1,6 @@
 package com.sjsu.rollbits.sharding.hashing;
 
-public class RNode implements Comparable<RNode>{
+public class RNode implements Comparable<RNode> {
 	private String nodeId;
 	private Type type;
 	private String ipAddress;
@@ -86,7 +86,20 @@ public class RNode implements Comparable<RNode>{
 	@Override
 	public int compareTo(RNode o) {
 		// TODO Auto-generated method stub
-		return virtualNodeCount-o.virtualNodeCount;
+		return virtualNodeCount - o.virtualNodeCount;
+	}
+
+	@Override
+	public int hashCode() {
+
+		return nodeId.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+
+		RNode rnode = (RNode) obj;
+		return this.nodeId.equals(rnode.nodeId);
 	}
 
 }
