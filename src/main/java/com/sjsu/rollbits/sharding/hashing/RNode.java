@@ -1,11 +1,13 @@
 package com.sjsu.rollbits.sharding.hashing;
 
-public class RNode {
+public class RNode implements Comparable<RNode>{
 	private String nodeId;
 	private Type type;
 	private String ipAddress;
 	private int port;
-	
+
+	private int virtualNodeCount;
+
 	public enum Type {
 		REPLICA, PRIMARY;
 
@@ -20,6 +22,14 @@ public class RNode {
 		this.type = type;
 		this.ipAddress = ipAddress;
 		this.port = port;
+	}
+
+	public RNode(String nodeId, Type type, String ipAddress, int port, int virtualNodeCount) {
+		this.nodeId = nodeId;
+		this.type = type;
+		this.ipAddress = ipAddress;
+		this.port = port;
+		this.virtualNodeCount = virtualNodeCount;
 	}
 
 	public RNode(String nodeId, String ipAddress) {
@@ -58,9 +68,25 @@ public class RNode {
 	public void setPort(int port) {
 		this.port = port;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return this.getNodeId();
+	}
+
+	public int getVirtualNodeCount() {
+		return virtualNodeCount;
+	}
+
+	public void setVirtualNodeCount(int virtualNodeCount) {
+		this.virtualNodeCount = virtualNodeCount;
+	}
+
+	@Override
+	public int compareTo(RNode o) {
+		// TODO Auto-generated method stub
+		return virtualNodeCount-o.virtualNodeCount;
+	}
 
 }
-
-
