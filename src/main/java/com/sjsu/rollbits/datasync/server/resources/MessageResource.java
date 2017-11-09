@@ -74,21 +74,12 @@ public class MessageResource implements RouteResource {
 				MessageClient mc = new MessageClient(node.getIpAddress(), node.getPort());
 				if (node.getType().equals(RNode.Type.REPLICA)) {
 					mc.sendMessage(message.getFromuname(),
-							message.getTouname() != null ? message.getTouname() : message.getTogname(), 1, // As of now,
-							// we are
-							// not using
-							// it. Will
-							// be used
-							// when we
-							// support
-							// Images
-							// and video
-							// messages
+							message.getTouname(), 1, 
 							message.getMessage(), true, true);
 				} else {
 					// mc.addUser(user.getUname(), user.getEmail(), true, false);
 					mc.sendMessage(message.getFromuname(),
-							message.getTouname() != null ? message.getTouname() : message.getTogname(), 1, // As of now,
+							message.getTouname(), 1, // As of now,
 																											// we are
 																											// not using
 																											// it. Will

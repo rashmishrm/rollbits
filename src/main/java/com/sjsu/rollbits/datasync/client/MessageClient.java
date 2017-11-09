@@ -125,7 +125,7 @@ public class MessageClient {
 		msg.setTouname(toUserId);
 
 		msg.setAction(routing.Pipe.actionType.PUT);
-
+		rb.setMessage(msg);
 		Pipe.Header.Builder header = Pipe.Header.newBuilder();
 
 		if (internal) {
