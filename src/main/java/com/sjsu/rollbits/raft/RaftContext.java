@@ -15,22 +15,40 @@ public class RaftContext {
 	public static Long RAFT_TIMER = 5 * 60 * 1000L;
 	private Long LAST_RECIEVED = -1L;
 	private String leaderNodeId;
+	private static RaftEngine raftEngine;
+	private static Thread raftEngineThread;
+	private static RaftHeartBeatEngine raftHeartBeatEngine;
+	private static Thread raftHeartBeatEngineThread;
+	
+	static {
+		if (raftContext == null) {
+			synchronized (RaftContext.class) {
+				if (raftContext == null) {
+					raftContext = new RaftContext();
+					raftContext.setRaftState(new RaftFollowerState());
+					raftEngine = new RaftEngine();
+					raftEngineThread = new Thread(raftEngine);
+					raftEngineThread.start();
+					System.out.println("Raft Engine started..");
+					raftHeartBeatEngine = new RaftHeartBeatEngine();
+					raftHeartBeatEngineThread = new Thread(raftHeartBeatEngine);
+					raftHeartBeatEngineThread.start();
+					System.out.println("Raft Heartbeat Engine started..");
+				}
+				
+			}
+		}
+	}
+	
 	/**
 	 * Making this as singleton
 	 */
 	private RaftContext() {
+		System.out.println("Creating Raft Context...");
 	}
 	
-	public static RaftContext getInstance(){
-	    if(raftContext == null){
-	        synchronized (RaftContext.class) {
-	            if(raftContext == null){
-	            	raftContext = new RaftContext();
-	            	raftContext.setRaftState(new RaftFollowerState());
-	            }
-	        }
-	    }
-	    return raftContext;
+	public static RaftContext getInstance() {
+		return raftContext;
 	}
 
 	/**
@@ -62,6 +80,9 @@ public class RaftContext {
 		
 	}
 
-	
+	public String getLeaderNodeId() {
+		return this.leaderNodeId;
+		
+	}
 
 }
