@@ -23,31 +23,15 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<NetworkDiscove
 
 	@Override
 	public void channelRead0(ChannelHandlerContext ctx, NetworkDiscoveryPacket request) throws Exception {
-		System.err.println("In channel read");
-
-		/*
-		 * if(!NodeMap.containsKey(request.getNodeid())){
-		 * NodeMap.put(request.getNodeid(), new Node(request.getNodeid(),
-		 * request.getIp(), request.getGroup(), request.getSender()));
-		 * 
-		 * }
-		 */
+		
+		//Dont do anything when youare yourself sending the broadcast
+		if(MyConstants.NODE_IP.equals(request.getNodeAddress())){
+			return;
+		}
+		
 		if (request.getSender().equals(Sender.EXTERNAL_SERVER_NODE)) {
 			ClusterDirectory.addToDirectory(request);
 		}
-		/*
-		 * for(String key: GroupMap.keySet()){
-		 * System.out.println("Group ID: "+key);//nMap.put(request.getNodeid(),
-		 * new Node(request.getNodeid(), request.getIp(), request.getGroup(),
-		 * request.getSender())); }
-		 */
-
-		/*
-		 * for(String key: NodeMap.keySet()){
-		 * System.out.println("Node ID: "+key);nMap.put(request.getNodeid(), new
-		 * Node(request.getNodeid(), request.getIp(), request.getGroup(),
-		 * request.getSender())); }
-		 */
 
 		if (request.getMode() == NetworkDiscoveryPacket.Mode.REQUEST) {
 
@@ -63,13 +47,6 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<NetworkDiscove
 				toSend.setSecret(MyConstants.SECRET);
 				NetworkDiscoveryPacket myResponse = toSend.build();
 				UdpClient.sendUDPMessage(myResponse, request.getNodeId(), Integer.parseInt(request.getNodePort()));
-				/*
-				 * ByteBuf buf =
-				 * Unpooled.copiedBuffer(myResponse.toByteArray());
-				 * ctx.writeAndFlush(new DatagramPacket(buf,
-				 * SocketUtils.socketAddress(request.getNodeId(),
-				 * Integer.parseInt(request.getNodePort())))) .sync();
-				 */
 			} catch (Exception e) {
 				System.err.println("Exception received");
 				e.printStackTrace();

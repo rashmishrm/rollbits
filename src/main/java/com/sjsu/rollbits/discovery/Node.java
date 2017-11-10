@@ -12,11 +12,12 @@ public class Node {
     private String group;
     private Pipe.NetworkDiscoveryPacket.Sender typeNode;
    
-	public Node(String id, String ip, String group, Pipe.NetworkDiscoveryPacket.Sender Sender){
+	public Node(String id, String ip, String port, String group, Pipe.NetworkDiscoveryPacket.Sender Sender){
 	  	this.nodeId = id;
 	  	this.nodeIp = ip;
 	  	this.group = group;
 	  	this.typeNode = Sender;
+	  	this.port = Integer.parseInt(port);
 	} 
 	
 	public String getNodeIp(){

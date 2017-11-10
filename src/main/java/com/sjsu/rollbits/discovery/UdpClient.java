@@ -44,10 +44,8 @@ public final class UdpClient {
 															// transitioning
 															// this builder to
 															// the built state.
-		String IP = "255.255.255.255";
-		int port = 8080;
 
-		sendUDPMessage(request, IP, port);
+		sendUDPMessage(request, MyConstants.UDP_IP_BROADCAST, MyConstants.UDP_PORT);
 	}
 
 	public static void sendUDPMessage(NetworkDiscoveryPacket request, String IP, int port) throws InterruptedException {

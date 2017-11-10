@@ -12,11 +12,11 @@ public class ClusterDirectory {
 	public static void addToDirectory(NetworkDiscoveryPacket request) {
 		if (clusterMap.containsKey(request.getGroupTag())) {
 			Map<String, Node> nMap = clusterMap.get(request.getGroupTag());
-			nMap.put(request.getNodeId(), new Node(request.getNodeId(), request.getNodePort(),
+			nMap.put(request.getNodeId(), new Node(request.getNodeId(), request.getNodeAddress(), request.getNodePort(),
 					request.getGroupTag(), request.getSender()));
 		} else {
 			Map<String, Node> nMap = new HashMap<>();
-			nMap.put(request.getNodeId(), new Node(request.getNodeId(), request.getNodePort(),
+			nMap.put(request.getNodeId(), new Node(request.getNodeId(), request.getNodeAddress(), request.getNodePort(),
 					request.getGroupTag(), request.getSender()));
 			clusterMap.put(request.getGroupTag(), nMap);
 		}
@@ -25,6 +25,7 @@ public class ClusterDirectory {
 	}
 
 	private static void printDirectory() {
+		System.out.println("Printing Cluster Directory");
 		for (Map.Entry<String, Map<String, Node>> entry : clusterMap.entrySet()) {
 			for (Map.Entry<String, Node> entry2 : entry.getValue().entrySet()) {
 				System.out.println("Group " + entry.getKey() + " NodeId " + entry2.getKey() + " IP "
