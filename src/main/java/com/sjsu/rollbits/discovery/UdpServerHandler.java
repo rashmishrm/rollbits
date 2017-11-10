@@ -46,7 +46,7 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<NetworkDiscove
 				toSend.setSender(Sender.EXTERNAL_SERVER_NODE);
 				toSend.setSecret(MyConstants.SECRET);
 				NetworkDiscoveryPacket myResponse = toSend.build();
-				UdpClient.sendUDPMessage(myResponse, request.getNodeId(), Integer.parseInt(request.getNodePort()));
+				UdpClient.sendUDPMessage(myResponse, request.getNodeAddress(), MyConstants.UDP_PORT);
 			} catch (Exception e) {
 				System.err.println("Exception received");
 				e.printStackTrace();
