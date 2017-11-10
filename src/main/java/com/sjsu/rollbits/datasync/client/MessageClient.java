@@ -72,6 +72,15 @@ public class MessageClient {
 		}
 	}
 
+	// Send already formed message
+	public void postOnQueue(Route.Builder msg) {
+		try {
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public boolean addUser(String name, String email, boolean internal, boolean async) {
 		// construct the message to send
 		boolean added = false;
@@ -105,7 +114,7 @@ public class MessageClient {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			//conn.release();
+			// conn.release();
 
 		}
 		return added;
@@ -146,7 +155,7 @@ public class MessageClient {
 			e.printStackTrace();
 
 		} finally {
-			//conn.release();
+			// conn.release();
 		}
 		return added;
 

@@ -29,8 +29,8 @@ message Route {
     optional Header header=8;
     optional Message message=9;
     
-    optional UserMessagesRequest=10;
-    optional UserMessagesResponse=11;
+    optional UserMessagesRequest userMessagesRequest=10;
+    optional UserMessagesResponse  userMessagesResponse=11;
 
 }
 

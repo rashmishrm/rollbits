@@ -15,14 +15,12 @@
  */
 package com.sjsu.rollbits.datasync.server.resources;
 
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sjsu.rollbits.Constants;
 import com.sjsu.rollbits.dao.interfaces.service.MessageService;
 import com.sjsu.rollbits.datasync.client.MessageClient;
 import com.sjsu.rollbits.sharding.hashing.Message;
@@ -30,7 +28,6 @@ import com.sjsu.rollbits.sharding.hashing.RNode;
 import com.sjsu.rollbits.sharding.hashing.ShardingService;
 
 import routing.Pipe;
-import routing.Pipe.Route;
 
 /**
  * processes requests of message passing - demonstration
@@ -56,9 +53,20 @@ public class UserMessageResource implements RouteResource {
 	@Override
 	public Object process(Pipe.Route msg) {
 		boolean isSuccess = false;
-		routing.Pipe.UserMessagesRequest message = null;
+		routing.Pipe.UserMessagesRequest message = msg.getUserMessagesRequest();
 
-		
+		// nodes from where data needs to be fetched
+
+		List<RNode> nodes = shardingService.getNodes(new Message(message.getUname()));
+
+		RNode primaryNode = nodes.get(0);
+
+		if (!primaryNode.getIpAddress().equals(Constants.MY_IP)) {
+			MessageClient msgClient = new MessageClient(primaryNode.getIpAddress(), primaryNode.getPort());
+
+			// msgClient.postOnQueue(msg);
+
+		}
 
 		return null;
 	}

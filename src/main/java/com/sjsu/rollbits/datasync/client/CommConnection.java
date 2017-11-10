@@ -125,6 +125,10 @@ public class CommConnection {
 
 		// TODO a queue is needed to prevent overloading of the socket
 		// connection. For the demonstration, we don't need it
+		
+		
+		
+	
 		ChannelFuture cf = connect().writeAndFlush(msg);
 		if (cf.isDone() && !cf.isSuccess()) {
 			logger.error("failed to send message to server - " + msg.getPayload());
