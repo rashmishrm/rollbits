@@ -15,8 +15,20 @@
  */
 package com.sjsu.rollbits.datasync.server.resources;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sjsu.rollbits.dao.interfaces.service.MessageService;
+import com.sjsu.rollbits.datasync.client.MessageClient;
+import com.sjsu.rollbits.sharding.hashing.Message;
+import com.sjsu.rollbits.sharding.hashing.RNode;
+import com.sjsu.rollbits.sharding.hashing.ShardingService;
+
 import routing.Pipe;
 import routing.Pipe.Route;
 
@@ -26,25 +38,29 @@ import routing.Pipe.Route;
  * @author gash
  * 
  */
-public class MsgResource implements RouteResource {
-	protected static Logger logger = LoggerFactory.getLogger("message");
+public class UserMessageResource implements RouteResource {
+	protected static Logger logger = LoggerFactory.getLogger("usermessage");
+	private ShardingService shardingService;
+	private MessageService dbService = null;
+
+	public UserMessageResource() {
+		shardingService = ShardingService.getInstance();
+		dbService = new MessageService();
+	}
 
 	@Override
 	public Pipe.Route.Path getPath() {
-		return Pipe.Route.Path.MSG;
+		return Pipe.Route.Path.USER_MESSAGES_REQUEST;
 	}
 
 	@Override
 	public Object process(Pipe.Route msg) {
-		String body = msg.getPayload();
-		if (body == null || body.trim().length() == 0)
-			throw new RuntimeException("Missing/Null data");
+		boolean isSuccess = false;
+		routing.Pipe.UserMessagesRequest message = null;
 
-		logger.info(body);
+		
 
-		Route.Builder rb = Route.newBuilder(msg);
-		rb.setPayload("good");
-		return rb;
+		return null;
 	}
 
 }

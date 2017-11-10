@@ -62,18 +62,18 @@ public class ServerHandler extends SimpleChannelInboundHandler<Route> {
 		}
 
 		System.out.println("---> " + msg.getId() + ": " + msg.getPath() + ", " + msg.getPayload());
-		System.out.println("all key set--->"+routing.keySet());
+		System.out.println("all key set--->" + routing.keySet());
 		try {
 			String clazz = routing.get(msg.getPath().toString());
 			if (clazz != null) {
 				RouteResource rsc = (RouteResource) Beans.instantiate(RouteResource.class.getClassLoader(), clazz);
 				try {
-					String reply = rsc.process(msg);
+					Route.Builder reply = (Route.Builder) rsc.process(msg);
 					System.out.println("---> reply: " + reply);
 					if (reply != null) {
-						Route.Builder rb = Route.newBuilder(msg);
-						rb.setPayload(reply);
-						channel.writeAndFlush(rb.build());
+						// Route.Builder rb = Route.newBuilder(msg);
+						// rb.setPayload(reply);
+						channel.writeAndFlush(reply.build());
 					}
 				} catch (Exception e) {
 					// TODO add logging
@@ -94,9 +94,8 @@ public class ServerHandler extends SimpleChannelInboundHandler<Route> {
 	}
 
 	/**
-	 * a message was received from the server. Here we dispatch the message to
-	 * the client's thread pool to minimize the time it takes to process other
-	 * messages.
+	 * a message was received from the server. Here we dispatch the message to the
+	 * client's thread pool to minimize the time it takes to process other messages.
 	 * 
 	 * @param ctx
 	 *            The channel the message was received from
@@ -105,7 +104,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Route> {
 	 */
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, Route msg) throws Exception {
-		System.out.println("------here23------"+msg);
+		System.out.println("------here23------" + msg);
 		handleMessage(msg, ctx.channel());
 	}
 

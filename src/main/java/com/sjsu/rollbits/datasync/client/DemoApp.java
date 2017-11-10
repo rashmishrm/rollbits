@@ -94,7 +94,7 @@ public class DemoApp implements CommListener {
 			
 			
 			
-			mc.sendMessage("akansha", "seconduser", 1, "Sending MEssage", false, true);
+			mc.sendMessage("yahoooooo", "seconduser", 1, "Sending MEssage", false, true);
 		
 
 			long etime= System.currentTimeMillis();

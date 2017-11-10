@@ -19,7 +19,7 @@ public class RaftResource  implements RouteResource {
     }
 
     @Override
-    public String process(Pipe.Route msg) {
+    public Object process(Pipe.Route msg) {
 
 
         RaftMessage raftMessage= msg.getRaftMessage();

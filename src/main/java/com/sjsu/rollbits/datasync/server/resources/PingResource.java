@@ -18,6 +18,7 @@ package com.sjsu.rollbits.datasync.server.resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import routing.Pipe;
+import routing.Pipe.Route;
 
 /**
  * responds to request for pinging the service
@@ -34,8 +35,12 @@ public class PingResource implements RouteResource {
 	}
 
 	@Override
-	public String process(Pipe.Route body) {
+	public Object process(Pipe.Route body) {
 		logger.info(body.getPayload());
+
+		Route.Builder rb = Route.newBuilder(body);
+		rb.setPayload("success");
+		
 		return "success";
 	}
 

@@ -40,5 +40,5 @@ public interface RouteResource {
 	 *            the string representation of the request
 	 * @return The string representation of the response
 	 */
-	String process(Pipe.Route msg);
+	Object process(Pipe.Route msg);
 }

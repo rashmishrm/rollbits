@@ -13,6 +13,7 @@ import com.sjsu.rollbits.sharding.hashing.RNode;
 import com.sjsu.rollbits.sharding.hashing.ShardingService;
 
 import routing.Pipe;
+import routing.Pipe.Route;
 
 public class UserResource implements RouteResource {
 	protected static Logger logger = LoggerFactory.getLogger("user");
@@ -32,7 +33,7 @@ public class UserResource implements RouteResource {
 	}
 
 	@Override
-	public String process(Pipe.Route msg) {
+	public Object process(Pipe.Route msg) {
 		boolean success = false;
 		Pipe.actionType option = msg.getUser().getAction();
 
@@ -50,8 +51,9 @@ public class UserResource implements RouteResource {
 
 				System.out.println(user.getUname());
 
-				//Set<RNode> nodes = new HashSet<>(shardingService.getNodes(new Message(user.getUname())));
-				List<RNode> nodes =shardingService.getNodes(new Message(user.getUname()));
+				// Set<RNode> nodes = new HashSet<>(shardingService.getNodes(new
+				// Message(user.getUname())));
+				List<RNode> nodes = shardingService.getNodes(new Message(user.getUname()));
 
 				// save to database
 
@@ -88,8 +90,9 @@ public class UserResource implements RouteResource {
 			break;
 
 		}
-
-		return success ? "success" : "failed";
+		Route.Builder rb = Route.newBuilder(msg);
+		rb.setPayload(success ? "sucess" : "Failed");
+		return rb;
 	}
 
 }

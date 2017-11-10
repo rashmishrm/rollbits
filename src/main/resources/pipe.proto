@@ -12,7 +12,8 @@ message Route {
     PING=5;
     MSG=6;
     RAFT_MSG =7;
-    
+    USER_MESSAGES_REQUEST=8;
+    USER_MESSAGES_RESPONSE=9;
     
 }
 
@@ -25,12 +26,22 @@ message Route {
     optional ServerNodeDiscoveryResponse serverNodeDiscoveryResponse= 5;
     optional User user = 6;
     optional RaftMessage raftMessage=7;
-    
-    
     optional Header header=8;
-    
     optional Message message=9;
+    
+    optional UserMessagesRequest=10;
+    optional UserMessagesResponse=11;
 
+}
+
+message UserMessagesRequest {
+  required string uname=1;
+  
+}
+
+message UserMessagesResponse {
+  required string uname=1;
+  repeated Message messages = 2;
 }
 
 enum actionType {
