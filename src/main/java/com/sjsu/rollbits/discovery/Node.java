@@ -66,6 +66,12 @@ public class Node {
 	public void setNodeIp(String nodeIp) {
 		this.nodeIp = nodeIp;
 	}
+
+	@Override
+	public String toString() {
+		return "Node [nodeId=" + nodeId + ", nodeIp=" + nodeIp + ", port=" + port + ", group=" + group + ", typeNode="
+				+ typeNode + "]";
+	}
 	
 	
 	
