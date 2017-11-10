@@ -91,7 +91,7 @@ public class MessageResource implements RouteResource {
 			isSuccess = true;
 		}
 
-		Route.Builder rb = Route.newBuilder(msg);
+		Route.Builder rb = Route.newBuilder();
 		rb.setPayload(isSuccess ? "sucess" : "Failed");
 
 		return rb;
