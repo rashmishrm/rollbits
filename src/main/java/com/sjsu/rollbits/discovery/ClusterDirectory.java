@@ -27,7 +27,7 @@ public class ClusterDirectory {
 	private static void printDirectory() {
 		for (Map.Entry<String, Map<String, Node>> entry : clusterMap.entrySet()) {
 			for (Map.Entry<String, Node> entry2 : entry.getValue().entrySet()) {
-				System.out.println("Group" + entry.getKey() + " NodeId" + entry2.getKey() + " IP"
+				System.out.println("Group " + entry.getKey() + " NodeId " + entry2.getKey() + " IP "
 						+ entry2.getValue().getNodeIp());
 			}
 

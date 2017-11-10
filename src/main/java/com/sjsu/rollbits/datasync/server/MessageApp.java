@@ -17,6 +17,8 @@ package com.sjsu.rollbits.datasync.server;
 
 import java.io.File;
 
+import com.sjsu.rollbits.raft.RaftContext;
+
 /**
  * @author gash1
  * 
@@ -32,8 +34,9 @@ public class MessageApp {
 //			System.exit(1);
 //		}
 
-		File cf = new File("/Users/rashmisharma/Documents/GitHub/rollbits/src/main/resources/routing.conf");
+		File cf = new File("/Users/nishantrathi/CMPE-275/project/rollbits/src/main/resources/routing.conf");
 		try {
+			//RaftContext rc = RaftContext.getInstance();
 			MessageServer svr = new MessageServer(cf);
 			svr.startServer();
 		} catch (Exception e) {

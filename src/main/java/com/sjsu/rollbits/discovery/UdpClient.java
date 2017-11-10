@@ -34,6 +34,7 @@ public final class UdpClient {
 		builder.setNodeId(MyConstants.NODE_NAME);
 		builder.setNodeAddress(MyConstants.NODE_IP);
 		builder.setNodePort(MyConstants.NODE_PORT);
+		builder.setSecret(MyConstants.SECRET);
 
 		// builder.setIp(InetAddress.getLocalHost().getHostAddress());
 		// System.out.println("******"+InetAddress.getLocalHost().getHostAddress());
