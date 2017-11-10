@@ -1,93 +1,91 @@
 package com.sjsu.rollbits.discovery;
 
-
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.channel.socket.DatagramPacket;
-import io.netty.util.CharsetUtil;
-
-import java.net.Inet4Address;
-import java.nio.ByteBuffer;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import io.netty.util.internal.SocketUtils;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 import routing.Pipe.NetworkDiscoveryPacket;
-import routing.Pipe.ServerNodeDiscoveryResponse;
+import routing.Pipe.NetworkDiscoveryPacket.Mode;
+import routing.Pipe.NetworkDiscoveryPacket.Sender;
 
 public class UdpServerHandler extends SimpleChannelInboundHandler<NetworkDiscoveryPacket> {
-    
-    private static final Random random = new Random();
-    //private static Map<String, Node> mp = Collections.emptyMap();
-    //private static Map<String, Map<String, Node>> mpMaps = Collections.emptyMap();
-    
-    private static Map<String, Node> NodeMap= new HashMap<>();
-    
-    private static Map<String, Map<String, Node>> GroupMap = new HashMap<String, Map<String, Node>>();
-    
-    @Override
-    public void channelRead0(ChannelHandlerContext ctx, NetworkDiscoveryPacket request) throws Exception {
-        System.err.println("In channel read");
-        
-        if(!NodeMap.containsKey(request.getNodeid())){
-    			NodeMap.put(request.getNodeid(), new Node(request.getNodeid()));
-    			GroupMap.put(request.getGroup(), NodeMap);
-    			
-    	} 
-        
-        for(String key: GroupMap.keySet()){
-        	System.out.println("Group ID: "+key);
-        }
-        
-        for(String key: NodeMap.keySet()){
-        	System.out.println("Node ID: "+key);
-        }
-        
-        
-        
-//
-        System.err.println(ctx.channel().attr(UdpServer.attkey).get());
-        String clientIpPort = ctx.channel().attr(UdpServer.attkey).get();
-        String clientIp = clientIpPort.split(":")[0];
-        String clientPort = clientIpPort.split(":")[1];
 
-        try {
-            ServerNodeDiscoveryResponse.Builder toSend = ServerNodeDiscoveryResponse.newBuilder();
-            toSend.setGroup("Group 1");
+	private static final Random random = new Random();
+	// private static Map<String, Node> mp = Collections.emptyMap();
+	// private static Map<String, Map<String, Node>> mpMaps =
+	// Collections.emptyMap();
 
-            toSend.setNodeid("Akansha");
-            toSend.setIp("10.0.0.3");
+	// public static Map<String, Node> NodeMap= new HashMap<>();
 
-            ServerNodeDiscoveryResponse myResponse = toSend.build();
-            ByteBuf buf = Unpooled.copiedBuffer(myResponse.toByteArray());
-            ctx.writeAndFlush(new DatagramPacket(buf, SocketUtils.socketAddress(clientIp.substring(1, clientIp.length()), Integer.parseInt(clientPort)))).sync();
-        } catch (Exception e) {
-            System.err.println("Exception received");
-            e.printStackTrace();
-        }
-    }
+	/*public static Map<String, Map<String, Node>> GroupMap = new HashMap<String, Map<String, Node>>();*/
 
-    public Map<String, Node> getNodeMap(){
-    	return NodeMap;
-    }
-    
-    public Map<String, Map<String, Node>> getGroupMap(){
-    	return GroupMap;
-    }
-    
-    @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) {
-        ctx.flush();
-    }
+	@Override
+	public void channelRead0(ChannelHandlerContext ctx, NetworkDiscoveryPacket request) throws Exception {
+		System.err.println("In channel read");
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-            cause.printStackTrace();
-        // We don't close the channel because we can keep serving requests.
-    }
+		/*
+		 * if(!NodeMap.containsKey(request.getNodeid())){
+		 * NodeMap.put(request.getNodeid(), new Node(request.getNodeid(),
+		 * request.getIp(), request.getGroup(), request.getSender()));
+		 * 
+		 * }
+		 */
+		if (request.getSender().equals(Sender.EXTERNAL_SERVER_NODE)) {
+			ClusterDirectory.addToDirectory(request);
+		}
+		/*
+		 * for(String key: GroupMap.keySet()){
+		 * System.out.println("Group ID: "+key);//nMap.put(request.getNodeid(),
+		 * new Node(request.getNodeid(), request.getIp(), request.getGroup(),
+		 * request.getSender())); }
+		 */
+
+		/*
+		 * for(String key: NodeMap.keySet()){
+		 * System.out.println("Node ID: "+key);nMap.put(request.getNodeid(), new
+		 * Node(request.getNodeid(), request.getIp(), request.getGroup(),
+		 * request.getSender())); }
+		 */
+
+		if (request.getMode() == NetworkDiscoveryPacket.Mode.REQUEST) {
+
+			try {
+				NetworkDiscoveryPacket.Builder toSend = NetworkDiscoveryPacket.newBuilder();
+				toSend.setGroupTag(MyConstants.GROUP_NAME);
+
+				toSend.setNodeId(MyConstants.NODE_NAME);
+				toSend.setNodeAddress(MyConstants.NODE_IP);
+				toSend.setMode(Mode.RESPONSE);
+				toSend.setNodePort(MyConstants.NODE_PORT);
+				toSend.setSender(Sender.EXTERNAL_SERVER_NODE);
+				NetworkDiscoveryPacket myResponse = toSend.build();
+				UdpClient.sendUDPMessage(myResponse, request.getNodeId(), Integer.parseInt(request.getNodePort()));
+				/*
+				 * ByteBuf buf =
+				 * Unpooled.copiedBuffer(myResponse.toByteArray());
+				 * ctx.writeAndFlush(new DatagramPacket(buf,
+				 * SocketUtils.socketAddress(request.getNodeId(),
+				 * Integer.parseInt(request.getNodePort())))) .sync();
+				 */
+			} catch (Exception e) {
+				System.err.println("Exception received");
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+
+	@Override
+	public void channelReadComplete(ChannelHandlerContext ctx) {
+		ctx.flush();
+	}
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+		cause.printStackTrace();
+		// We don't close the channel because we can keep serving requests.
+	}
 }

@@ -23,7 +23,6 @@ message Route {
      
     optional string payload = 3;
     optional NetworkDiscoveryPacket networkDiscoveryPacket = 4;
-    optional ServerNodeDiscoveryResponse serverNodeDiscoveryResponse= 5;
     optional User user = 6;
     optional RaftMessage raftMessage=7;
     optional Header header=8;
@@ -95,14 +94,23 @@ message User {
  message NetworkDiscoveryPacket{
  	
  	enum Sender{
-    SERVER_NODE=0;
-    END_USER_CLIENT=1;
+    EXTERNAL_SERVER_NODE=0;
+    INTERNAL_SERVER_NODE=1;
+    END_USER_CLIENT=2;
     }
     
-    optional string group = 1; //If sender is a server node, then this field can contain its group id. If sender is end user client, then this field is not required.
-    required string nodeid = 2; //node id of the sender
-    optional string ip = 3;
-    required Sender sender =4 [default = SERVER_NODE]; 
+    	enum Mode{
+    REQUEST=0;
+    RESPONSE=1;
+    }
+    
+    required Mode mode = 1;
+    required Sender sender = 2 [default = EXTERNAL_SERVER_NODE];
+    optional string groupTag = 3; //If sender is a server node, then this field can contain its group id. If sender is end user client, then this field is not required.
+    optional string nodeId = 4; //node id of the sender
+    required string nodeAddress = 5;
+    required string nodePort = 6;
+    required string secret = 7;
  
  }
  
@@ -110,10 +118,4 @@ message User {
  	required string type=1;
  }
  
- message ServerNodeDiscoveryResponse{
- 	
-    required string group = 1;
-    required string ip = 2;
- 	required string nodeid = 3;
- 	
- }
+ 
