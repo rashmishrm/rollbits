@@ -90,7 +90,7 @@ public class UserResource implements RouteResource {
 			break;
 
 		}
-		Route.Builder rb = Route.newBuilder(msg);
+		Route.Builder rb = Route.newBuilder();
 		rb.setPayload(success ? "sucess" : "Failed");
 		return rb;
 	}
