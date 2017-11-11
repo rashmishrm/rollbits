@@ -2,11 +2,14 @@ package com.sjsu.rollbits.discovery;
 
 import java.util.HashMap;
 import java.util.Map;
+import yml.Config;
 
 import routing.Pipe.NetworkDiscoveryPacket;
 
 public class ClusterDirectory {
 
+
+	static String[] arg = new String[] {"123"};
 	public static Map<String, Map<String, Node>> clusterMap = new HashMap<String, Map<String, Node>>();
 
 	public static synchronized void addToDirectory(NetworkDiscoveryPacket request) {
@@ -22,6 +25,7 @@ public class ClusterDirectory {
 			clusterMap.put(request.getGroupTag(), nMap);
 		}
 
+		Config.main(arg);
 		printDirectory();
 	}
 
