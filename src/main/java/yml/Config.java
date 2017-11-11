@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.hibernate.cfg.Configuration;
@@ -15,7 +14,7 @@ import com.sjsu.rollbits.discovery.Node;
 
 
 public class Config {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
     	MyConstants constant=new MyConstants();
     	Configure con=new Configure();
     	Configuration configuration=new Configuration();
@@ -31,19 +30,26 @@ public class Config {
     	
         Yaml yaml = new Yaml();
         File file = new File("config.yml");
-        FileWriter writer = new FileWriter(file,true);
+        FileWriter writer;
+		try {
+			writer = new FileWriter(file,true);
+			 yaml.dump("---------------------------",writer);
+		        yaml.dump(new Date(),writer);
+		        yaml.dump(url,writer);
+		        yaml.dump(port,writer);
+		        yaml.dump("Nodes", writer);
+		        yaml.dump(mapnodes,writer);
+		        yaml.dump("Groups",writer);
+		        yaml.dump(groupnodes,writer);
+		        
+		        writer.close();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
-        yaml.dump("---------------------------",writer);
-        yaml.dump(new Date(),writer);
-        yaml.dump(url,writer);
-        yaml.dump(port,writer);
-        yaml.dump("Nodes", writer);
-        yaml.dump(mapnodes,writer);
-        yaml.dump("Groups",writer);
-        yaml.dump(groupnodes,writer);
-        
-        writer.close();
-        //System.out.println("end");	
+               //System.out.println("end");	
         
     }
 }
