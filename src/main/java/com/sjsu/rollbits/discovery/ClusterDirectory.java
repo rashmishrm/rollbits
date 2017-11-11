@@ -9,7 +9,8 @@ import routing.Pipe.NetworkDiscoveryPacket;
 public class ClusterDirectory {
 
 
-	static String[] arg = new String[] {"123"};
+	
+	static Config conf=new Config();
 	public static Map<String, Map<String, Node>> clusterMap = new HashMap<String, Map<String, Node>>();
 
 	public static synchronized void addToDirectory(NetworkDiscoveryPacket request) {
@@ -24,8 +25,8 @@ public class ClusterDirectory {
 			nMap.put(request.getNodeId(), node);
 			clusterMap.put(request.getGroupTag(), nMap);
 		}
-
-		Config.main(arg);
+		
+		conf.loadyaml();
 		printDirectory();
 	}
 
