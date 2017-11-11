@@ -14,8 +14,10 @@ import com.sjsu.rollbits.discovery.Node;
 
 
 public class Config {
-    public static void main(String[] args) {
-    	MyConstants constant=new MyConstants();
+	
+	public void loadyaml()
+	{
+		MyConstants constant=new MyConstants();
     	Configure con=new Configure();
     	Configuration configuration=new Configuration();
     	Connection conn=new Connection();
@@ -48,6 +50,10 @@ public class Config {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        
+	}
+    public static void main(String[] args) {
+
         
                //System.out.println("end");	
         
