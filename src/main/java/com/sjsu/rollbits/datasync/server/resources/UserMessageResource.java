@@ -5,7 +5,7 @@
  * (the "License"); you may not use this file except in compliance with the
  * License.  You may obtain a copy of the License at:
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *    http:www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -56,43 +56,45 @@ public class UserMessageResource implements RouteResource {
 		boolean isSuccess = false;
 		routing.Pipe.UserMessagesRequest message = msg.getUserMessagesRequest();
 
-		// nodes from where data needs to be fetched
 
 		List<RNode> nodes = shardingService.getNodes(new Message(message.getUname()));
 
-		// RNode primaryNode = nodes.get(0);
+		 RNode primaryNode = nodes.get(0);
+		 Route.Builder rb=null;
+		 if (!primaryNode.getIpAddress().equals(Constants.MY_IP)) {
+		 MessageClient msgClient = new MessageClient(primaryNode.getIpAddress(),
+		 primaryNode.getPort());
+		 Route r=msgClient.sendSyncronousMessage(msg.toBuilder());
+		 rb=r.toBuilder();
+		
+		 }
+		 else {
 
-		// if (!primaryNode.getIpAddress().equals(Constants.MY_IP)) {
-		// MessageClient msgClient = new MessageClient(primaryNode.getIpAddress(),
-		// primaryNode.getPort());
-		// msgClient.sendSyncronousMessage(msg.toBuilder());
-		//
-		//
-		//
-		//
-		// // msgClient.postOnQueue(msg);
-		//
-		// }
-		// else {
+		 List<com.sjsu.rollbits.dao.interfaces.model.Message> messages =
+		 dbService.findByUserName(message.getUname());
 
-		List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = dbService.findByUserName(message.getUname());
-		Route.Builder rb = Route.newBuilder();
+		System.out.println("hererrerererrerer in message resource");
+		rb = Route.newBuilder();
 		rb.setId(msg.getId());
-		rb.setPath(Route.Path.USER);
+		rb.setPath(Route.Path.USER_MESSAGES_RESPONSE);
 
 		Pipe.UserMessagesResponse.Builder ub = Pipe.UserMessagesResponse.newBuilder();
-		int i = 0;
+		
+		 int i = 0;
+		
+		 for (com.sjsu.rollbits.dao.interfaces.model.Message mesg : messages) {
+		 Pipe.Message.Builder m = Pipe.Message.newBuilder();
+		 m.setFromuname(mesg.getMessage());
+		 m.setTouname(mesg.getTouserid());
+		 ub.setMessages(i++, m);
+		 }
 
-		for (com.sjsu.rollbits.dao.interfaces.model.Message mesg : messages) {
-			Pipe.Message.Builder m = Pipe.Message.newBuilder();
-			m.setFromuname(mesg.getMessage());
-			m.setTouname(mesg.getTouserid());
-			ub.setMessages(i++, m);
-		}
-
-		rb.setUserMessagesResponse(ub);
-
-		return rb;
+	rb.setUserMessagesResponse(ub);
+		
+	
+		
 	}
-
+		 return rb;
+}
+	
 }

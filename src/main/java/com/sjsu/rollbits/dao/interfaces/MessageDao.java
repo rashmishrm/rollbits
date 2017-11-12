@@ -79,9 +79,9 @@ public class MessageDao {
         return message;
     }
     
-    @SuppressWarnings("unchecked")
-    public List<Message> findAllForUname(String uname) {
-        List<Message> message = (List<Message>) getCurrentSession().createQuery("from Message where touserid="+uname).list();
+	@SuppressWarnings("unchecked")
+	public List<Message> findAllForUname(String uname) {
+        List<Message> message = (List<Message>) getCurrentSession().createQuery("from Message m where m.touserid = '"+uname+"'").list();
         return message;
     }
 

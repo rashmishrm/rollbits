@@ -130,8 +130,16 @@ public class CommConnection {
 		
 	
 		ChannelFuture cf = connect().writeAndFlush(msg);
-		
-	
+//		cf.addListener(new ChannelFutureListener() {
+//			
+//			@Override
+//			public void operationComplete(ChannelFuture future) throws Exception {
+//				System.out.println("Ia ma here in channel operation completed.........!!@@@@ ");
+//				future.channel().read();
+//				
+//			}
+//		});
+//	
 		if (cf.isDone() && !cf.isSuccess()) {
 			logger.error("failed to send message to server - " + msg.getPayload());
 			return false;

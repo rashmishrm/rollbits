@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import routing.Pipe;
 import routing.Pipe.Route;
+import routing.Pipe.Route.Path;
 
 /**
  * responds to request for pinging the service
@@ -36,12 +37,14 @@ public class PingResource implements RouteResource {
 
 	@Override
 	public Object process(Pipe.Route body) {
-		logger.info(body.getPayload());
-
-		Route.Builder rb = Route.newBuilder(body);
+	logger.info(body.getPayload());
+	System.out.println(body.getPayload());	
+		Route.Builder rb = Route.newBuilder();
+		rb.setId(body.getId());
+		rb.setPath(Route.Path.PING);
 		rb.setPayload("success");
 		
-		return "success";
+		return rb;
 	}
 
 

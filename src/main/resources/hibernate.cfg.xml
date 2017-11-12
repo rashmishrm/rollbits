@@ -16,8 +16,8 @@
 		<mapping class="com.sjsu.rollbits.dao.interfaces.model.Message" />
 		<mapping class="com.sjsu.rollbits.dao.interfaces.model.Messagetype" />
 		<mapping class="com.sjsu.rollbits.dao.interfaces.model.User" />
-		<mapping class="com.sjsu.rollbits.dao.interfaces.model.Group" />
-		<mapping class="com.sjsu.rollbits.dao.interfaces.model.GroupUser" />
+		<!-- <mapping class="com.sjsu.rollbits.dao.interfaces.model.Group" />
+		<mapping class="com.sjsu.rollbits.dao.interfaces.model.GroupUser" /> -->
 	</session-factory>
 
 </hibernate-configuration>

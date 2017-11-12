@@ -53,10 +53,10 @@ public class MessageClient {
 
 		try {
 			// direct no queue
-			// CommConnection.getInstance().write(rb.build());
+			 CommConnection.getInstance().write(rb.build());
 
 			// using queue
-			CommConnection.getInstance().enqueue(rb.build());
+			//CommConnection.getInstance().enqueue(rb.build());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -88,8 +88,7 @@ public class MessageClient {
 		
 		
 		try {
-			CommConnection.getInstance().write(msg.build());
-
+			
 			this.addListener(new CommListener() {
 
 				@Override
@@ -104,10 +103,14 @@ public class MessageClient {
 					return "userresource";
 				}
 			});
+			
+			CommConnection.getInstance().write(msg.build());
+
+			
 
 			while (true) {
 
-				Thread.sleep(2);
+				Thread.sleep(20000);
 				System.out.println("Checking..... whether we recieved response!!!! for requestId" + id);
 				if (requestResponseMap.get(id) != null) {
 					response = requestResponseMap.get(id);
