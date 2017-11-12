@@ -14,7 +14,7 @@ public class Group {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 
 	@Column(name = "id")
-	private int id;
+	private String id;
 	@Column(name = "name")
 	private String name;
 
@@ -22,16 +22,16 @@ public class Group {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Group(int id, String name) {
+	public Group(String id, String name) {
 		this.id = id;
 		this.name = name;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
