@@ -170,7 +170,7 @@ public class MessageClient {
 		return added;
 	}
 
-	public boolean addGroup(String gname, String gid, boolean internal, boolean async) {
+	public boolean addGroup(String gname, int gid, boolean internal, boolean async) {
 		// TODO Auto-generated method stub
 		boolean added = false;
 		Route.Builder rb = Route.newBuilder();

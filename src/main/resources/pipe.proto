@@ -84,7 +84,7 @@ message User {
  
   message Group{
      required string gname = 1;
-	 required string gid = 2;
+	 required int64 gid = 2;
 	 required actionType action =3 [default =GET];
  
  }

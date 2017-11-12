@@ -30,6 +30,7 @@ message Route {
     
     optional UserMessagesRequest userMessagesRequest=10;
     optional UserMessagesResponse  userMessagesResponse=11;
+    optional Group group = 12;
 
 }
 
@@ -79,6 +80,13 @@ message User {
      required string email=2;
 	 required actionType action =3 [default =GET];
 
+ }
+ 
+  message Group{
+     required string gname = 1;
+	 required int64 gid = 2;
+	 required actionType action =3 [default =GET];
+ 
  }
 
  message Message {

@@ -58,9 +58,9 @@ public class GroupResource implements RouteResource {
 				for (RNode node : nodes) {
 					MessageClient mc = new MessageClient(node.getIpAddress(), node.getPort());
 					if (node.getType().equals(RNode.Type.REPLICA)) {
-						mc.addGroup(group.getGname(), group.getGid(), true, true);
+						mc.addGroup(group.getGname(), (int) group.getGid(), true, true);
 					} else {
-						success = mc.addGroup(group.getGname(), group.getGid(), true, false);
+						success = mc.addGroup(group.getGname(), (int) group.getGid(), true, false);
 
 					}
 
@@ -70,7 +70,7 @@ public class GroupResource implements RouteResource {
 			else {
 
 				System.out.println("Adding to database!!!!!");
-				Group dbgrp = new Group(group.getGid(), group.getGname());
+				Group dbgrp = new Group((int) group.getGid(), group.getGname());
 				dbService.persist(dbgrp);
 				success = true;
 
