@@ -42,12 +42,12 @@ public class ClusterDirectory {
 		}*/
 	}
 	
-	public Map<String, Node> getNodeMap(){
+	public static Map<String, Node> getNodeMap(){
 		
 		return clusterMap.get(MyConstants.GROUP_NAME);
 	}
 	
-	public Map<String, Map<String, Node>> getGroupMap(){
+	public static Map<String, Map<String, Node>> getGroupMap(){
     	return clusterMap;
     }
 }

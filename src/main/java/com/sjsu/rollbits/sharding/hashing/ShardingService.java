@@ -2,6 +2,10 @@ package com.sjsu.rollbits.sharding.hashing;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import com.sjsu.rollbits.discovery.ClusterDirectory;
+import com.sjsu.rollbits.discovery.Node;
 
 public class ShardingService {
 	private ConsistentHash hash = null;
@@ -11,10 +15,12 @@ public class ShardingService {
 	private ShardingService() {
 		int numberOfReplicas = 2;
 		List<RNode> list = new ArrayList<>();
-		list.add(new RNode("ABC", RNode.Type.PRIMARY, "10.0.0.1", 4567));
-		list.add(new RNode("DEF", RNode.Type.PRIMARY, "10.0.0.2", 4567));
-		list.add(new RNode("GHI", RNode.Type.REPLICA, "10.0.0.3", 4567));
-		list.add(new RNode("JKL", RNode.Type.REPLICA, "10.0.0.4", 4567));
+		Map<String, Node> nodeMap = ClusterDirectory.getNodeMap();
+		for (Map.Entry<String, Node> entry : nodeMap.entrySet())
+		{
+			list.add(new RNode(entry.getKey(), RNode.Type.PRIMARY, entry.getValue().getNodeId(), entry.getValue().getPort()));
+		}
+		
 		MurmurHash128 m = new MurmurHash128();
 		hash = new ConsistentHash(m, numberOfReplicas, list);
 	}
