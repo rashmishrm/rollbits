@@ -79,6 +79,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Route> {
 					// TODO add logging
 					Route.Builder rb = Route.newBuilder(msg);
 					rb.setPayload("Error: " + e.getMessage());
+					e.printStackTrace();
 					channel.write(rb.build());
 				}
 			} else {

@@ -49,8 +49,6 @@ public class UserResource implements RouteResource {
 
 			if (header.getType() != null && !header.getType().equals("INTERNAL")) {
 
-				System.out.println(user.getUname());			
-
 				// Set<RNode> nodes = new HashSet<>(shardingService.getNodes(new
 				// Message(user.getUname())));
 				List<RNode> nodes = shardingService.getNodes(new Message(user.getUname()));
@@ -91,6 +89,7 @@ public class UserResource implements RouteResource {
 
 		}
 		Route.Builder rb = Route.newBuilder();
+		rb.setId(msg.getId());
 		rb.setPayload(success ? "sucess" : "Failed");
 		return rb;
 	}

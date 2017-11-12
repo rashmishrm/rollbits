@@ -64,7 +64,7 @@ public class MessageResource implements RouteResource {
 			System.out.println("Message recieved from :" + message.getFromuname());
 
 			List<RNode> fromNames = shardingService.getNodes(new Message(message.getFromuname()));
-			List<RNode> toNames = shardingService.getNodes(new Message(message.getTogname()));
+			List<RNode> toNames = shardingService.getNodes(new Message(message.getTouname()));
 			Set<RNode> set = new HashSet<RNode>();
 			set.addAll(fromNames);
 			set.addAll(toNames);
@@ -92,6 +92,7 @@ public class MessageResource implements RouteResource {
 		}
 
 		Route.Builder rb = Route.newBuilder();
+		rb.setId(msg.getId());
 		rb.setPayload(isSuccess ? "sucess" : "Failed");
 
 		return rb;

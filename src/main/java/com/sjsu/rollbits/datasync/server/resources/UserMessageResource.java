@@ -15,11 +15,13 @@
  */
 package com.sjsu.rollbits.datasync.server.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.protobuf.Extension.MessageType;
 import com.sjsu.rollbits.Constants;
 import com.sjsu.rollbits.dao.interfaces.service.MessageService;
 import com.sjsu.rollbits.datasync.client.MessageClient;
@@ -29,6 +31,7 @@ import com.sjsu.rollbits.sharding.hashing.ShardingService;
 
 import routing.Pipe;
 import routing.Pipe.Route;
+import routing.Pipe.actionType;
 
 /**
  * processes requests of message passing - demonstration
@@ -56,45 +59,48 @@ public class UserMessageResource implements RouteResource {
 		boolean isSuccess = false;
 		routing.Pipe.UserMessagesRequest message = msg.getUserMessagesRequest();
 
-
 		List<RNode> nodes = shardingService.getNodes(new Message(message.getUname()));
 
-		 RNode primaryNode = nodes.get(0);
-		 Route.Builder rb=null;
-		 if (!primaryNode.getIpAddress().equals(Constants.MY_IP)) {
-		 MessageClient msgClient = new MessageClient(primaryNode.getIpAddress(),
-		 primaryNode.getPort());
-		 Route r=msgClient.sendSyncronousMessage(msg.toBuilder());
-		 rb=r.toBuilder();
-		
-		 }
-		 else {
+		RNode primaryNode = nodes.get(0);
+		Route.Builder rb = null;
+		if (!primaryNode.getIpAddress().equals(Constants.MY_IP)) {
+			MessageClient msgClient = new MessageClient(primaryNode.getIpAddress(), primaryNode.getPort());
+			Route r = msgClient.sendSyncronousMessage(msg.toBuilder());
+			rb = r.toBuilder();
 
-		 List<com.sjsu.rollbits.dao.interfaces.model.Message> messages =
-		 dbService.findByUserName(message.getUname());
+		} else {
 
-		System.out.println("hererrerererrerer in message resource");
-		rb = Route.newBuilder();
-		rb.setId(msg.getId());
-		rb.setPath(Route.Path.USER_MESSAGES_RESPONSE);
+			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = dbService.findAll();
 
-		Pipe.UserMessagesResponse.Builder ub = Pipe.UserMessagesResponse.newBuilder();
-		
-		 int i = 0;
-		
-		 for (com.sjsu.rollbits.dao.interfaces.model.Message mesg : messages) {
-		 Pipe.Message.Builder m = Pipe.Message.newBuilder();
-		 m.setFromuname(mesg.getMessage());
-		 m.setTouname(mesg.getTouserid());
-		 ub.setMessages(i++, m);
-		 }
+			System.out.println("hererrerererrerer in message resource");
+			rb = Route.newBuilder();
+			rb.setId(msg.getId());
+			rb.setPath(Route.Path.USER_MESSAGES_RESPONSE);
 
-	rb.setUserMessagesResponse(ub);
-		
-	
-		
+			Pipe.UserMessagesResponse.Builder ub = Pipe.UserMessagesResponse.newBuilder();
+
+			int i = 0;
+
+			List<Pipe.Message> list = new ArrayList<>();
+
+			for (com.sjsu.rollbits.dao.interfaces.model.Message mesg : messages) {
+				if (mesg != null) {
+					Pipe.Message.Builder m = Pipe.Message.newBuilder();
+					m.setFromuname(mesg.getMessage() == null ? "" : mesg.getMessage());
+					m.setTouname(mesg.getTouserid() == null ? "" : mesg.getTouserid());
+					m.setAction(actionType.GET);
+					m.setMessage(mesg.getMessage() == null ? "" : mesg.getMessage());
+				
+					list.add(m.build());
+				}
+			}
+			ub.addAllMessages(list);
+			ub.setUname(message.getUname());
+			rb.setUserMessagesResponse(ub);
+			
+
+		}
+		return rb;
 	}
-		 return rb;
-}
-	
+
 }
