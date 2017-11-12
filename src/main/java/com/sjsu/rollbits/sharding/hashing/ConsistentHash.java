@@ -62,7 +62,8 @@ public class ConsistentHash {
 		}
 
 		// get next nodes
-		SortedMap<Long, RNode> tailMap = circle.tailMap(hash);
+		SortedMap<Long, RNode> tailMap = new TreeMap<>();
+		tailMap.putAll(circle.tailMap(hash));
 
 		if (tailMap.size() < numberOfReplicas) {
 
