@@ -130,6 +130,8 @@ public class CommConnection {
 		
 	
 		ChannelFuture cf = connect().writeAndFlush(msg);
+		
+	
 		if (cf.isDone() && !cf.isSuccess()) {
 			logger.error("failed to send message to server - " + msg.getPayload());
 			return false;
@@ -137,6 +139,8 @@ public class CommConnection {
 
 		return true;
 	}
+
+	
 
 	/**
 	 * abstraction of notification in the communication

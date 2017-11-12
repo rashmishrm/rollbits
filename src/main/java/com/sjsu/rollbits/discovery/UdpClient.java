@@ -14,7 +14,6 @@ import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.internal.SocketUtils;
 import routing.Pipe.NetworkDiscoveryPacket;
-import routing.Pipe.NetworkDiscoveryPacket.Sender;
 
 public final class UdpClient {
 

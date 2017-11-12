@@ -15,6 +15,8 @@
  */
 package com.sjsu.rollbits.datasync.client;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import routing.Pipe;
 import routing.Pipe.Route;
 
@@ -27,6 +29,8 @@ import routing.Pipe.Route;
 public class MessageClient {
 	// track requests
 	private long curID = 0;
+
+	ConcurrentHashMap<Long, Route> requestResponseMap = new ConcurrentHashMap<>();
 
 	public MessageClient(String host, int port) {
 		init(host, port);
@@ -72,10 +76,56 @@ public class MessageClient {
 		}
 	}
 
+	
+	
+	//
+	public Route sendSyncronousMessage(Route.Builder msg) {
+		// construct the message to send
+
+		Route response = null;
+		long id = nextId();
+		msg.setId(id);
+		
+		
+		try {
+			CommConnection.getInstance().write(msg.build());
+
+			this.addListener(new CommListener() {
+
+				@Override
+				public void onMessage(Route msg) {
+					System.out.println("Recieved Message");
+					requestResponseMap.put(msg.getId(), msg);
+				}
+
+				@Override
+				public String getListenerID() {
+					// TODO Auto-generated method stub
+					return "userresource";
+				}
+			});
+
+			while (true) {
+
+				Thread.sleep(2);
+				System.out.println("Checking..... whether we recieved response!!!! for requestId" + id);
+				if (requestResponseMap.get(id) != null) {
+					response = requestResponseMap.get(id);
+					break;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return response;
+	}
+
 	// Send already formed message
 	public void postOnQueue(Route.Builder msg) {
 		try {
-		
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -120,6 +170,47 @@ public class MessageClient {
 		return added;
 	}
 
+	public boolean addGroup(String gname, String gid, boolean internal, boolean async) {
+		// TODO Auto-generated method stub
+		boolean added = false;
+		Route.Builder rb = Route.newBuilder();
+		rb.setId(nextId());
+		rb.setPath(Route.Path.GROUP);
+		// rb.setAction(routing.Pipe.actionType.PUT);
+		Pipe.Group.Builder gb = Pipe.Group.newBuilder();
+		gb.setGname(gname);
+		gb.setGid(gid);
+		gb.setAction(routing.Pipe.actionType.PUT);
+		rb.setGroup(gb);
+
+		Pipe.Header.Builder header = Pipe.Header.newBuilder();
+
+		if (internal) {
+			header.setType("INTERNAL");
+
+		} else {
+			header.setType("EXTERNAL");
+
+		}
+		rb.setHeader(header);
+		CommConnection conn = CommConnection.getInstance();
+
+		try {
+			if (async)
+				conn.enqueue(rb.build());
+			else
+				added = conn.write(rb.build());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// conn.release();
+
+		}
+		return added;
+
+	}
+
+	
 	public boolean sendMessage(String fromUserId, String toUserId, int type, String message, boolean internal,
 			boolean async) {
 		// construct the message to send

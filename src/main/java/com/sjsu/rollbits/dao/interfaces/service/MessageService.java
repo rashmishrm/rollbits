@@ -40,6 +40,15 @@ public class MessageService {
         messageDao.closeCurrentSession();
         return messages;
     }
+    
+    
+    public static List<Message> findByUserName(String uname) {
+        messageDao.openCurrentSession();
+        List<Message> messages = messageDao.findAllForUname(uname);
+        messageDao.closeCurrentSession();
+        return messages;
+    }
+    
     public static void deleteAll() {
         messageDao.openCurrentSessionwithTransaction();
         messageDao.deleteAll();

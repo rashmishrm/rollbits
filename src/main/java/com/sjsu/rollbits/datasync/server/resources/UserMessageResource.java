@@ -28,6 +28,7 @@ import com.sjsu.rollbits.sharding.hashing.RNode;
 import com.sjsu.rollbits.sharding.hashing.ShardingService;
 
 import routing.Pipe;
+import routing.Pipe.Route;
 
 /**
  * processes requests of message passing - demonstration
@@ -59,16 +60,39 @@ public class UserMessageResource implements RouteResource {
 
 		List<RNode> nodes = shardingService.getNodes(new Message(message.getUname()));
 
-		RNode primaryNode = nodes.get(0);
+		// RNode primaryNode = nodes.get(0);
 
-		if (!primaryNode.getIpAddress().equals(Constants.MY_IP)) {
-			MessageClient msgClient = new MessageClient(primaryNode.getIpAddress(), primaryNode.getPort());
+		// if (!primaryNode.getIpAddress().equals(Constants.MY_IP)) {
+		// MessageClient msgClient = new MessageClient(primaryNode.getIpAddress(),
+		// primaryNode.getPort());
+		// msgClient.sendSyncronousMessage(msg.toBuilder());
+		//
+		//
+		//
+		//
+		// // msgClient.postOnQueue(msg);
+		//
+		// }
+		// else {
 
-			// msgClient.postOnQueue(msg);
+		List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = dbService.findByUserName(message.getUname());
+		Route.Builder rb = Route.newBuilder();
+		rb.setId(msg.getId());
+		rb.setPath(Route.Path.USER);
 
+		Pipe.UserMessagesResponse.Builder ub = Pipe.UserMessagesResponse.newBuilder();
+		int i = 0;
+
+		for (com.sjsu.rollbits.dao.interfaces.model.Message mesg : messages) {
+			Pipe.Message.Builder m = Pipe.Message.newBuilder();
+			m.setFromuname(mesg.getMessage());
+			m.setTouname(mesg.getTouserid());
+			ub.setMessages(i++, m);
 		}
 
-		return null;
+		rb.setUserMessagesResponse(ub);
+
+		return rb;
 	}
 
 }

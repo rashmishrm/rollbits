@@ -78,6 +78,12 @@ public class MessageDao {
         List<Message> message = (List<Message>) getCurrentSession().createQuery("from Message").list();
         return message;
     }
+    
+    @SuppressWarnings("unchecked")
+    public List<Message> findAllForUname(String uname) {
+        List<Message> message = (List<Message>) getCurrentSession().createQuery("from Message where touserid="+uname).list();
+        return message;
+    }
 
     public void deleteAll() {
         List<Message> entityList = findAll();

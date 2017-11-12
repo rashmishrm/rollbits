@@ -79,27 +79,36 @@ public class DemoApp implements CommListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String host = "10.0.0.1";
+		String host = "127.0.0.1";
 		int port = 4567;
 		System.out.println(Pipe.Route.Path.USER);
-		long stime= System.currentTimeMillis();
+		long stime = System.currentTimeMillis();
 
 		try {
 			MessageClient mc = new MessageClient(host, port);
 			// DemoApp da = new DemoApp(mc);
-			
-			
-			mc.addUser("testuser1", "abc", false, true);
-			//mc.addUser("nishantrathi", "rashmishrm74@gmail.com", false, true);
-			
-			
-			
-			//mc.sendMessage("yahoooooo", "seconduser", 1, "Sending MEssage", false, true);
-		
 
-			long etime= System.currentTimeMillis();
-			
-			System.out.println(etime-stime);
+			mc.addUser("sdkfslfdskjflsjfjsdlflksf", "abc", false, true);
+			// mc.addUser("nishantrathi", "rashmishrm74@gmail.com", false, true);
+
+			Route.Builder rb = Route.newBuilder();
+
+			rb.setPath(Route.Path.USER_MESSAGES_REQUEST);
+			// rb.setAction(routing.Pipe.actionType.PUT);
+			Pipe.UserMessagesRequest.Builder ub = Pipe.UserMessagesRequest.newBuilder();
+
+			ub.setUname("akansha");
+
+			Route r = mc.sendSyncronousMessage(rb);
+			System.out.println(r.getId());
+
+			// construct the message to send
+
+			// mc.sendMessage("yahoooooo", "seconduser", 1, "Sending MEssage", false, true);
+
+			long etime = System.currentTimeMillis();
+
+			System.out.println(etime - stime);
 
 			Thread.sleep(10);
 
