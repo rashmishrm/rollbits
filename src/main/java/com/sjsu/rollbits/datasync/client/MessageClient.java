@@ -120,6 +120,47 @@ public class MessageClient {
 		return added;
 	}
 
+	public boolean addGroup(String gname, String gid, boolean internal, boolean async) {
+		// TODO Auto-generated method stub
+		boolean added = false;
+		Route.Builder rb = Route.newBuilder();
+		rb.setId(nextId());
+		rb.setPath(Route.Path.GROUP);
+		// rb.setAction(routing.Pipe.actionType.PUT);
+		Pipe.Group.Builder gb = Pipe.Group.newBuilder();
+		gb.setGname(gname);
+		gb.setGid(gid);
+		gb.setAction(routing.Pipe.actionType.PUT);
+		rb.setGroup(gb);
+
+		Pipe.Header.Builder header = Pipe.Header.newBuilder();
+
+		if (internal) {
+			header.setType("INTERNAL");
+
+		} else {
+			header.setType("EXTERNAL");
+
+		}
+		rb.setHeader(header);
+		CommConnection conn = CommConnection.getInstance();
+
+		try {
+			if (async)
+				conn.enqueue(rb.build());
+			else
+				added = conn.write(rb.build());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// conn.release();
+
+		}
+		return added;
+
+	}
+
+	
 	public boolean sendMessage(String fromUserId, String toUserId, int type, String message, boolean internal,
 			boolean async) {
 		// construct the message to send
