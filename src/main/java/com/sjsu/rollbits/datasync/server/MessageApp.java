@@ -40,7 +40,7 @@ public class MessageApp {
 		t.start();
 		Thread.sleep(4 * 1000L);
 		UdpClient.broadcast();
-		Thread.sleep(15 * 1000L);
+		//Thread.sleep(15 * 1000L);
 		RaftContext.getInstance();//To Start Raft Engine
 		
 		File cf = new File("/Users/nishantrathi/CMPE-275/project/rollbits/src/main/resources/routing.conf");

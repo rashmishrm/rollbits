@@ -14,6 +14,7 @@ import com.sjsu.rollbits.sharding.hashing.ShardingService;
 
 import routing.Pipe;
 import routing.Pipe.Route;
+import routing.Pipe.Route.Path;
 
 public class UserResource implements RouteResource {
 	protected static Logger logger = LoggerFactory.getLogger("user");
@@ -90,6 +91,7 @@ public class UserResource implements RouteResource {
 		}
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(msg.getId());
+		rb.setPath(Path.MESSAGE);
 		rb.setPayload(success ? "sucess" : "Failed");
 		return rb;
 	}

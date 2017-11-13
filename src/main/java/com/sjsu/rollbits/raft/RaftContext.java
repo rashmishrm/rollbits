@@ -12,7 +12,7 @@ public class RaftContext {
 	private static RaftContext raftContext;
 	private RaftState raftState;
 	public static Long HEARTBEAT_TIMER = 1 * 60 * 1000L;
-	public static Long RAFT_TIMER = 5 * 60 * 1000L;
+	public static Long RAFT_TIMER = 2 * 60 * 1000L;
 	private Long LAST_RECIEVED = -1L;
 	private String leaderNodeId;
 	private static RaftEngine raftEngine;
