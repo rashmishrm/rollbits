@@ -2,6 +2,7 @@ package com.sjsu.rollbits.dao.interfaces;
 
 import com.sjsu.rollbits.dao.interfaces.model.Message;
 
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

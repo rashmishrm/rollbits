@@ -1,9 +1,9 @@
 package com.sjsu.rollbits.dao.interfaces.service;
 
 import java.util.List;
-
 import com.sjsu.rollbits.dao.interfaces.MessageDao;
 import com.sjsu.rollbits.dao.interfaces.model.Message;
+
 public class MessageService {
 
     private static MessageDao messageDao;

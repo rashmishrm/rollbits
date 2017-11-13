@@ -8,13 +8,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Group")
+@Table(name = "GroupTable")
 public class Group {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 
 	@Column(name = "id")
-	private int id;
+	private Integer id;
 	@Column(name = "name")
 	private String name;
 
@@ -22,12 +22,17 @@ public class Group {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Group(int id, String name) {
+	public Group(Integer id, String name) {
 		this.id = id;
 		this.name = name;
 	}
+	
+	public Group(String name) {
+		//this.id = id;
+		this.name = name;
+	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 

@@ -10,11 +10,8 @@ import com.sjsu.rollbits.dao.interfaces.service.GroupService;
 import com.sjsu.rollbits.datasync.client.MessageClient;
 import com.sjsu.rollbits.sharding.hashing.Message;
 import com.sjsu.rollbits.sharding.hashing.RNode;
-
 import routing.Pipe;
 import routing.Pipe.Route;
-
-import com.sjsu.rollbits.dao.interfaces.service.Service;
 import com.sjsu.rollbits.sharding.hashing.ShardingService;
 
 public class GroupResource implements RouteResource {
@@ -70,7 +67,7 @@ public class GroupResource implements RouteResource {
 			else {
 
 				System.out.println("Adding to database!!!!!");
-				Group dbgrp = new Group((int) group.getGid(), group.getGname());
+				Group dbgrp = new Group(group.getGname());
 				dbService.persist(dbgrp);
 				success = true;
 

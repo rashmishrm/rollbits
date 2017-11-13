@@ -23,31 +23,38 @@ public class GroupService {
 
     public static Group findById(int id) {
     	groupDao.openCurrentSession();
-        Group user = groupDao.findById(id);
+        Group groups = groupDao.findById(id);
         groupDao.closeCurrentSession();
-        return user;
+        return groups;
     }
     public static void delete(int id) {
     	groupDao.openCurrentSessionwithTransaction();
-        Group User = groupDao.findById(id);
-        groupDao.delete(User);
+        Group groups = groupDao.findById(id);
+        groupDao.delete(groups);
         groupDao.closeCurrentSessionwithTransaction();
     }
 
     public static List<Group> findAll() {
     	groupDao.openCurrentSession();
-        List<Group> Users = groupDao.findAll();
+        List<Group> groups = groupDao.findAll();
         groupDao.closeCurrentSession();
-        return Users;
+        return groups;
     }
     public static void deleteAll() {
     	groupDao.openCurrentSessionwithTransaction();
     	groupDao.deleteAll();
     	groupDao.closeCurrentSessionwithTransaction();
     }
-    public GroupDao UserDao() {
+    public GroupDao GroupDao() {
         return groupDao;
 
     }
+    
+    /*public static void main(String[] args){
+    	GroupService gs = new GroupService();
+    	Group g = new Group("Hey");
+    	gs.persist(g);
+    	
+    }*/
 
 }

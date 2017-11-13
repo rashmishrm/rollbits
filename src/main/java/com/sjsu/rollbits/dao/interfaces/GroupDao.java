@@ -1,5 +1,7 @@
 package com.sjsu.rollbits.dao.interfaces;
 
+
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -63,8 +65,8 @@ public class GroupDao {
     }
 
     public Group findById(int id) {
-        Group user = (Group) getCurrentSession().get(Group.class, id);
-        return user;
+        Group groups = (Group) getCurrentSession().get(Group.class, id);
+        return groups;
     }
 
     public void delete(Group entity) {
@@ -73,8 +75,8 @@ public class GroupDao {
 
     @SuppressWarnings("unchecked")
     public List<Group> findAll() {
-        List<Group> users = (List<Group>) getCurrentSession().createQuery("from Group").list();
-        return users;
+        List<Group> groups = (List<Group>) getCurrentSession().createQuery("from Group").list();
+        return groups;
     }
 
     public void deleteAll() {
