@@ -44,8 +44,10 @@ public class RaftHelper {
 		}
 		if(failedList.size()>0 && failedList.size() == ClusterDirectory.getNodeMap().size()){
 			//I am the leader and I Go Down
+			RaftContext.getInstance().setRaftState(new RaftFollowerState());
 		} else {
 			//handle failover
+			broadcastFailover(failedList);
 		}
 		
 	}
