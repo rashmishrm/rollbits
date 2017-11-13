@@ -41,6 +41,19 @@ public class MessageService {
         return messages;
     }
     
+    public static List<Message> findAllforuname(String uname) {
+        messageDao.openCurrentSession();
+        List<Message> messages = messageDao.findAllForUname(uname);
+        messageDao.closeCurrentSession();
+        return messages;
+    }
+
+    public static List<Message> findAllfromuname(String uname) {
+        messageDao.openCurrentSession();
+        List<Message> messages = messageDao.findAllFromUname(uname);
+        messageDao.closeCurrentSession();
+        return messages;
+    }
     
     public static List<Message> findByUserName(String uname) {
         messageDao.openCurrentSession();
