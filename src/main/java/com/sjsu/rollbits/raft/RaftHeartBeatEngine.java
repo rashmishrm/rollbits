@@ -38,7 +38,7 @@ public class RaftHeartBeatEngine implements Runnable {
 					raftMessageBuilder.setSenderNodeid(RaftHelper.getMyNodeId());
 					RaftMessage raftMessage = raftMessageBuilder.build();
 					routeBuilder.setRaftMessage(raftMessage);
-					RaftHelper.broadcast(routeBuilder.build());
+					RaftHelper.broadcast(routeBuilder);
 					raftContext.setLAST_RECIEVED(System.currentTimeMillis());
 				}
 

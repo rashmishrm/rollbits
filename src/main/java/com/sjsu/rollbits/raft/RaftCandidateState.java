@@ -46,7 +46,7 @@ public class RaftCandidateState implements RaftState {
 		raftMessageBuilder.setSenderNodeid(RaftHelper.getMyNodeId());
 		RaftMessage raftMessage = raftMessageBuilder.build();
 		routeBuilder.setRaftMessage(raftMessage);
-		RaftHelper.broadcast(routeBuilder.build());
+		RaftHelper.broadcast(routeBuilder);
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class RaftCandidateState implements RaftState {
 			raftMessageBuilder.setSenderNodeid(RaftHelper.getMyNodeId());
 			RaftMessage raftMessage = raftMessageBuilder.build();
 			routeBuilder.setRaftMessage(raftMessage);
-			RaftHelper.broadcast(routeBuilder.build());
+			RaftHelper.broadcast(routeBuilder);
 		}
 
 	}

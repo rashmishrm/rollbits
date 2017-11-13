@@ -269,6 +269,19 @@ public final class Pipe {
      * <code>optional .Group group = 12;</code>
      */
     routing.Pipe.GroupOrBuilder getGroupOrBuilder();
+
+    /**
+     * <code>optional .FailoverMessage failoverMessage = 13;</code>
+     */
+    boolean hasFailoverMessage();
+    /**
+     * <code>optional .FailoverMessage failoverMessage = 13;</code>
+     */
+    routing.Pipe.FailoverMessage getFailoverMessage();
+    /**
+     * <code>optional .FailoverMessage failoverMessage = 13;</code>
+     */
+    routing.Pipe.FailoverMessageOrBuilder getFailoverMessageOrBuilder();
   }
   /**
    * Protobuf type {@code Route}
@@ -441,6 +454,19 @@ public final class Pipe {
               bitField0_ |= 0x00000400;
               break;
             }
+            case 106: {
+              routing.Pipe.FailoverMessage.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000800) == 0x00000800)) {
+                subBuilder = failoverMessage_.toBuilder();
+              }
+              failoverMessage_ = input.readMessage(routing.Pipe.FailoverMessage.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(failoverMessage_);
+                failoverMessage_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000800;
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -475,10 +501,6 @@ public final class Pipe {
        */
       NETWORK_DISCOVERY(0),
       /**
-       * <code>NETWORK_DISCOVERY_RESPONSE = 1;</code>
-       */
-      NETWORK_DISCOVERY_RESPONSE(1),
-      /**
        * <code>USER = 2;</code>
        */
       USER(2),
@@ -510,16 +532,16 @@ public final class Pipe {
        * <code>USER_MESSAGES_RESPONSE = 9;</code>
        */
       USER_MESSAGES_RESPONSE(9),
+      /**
+       * <code>FAILOVER_MSG = 10;</code>
+       */
+      FAILOVER_MSG(10),
       ;
 
       /**
        * <code>NETWORK_DISCOVERY = 0;</code>
        */
       public static final int NETWORK_DISCOVERY_VALUE = 0;
-      /**
-       * <code>NETWORK_DISCOVERY_RESPONSE = 1;</code>
-       */
-      public static final int NETWORK_DISCOVERY_RESPONSE_VALUE = 1;
       /**
        * <code>USER = 2;</code>
        */
@@ -552,6 +574,10 @@ public final class Pipe {
        * <code>USER_MESSAGES_RESPONSE = 9;</code>
        */
       public static final int USER_MESSAGES_RESPONSE_VALUE = 9;
+      /**
+       * <code>FAILOVER_MSG = 10;</code>
+       */
+      public static final int FAILOVER_MSG_VALUE = 10;
 
 
       public final int getNumber() {
@@ -569,7 +595,6 @@ public final class Pipe {
       public static Path forNumber(int value) {
         switch (value) {
           case 0: return NETWORK_DISCOVERY;
-          case 1: return NETWORK_DISCOVERY_RESPONSE;
           case 2: return USER;
           case 3: return MESSAGE;
           case 4: return GROUP;
@@ -578,6 +603,7 @@ public final class Pipe {
           case 7: return RAFT_MSG;
           case 8: return USER_MESSAGES_REQUEST;
           case 9: return USER_MESSAGES_RESPONSE;
+          case 10: return FAILOVER_MSG;
           default: return null;
         }
       }
@@ -877,6 +903,27 @@ public final class Pipe {
       return group_ == null ? routing.Pipe.Group.getDefaultInstance() : group_;
     }
 
+    public static final int FAILOVERMESSAGE_FIELD_NUMBER = 13;
+    private routing.Pipe.FailoverMessage failoverMessage_;
+    /**
+     * <code>optional .FailoverMessage failoverMessage = 13;</code>
+     */
+    public boolean hasFailoverMessage() {
+      return ((bitField0_ & 0x00000800) == 0x00000800);
+    }
+    /**
+     * <code>optional .FailoverMessage failoverMessage = 13;</code>
+     */
+    public routing.Pipe.FailoverMessage getFailoverMessage() {
+      return failoverMessage_ == null ? routing.Pipe.FailoverMessage.getDefaultInstance() : failoverMessage_;
+    }
+    /**
+     * <code>optional .FailoverMessage failoverMessage = 13;</code>
+     */
+    public routing.Pipe.FailoverMessageOrBuilder getFailoverMessageOrBuilder() {
+      return failoverMessage_ == null ? routing.Pipe.FailoverMessage.getDefaultInstance() : failoverMessage_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -939,6 +986,12 @@ public final class Pipe {
           return false;
         }
       }
+      if (hasFailoverMessage()) {
+        if (!getFailoverMessage().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -977,6 +1030,9 @@ public final class Pipe {
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         output.writeMessage(12, getGroup());
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        output.writeMessage(13, getFailoverMessage());
       }
       unknownFields.writeTo(output);
     }
@@ -1028,6 +1084,10 @@ public final class Pipe {
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(12, getGroup());
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(13, getFailoverMessage());
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1100,6 +1160,11 @@ public final class Pipe {
         result = result && getGroup()
             .equals(other.getGroup());
       }
+      result = result && (hasFailoverMessage() == other.hasFailoverMessage());
+      if (hasFailoverMessage()) {
+        result = result && getFailoverMessage()
+            .equals(other.getFailoverMessage());
+      }
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -1155,6 +1220,10 @@ public final class Pipe {
       if (hasGroup()) {
         hash = (37 * hash) + GROUP_FIELD_NUMBER;
         hash = (53 * hash) + getGroup().hashCode();
+      }
+      if (hasFailoverMessage()) {
+        hash = (37 * hash) + FAILOVERMESSAGE_FIELD_NUMBER;
+        hash = (53 * hash) + getFailoverMessage().hashCode();
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -1278,6 +1347,7 @@ public final class Pipe {
           getUserMessagesRequestFieldBuilder();
           getUserMessagesResponseFieldBuilder();
           getGroupFieldBuilder();
+          getFailoverMessageFieldBuilder();
         }
       }
       public Builder clear() {
@@ -1336,6 +1406,12 @@ public final class Pipe {
           groupBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000400);
+        if (failoverMessageBuilder_ == null) {
+          failoverMessage_ = null;
+        } else {
+          failoverMessageBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
 
@@ -1436,6 +1512,14 @@ public final class Pipe {
         } else {
           result.group_ = groupBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000800;
+        }
+        if (failoverMessageBuilder_ == null) {
+          result.failoverMessage_ = failoverMessage_;
+        } else {
+          result.failoverMessage_ = failoverMessageBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1513,6 +1597,9 @@ public final class Pipe {
         if (other.hasGroup()) {
           mergeGroup(other.getGroup());
         }
+        if (other.hasFailoverMessage()) {
+          mergeFailoverMessage(other.getFailoverMessage());
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -1562,6 +1649,11 @@ public final class Pipe {
         }
         if (hasGroup()) {
           if (!getGroup().isInitialized()) {
+            return false;
+          }
+        }
+        if (hasFailoverMessage()) {
+          if (!getFailoverMessage().isInitialized()) {
             return false;
           }
         }
@@ -2689,6 +2781,124 @@ public final class Pipe {
           group_ = null;
         }
         return groupBuilder_;
+      }
+
+      private routing.Pipe.FailoverMessage failoverMessage_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          routing.Pipe.FailoverMessage, routing.Pipe.FailoverMessage.Builder, routing.Pipe.FailoverMessageOrBuilder> failoverMessageBuilder_;
+      /**
+       * <code>optional .FailoverMessage failoverMessage = 13;</code>
+       */
+      public boolean hasFailoverMessage() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>optional .FailoverMessage failoverMessage = 13;</code>
+       */
+      public routing.Pipe.FailoverMessage getFailoverMessage() {
+        if (failoverMessageBuilder_ == null) {
+          return failoverMessage_ == null ? routing.Pipe.FailoverMessage.getDefaultInstance() : failoverMessage_;
+        } else {
+          return failoverMessageBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .FailoverMessage failoverMessage = 13;</code>
+       */
+      public Builder setFailoverMessage(routing.Pipe.FailoverMessage value) {
+        if (failoverMessageBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          failoverMessage_ = value;
+          onChanged();
+        } else {
+          failoverMessageBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000800;
+        return this;
+      }
+      /**
+       * <code>optional .FailoverMessage failoverMessage = 13;</code>
+       */
+      public Builder setFailoverMessage(
+          routing.Pipe.FailoverMessage.Builder builderForValue) {
+        if (failoverMessageBuilder_ == null) {
+          failoverMessage_ = builderForValue.build();
+          onChanged();
+        } else {
+          failoverMessageBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000800;
+        return this;
+      }
+      /**
+       * <code>optional .FailoverMessage failoverMessage = 13;</code>
+       */
+      public Builder mergeFailoverMessage(routing.Pipe.FailoverMessage value) {
+        if (failoverMessageBuilder_ == null) {
+          if (((bitField0_ & 0x00000800) == 0x00000800) &&
+              failoverMessage_ != null &&
+              failoverMessage_ != routing.Pipe.FailoverMessage.getDefaultInstance()) {
+            failoverMessage_ =
+              routing.Pipe.FailoverMessage.newBuilder(failoverMessage_).mergeFrom(value).buildPartial();
+          } else {
+            failoverMessage_ = value;
+          }
+          onChanged();
+        } else {
+          failoverMessageBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000800;
+        return this;
+      }
+      /**
+       * <code>optional .FailoverMessage failoverMessage = 13;</code>
+       */
+      public Builder clearFailoverMessage() {
+        if (failoverMessageBuilder_ == null) {
+          failoverMessage_ = null;
+          onChanged();
+        } else {
+          failoverMessageBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000800);
+        return this;
+      }
+      /**
+       * <code>optional .FailoverMessage failoverMessage = 13;</code>
+       */
+      public routing.Pipe.FailoverMessage.Builder getFailoverMessageBuilder() {
+        bitField0_ |= 0x00000800;
+        onChanged();
+        return getFailoverMessageFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .FailoverMessage failoverMessage = 13;</code>
+       */
+      public routing.Pipe.FailoverMessageOrBuilder getFailoverMessageOrBuilder() {
+        if (failoverMessageBuilder_ != null) {
+          return failoverMessageBuilder_.getMessageOrBuilder();
+        } else {
+          return failoverMessage_ == null ?
+              routing.Pipe.FailoverMessage.getDefaultInstance() : failoverMessage_;
+        }
+      }
+      /**
+       * <code>optional .FailoverMessage failoverMessage = 13;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          routing.Pipe.FailoverMessage, routing.Pipe.FailoverMessage.Builder, routing.Pipe.FailoverMessageOrBuilder> 
+          getFailoverMessageFieldBuilder() {
+        if (failoverMessageBuilder_ == null) {
+          failoverMessageBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              routing.Pipe.FailoverMessage, routing.Pipe.FailoverMessage.Builder, routing.Pipe.FailoverMessageOrBuilder>(
+                  getFailoverMessage(),
+                  getParentForChildren(),
+                  isClean());
+          failoverMessage_ = null;
+        }
+        return failoverMessageBuilder_;
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -4968,6 +5178,557 @@ public final class Pipe {
     }
 
     public routing.Pipe.RaftNode getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface FailoverMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:FailoverMessage)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>required string nodeName = 1;</code>
+     */
+    boolean hasNodeName();
+    /**
+     * <code>required string nodeName = 1;</code>
+     */
+    java.lang.String getNodeName();
+    /**
+     * <code>required string nodeName = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getNodeNameBytes();
+  }
+  /**
+   * Protobuf type {@code FailoverMessage}
+   */
+  public  static final class FailoverMessage extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:FailoverMessage)
+      FailoverMessageOrBuilder {
+    // Use FailoverMessage.newBuilder() to construct.
+    private FailoverMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private FailoverMessage() {
+      nodeName_ = "";
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private FailoverMessage(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000001;
+              nodeName_ = bs;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return routing.Pipe.internal_static_FailoverMessage_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return routing.Pipe.internal_static_FailoverMessage_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              routing.Pipe.FailoverMessage.class, routing.Pipe.FailoverMessage.Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int NODENAME_FIELD_NUMBER = 1;
+    private volatile java.lang.Object nodeName_;
+    /**
+     * <code>required string nodeName = 1;</code>
+     */
+    public boolean hasNodeName() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required string nodeName = 1;</code>
+     */
+    public java.lang.String getNodeName() {
+      java.lang.Object ref = nodeName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          nodeName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string nodeName = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNodeNameBytes() {
+      java.lang.Object ref = nodeName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        nodeName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      if (!hasNodeName()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, nodeName_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, nodeName_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof routing.Pipe.FailoverMessage)) {
+        return super.equals(obj);
+      }
+      routing.Pipe.FailoverMessage other = (routing.Pipe.FailoverMessage) obj;
+
+      boolean result = true;
+      result = result && (hasNodeName() == other.hasNodeName());
+      if (hasNodeName()) {
+        result = result && getNodeName()
+            .equals(other.getNodeName());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasNodeName()) {
+        hash = (37 * hash) + NODENAME_FIELD_NUMBER;
+        hash = (53 * hash) + getNodeName().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static routing.Pipe.FailoverMessage parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static routing.Pipe.FailoverMessage parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static routing.Pipe.FailoverMessage parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static routing.Pipe.FailoverMessage parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static routing.Pipe.FailoverMessage parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static routing.Pipe.FailoverMessage parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static routing.Pipe.FailoverMessage parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static routing.Pipe.FailoverMessage parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static routing.Pipe.FailoverMessage parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static routing.Pipe.FailoverMessage parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(routing.Pipe.FailoverMessage prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code FailoverMessage}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:FailoverMessage)
+        routing.Pipe.FailoverMessageOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return routing.Pipe.internal_static_FailoverMessage_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return routing.Pipe.internal_static_FailoverMessage_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                routing.Pipe.FailoverMessage.class, routing.Pipe.FailoverMessage.Builder.class);
+      }
+
+      // Construct using routing.Pipe.FailoverMessage.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        nodeName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return routing.Pipe.internal_static_FailoverMessage_descriptor;
+      }
+
+      public routing.Pipe.FailoverMessage getDefaultInstanceForType() {
+        return routing.Pipe.FailoverMessage.getDefaultInstance();
+      }
+
+      public routing.Pipe.FailoverMessage build() {
+        routing.Pipe.FailoverMessage result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public routing.Pipe.FailoverMessage buildPartial() {
+        routing.Pipe.FailoverMessage result = new routing.Pipe.FailoverMessage(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.nodeName_ = nodeName_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof routing.Pipe.FailoverMessage) {
+          return mergeFrom((routing.Pipe.FailoverMessage)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(routing.Pipe.FailoverMessage other) {
+        if (other == routing.Pipe.FailoverMessage.getDefaultInstance()) return this;
+        if (other.hasNodeName()) {
+          bitField0_ |= 0x00000001;
+          nodeName_ = other.nodeName_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasNodeName()) {
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        routing.Pipe.FailoverMessage parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (routing.Pipe.FailoverMessage) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.lang.Object nodeName_ = "";
+      /**
+       * <code>required string nodeName = 1;</code>
+       */
+      public boolean hasNodeName() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string nodeName = 1;</code>
+       */
+      public java.lang.String getNodeName() {
+        java.lang.Object ref = nodeName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            nodeName_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string nodeName = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNodeNameBytes() {
+        java.lang.Object ref = nodeName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          nodeName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string nodeName = 1;</code>
+       */
+      public Builder setNodeName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        nodeName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string nodeName = 1;</code>
+       */
+      public Builder clearNodeName() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        nodeName_ = getDefaultInstance().getNodeName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string nodeName = 1;</code>
+       */
+      public Builder setNodeNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        nodeName_ = value;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:FailoverMessage)
+    }
+
+    // @@protoc_insertion_point(class_scope:FailoverMessage)
+    private static final routing.Pipe.FailoverMessage DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new routing.Pipe.FailoverMessage();
+    }
+
+    public static routing.Pipe.FailoverMessage getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<FailoverMessage>
+        PARSER = new com.google.protobuf.AbstractParser<FailoverMessage>() {
+      public FailoverMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new FailoverMessage(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<FailoverMessage> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<FailoverMessage> getParserForType() {
+      return PARSER;
+    }
+
+    public routing.Pipe.FailoverMessage getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -10952,6 +11713,11 @@ public final class Pipe {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_RaftNode_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_FailoverMessage_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_FailoverMessage_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_RaftMessage_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -10990,7 +11756,7 @@ public final class Pipe {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\npipe.proto\"\235\004\n\005Route\022\n\n\002id\030\001 \002(\003\022\031\n\004pa" +
+      "\n\npipe.proto\"\272\004\n\005Route\022\n\n\002id\030\001 \002(\003\022\031\n\004pa" +
       "th\030\002 \002(\0162\013.Route.Path\022\017\n\007payload\030\003 \001(\t\0227" +
       "\n\026networkDiscoveryPacket\030\004 \001(\0132\027.Network" +
       "DiscoveryPacket\022\023\n\004user\030\006 \001(\0132\005.User\022!\n\013" +
@@ -10999,39 +11765,41 @@ public final class Pipe {
       "age\0221\n\023userMessagesRequest\030\n \001(\0132\024.UserM" +
       "essagesRequest\0223\n\024userMessagesResponse\030\013" +
       " \001(\0132\025.UserMessagesResponse\022\025\n\005group\030\014 \001" +
-      "(\0132\006.Group\"\267\001\n\004Path\022\025\n\021NETWORK_DISCOVERY",
-      "\020\000\022\036\n\032NETWORK_DISCOVERY_RESPONSE\020\001\022\010\n\004US" +
-      "ER\020\002\022\013\n\007MESSAGE\020\003\022\t\n\005GROUP\020\004\022\010\n\004PING\020\005\022\007" +
-      "\n\003MSG\020\006\022\014\n\010RAFT_MSG\020\007\022\031\n\025USER_MESSAGES_R" +
-      "EQUEST\020\010\022\032\n\026USER_MESSAGES_RESPONSE\020\t\"$\n\023" +
-      "UserMessagesRequest\022\r\n\005uname\030\001 \002(\t\"A\n\024Us" +
-      "erMessagesResponse\022\r\n\005uname\030\001 \002(\t\022\032\n\010mes" +
-      "sages\030\002 \003(\0132\010.Message\"x\n\010RaftNode\022\016\n\006nod" +
-      "eid\030\001 \002(\t\022&\n\traftState\030\002 \002(\0162\023.RaftNode." +
-      "RaftState\"4\n\tRaftState\022\r\n\tCandidate\020\000\022\n\n" +
-      "\006Leader\020\001\022\014\n\010Follower\020\002\"\254\001\n\013RaftMessage\022",
-      "&\n\004type\030\001 \002(\0162\030.RaftMessage.RaftMsgType\022" +
-      "\024\n\014senderNodeid\030\002 \002(\t\"_\n\013RaftMsgType\022\023\n\017" +
-      "LeaderHeartBeat\020\000\022\017\n\013RequestVote\020\001\022\020\n\014Vo" +
-      "teResponse\020\002\022\030\n\024LeaderElectionResult\020\003\"F" +
-      "\n\004User\022\r\n\005uname\030\001 \002(\t\022\r\n\005email\030\002 \002(\t\022 \n\006" +
-      "action\030\003 \002(\0162\013.actionType:\003GET\"E\n\005Group\022" +
-      "\r\n\005gname\030\001 \002(\t\022\013\n\003gid\030\002 \002(\003\022 \n\006action\030\003 " +
-      "\002(\0162\013.actionType:\003GET\"q\n\007Message\022\021\n\tfrom" +
-      "uname\030\001 \002(\t\022\017\n\007message\030\002 \002(\t\022\017\n\007touname\030" +
-      "\003 \001(\t\022\017\n\007togname\030\004 \001(\t\022 \n\006action\030\005 \002(\0162\013",
-      ".actionType:\003GET\"\331\002\n\026NetworkDiscoveryPac" +
-      "ket\022*\n\004mode\030\001 \002(\0162\034.NetworkDiscoveryPack" +
-      "et.Mode\022D\n\006sender\030\002 \002(\0162\036.NetworkDiscove" +
-      "ryPacket.Sender:\024EXTERNAL_SERVER_NODE\022\020\n" +
-      "\010groupTag\030\003 \001(\t\022\016\n\006nodeId\030\004 \001(\t\022\023\n\013nodeA" +
-      "ddress\030\005 \002(\t\022\020\n\010nodePort\030\006 \002(\t\022\016\n\006secret" +
-      "\030\007 \002(\t\"Q\n\006Sender\022\030\n\024EXTERNAL_SERVER_NODE" +
-      "\020\000\022\030\n\024INTERNAL_SERVER_NODE\020\001\022\023\n\017END_USER" +
-      "_CLIENT\020\002\"!\n\004Mode\022\013\n\007REQUEST\020\000\022\014\n\010RESPON" +
-      "SE\020\001\"\026\n\006Header\022\014\n\004type\030\001 \002(\t*4\n\nactionTy",
-      "pe\022\007\n\003PUT\020\000\022\010\n\004POST\020\001\022\n\n\006DELETE\020\002\022\007\n\003GET" +
-      "\020\003B\013\n\007routingH\001"
+      "(\0132\006.Group\022)\n\017failoverMessage\030\r \001(\0132\020.Fa",
+      "iloverMessage\"\251\001\n\004Path\022\025\n\021NETWORK_DISCOV" +
+      "ERY\020\000\022\010\n\004USER\020\002\022\013\n\007MESSAGE\020\003\022\t\n\005GROUP\020\004\022" +
+      "\010\n\004PING\020\005\022\007\n\003MSG\020\006\022\014\n\010RAFT_MSG\020\007\022\031\n\025USER" +
+      "_MESSAGES_REQUEST\020\010\022\032\n\026USER_MESSAGES_RES" +
+      "PONSE\020\t\022\020\n\014FAILOVER_MSG\020\n\"$\n\023UserMessage" +
+      "sRequest\022\r\n\005uname\030\001 \002(\t\"A\n\024UserMessagesR" +
+      "esponse\022\r\n\005uname\030\001 \002(\t\022\032\n\010messages\030\002 \003(\013" +
+      "2\010.Message\"x\n\010RaftNode\022\016\n\006nodeid\030\001 \002(\t\022&" +
+      "\n\traftState\030\002 \002(\0162\023.RaftNode.RaftState\"4" +
+      "\n\tRaftState\022\r\n\tCandidate\020\000\022\n\n\006Leader\020\001\022\014",
+      "\n\010Follower\020\002\"#\n\017FailoverMessage\022\020\n\010nodeN" +
+      "ame\030\001 \002(\t\"\254\001\n\013RaftMessage\022&\n\004type\030\001 \002(\0162" +
+      "\030.RaftMessage.RaftMsgType\022\024\n\014senderNodei" +
+      "d\030\002 \002(\t\"_\n\013RaftMsgType\022\023\n\017LeaderHeartBea" +
+      "t\020\000\022\017\n\013RequestVote\020\001\022\020\n\014VoteResponse\020\002\022\030" +
+      "\n\024LeaderElectionResult\020\003\"F\n\004User\022\r\n\005unam" +
+      "e\030\001 \002(\t\022\r\n\005email\030\002 \002(\t\022 \n\006action\030\003 \002(\0162\013" +
+      ".actionType:\003GET\"E\n\005Group\022\r\n\005gname\030\001 \002(\t" +
+      "\022\013\n\003gid\030\002 \002(\003\022 \n\006action\030\003 \002(\0162\013.actionTy" +
+      "pe:\003GET\"q\n\007Message\022\021\n\tfromuname\030\001 \002(\t\022\017\n",
+      "\007message\030\002 \002(\t\022\017\n\007touname\030\003 \001(\t\022\017\n\007togna" +
+      "me\030\004 \001(\t\022 \n\006action\030\005 \002(\0162\013.actionType:\003G" +
+      "ET\"\331\002\n\026NetworkDiscoveryPacket\022*\n\004mode\030\001 " +
+      "\002(\0162\034.NetworkDiscoveryPacket.Mode\022D\n\006sen" +
+      "der\030\002 \002(\0162\036.NetworkDiscoveryPacket.Sende" +
+      "r:\024EXTERNAL_SERVER_NODE\022\020\n\010groupTag\030\003 \001(" +
+      "\t\022\016\n\006nodeId\030\004 \001(\t\022\023\n\013nodeAddress\030\005 \002(\t\022\020" +
+      "\n\010nodePort\030\006 \002(\t\022\016\n\006secret\030\007 \002(\t\"Q\n\006Send" +
+      "er\022\030\n\024EXTERNAL_SERVER_NODE\020\000\022\030\n\024INTERNAL" +
+      "_SERVER_NODE\020\001\022\023\n\017END_USER_CLIENT\020\002\"!\n\004M",
+      "ode\022\013\n\007REQUEST\020\000\022\014\n\010RESPONSE\020\001\"\026\n\006Header" +
+      "\022\014\n\004type\030\001 \002(\t*4\n\nactionType\022\007\n\003PUT\020\000\022\010\n" +
+      "\004POST\020\001\022\n\n\006DELETE\020\002\022\007\n\003GET\020\003B\013\n\007routingH" +
+      "\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -11050,7 +11818,7 @@ public final class Pipe {
     internal_static_Route_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Route_descriptor,
-        new java.lang.String[] { "Id", "Path", "Payload", "NetworkDiscoveryPacket", "User", "RaftMessage", "Header", "Message", "UserMessagesRequest", "UserMessagesResponse", "Group", });
+        new java.lang.String[] { "Id", "Path", "Payload", "NetworkDiscoveryPacket", "User", "RaftMessage", "Header", "Message", "UserMessagesRequest", "UserMessagesResponse", "Group", "FailoverMessage", });
     internal_static_UserMessagesRequest_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_UserMessagesRequest_fieldAccessorTable = new
@@ -11069,38 +11837,44 @@ public final class Pipe {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_RaftNode_descriptor,
         new java.lang.String[] { "Nodeid", "RaftState", });
-    internal_static_RaftMessage_descriptor =
+    internal_static_FailoverMessage_descriptor =
       getDescriptor().getMessageTypes().get(4);
+    internal_static_FailoverMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_FailoverMessage_descriptor,
+        new java.lang.String[] { "NodeName", });
+    internal_static_RaftMessage_descriptor =
+      getDescriptor().getMessageTypes().get(5);
     internal_static_RaftMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_RaftMessage_descriptor,
         new java.lang.String[] { "Type", "SenderNodeid", });
     internal_static_User_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(6);
     internal_static_User_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_User_descriptor,
         new java.lang.String[] { "Uname", "Email", "Action", });
     internal_static_Group_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(7);
     internal_static_Group_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Group_descriptor,
         new java.lang.String[] { "Gname", "Gid", "Action", });
     internal_static_Message_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_Message_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Message_descriptor,
         new java.lang.String[] { "Fromuname", "Message", "Touname", "Togname", "Action", });
     internal_static_NetworkDiscoveryPacket_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+      getDescriptor().getMessageTypes().get(9);
     internal_static_NetworkDiscoveryPacket_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_NetworkDiscoveryPacket_descriptor,
         new java.lang.String[] { "Mode", "Sender", "GroupTag", "NodeId", "NodeAddress", "NodePort", "Secret", });
     internal_static_Header_descriptor =
-      getDescriptor().getMessageTypes().get(9);
+      getDescriptor().getMessageTypes().get(10);
     internal_static_Header_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Header_descriptor,

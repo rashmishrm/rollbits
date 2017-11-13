@@ -65,4 +65,9 @@ public class ShardingService {
 		return list;
 	}
 
+	public void reset() {
+		service = null;
+		getInstance();
+	}
+
 }

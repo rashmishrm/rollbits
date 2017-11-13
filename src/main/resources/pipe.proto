@@ -5,7 +5,6 @@ option java_package = "routing";
 message Route {
 	enum Path {
     NETWORK_DISCOVERY=0;
-    NETWORK_DISCOVERY_RESPONSE=1;
     USER=2;
     MESSAGE=3;
     GROUP=4;
@@ -14,7 +13,7 @@ message Route {
     RAFT_MSG =7;
     USER_MESSAGES_REQUEST=8;
     USER_MESSAGES_RESPONSE=9;
-    
+    FAILOVER_MSG=10;
 }
 
     // a node should not have a value though this is not enforced
@@ -31,6 +30,7 @@ message Route {
     optional UserMessagesRequest userMessagesRequest=10;
     optional UserMessagesResponse  userMessagesResponse=11;
     optional Group group = 12;
+    optional FailoverMessage failoverMessage = 13;
 
 }
 
@@ -60,6 +60,10 @@ message RaftNode{
     }
 	required string nodeid=1;
 	required RaftState raftState=2;
+}
+
+message FailoverMessage{
+	required string nodeName = 1;
 }
 
 message RaftMessage{

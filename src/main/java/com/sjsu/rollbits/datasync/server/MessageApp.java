@@ -35,18 +35,24 @@ public class MessageApp {
 //			System.out.println("usage: server <config file>");
 //			System.exit(1);
 //		}
-		UdpServer.start();
-		Thread.sleep(2 * 1000L);
+		Thread t = new Thread(new UdpServer());
+		t.setDaemon(true);
+		t.start();
+		Thread.sleep(1 * 1000L);
 		UdpClient.broadcast();
-		Thread.sleep(60*1000L);
+		Thread.sleep(1*1000L);
+		
+		System.out.println("hereeeee");
 		File cf = new File("/Users/nishantrathi/CMPE-275/project/rollbits/src/main/resources/routing.conf");
 		try {
 			MessageServer svr = new MessageServer(cf);
+			System.out.println("hereeeee");
 			svr.startServer();
+			System.out.println("hereeeee");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			System.out.println("server closing");
+			//System.out.println("server closing");
 		}
 	}
 }

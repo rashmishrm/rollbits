@@ -3,6 +3,10 @@
  */
 package com.sjsu.rollbits.raft;
 
+import com.sjsu.rollbits.datasync.client.MessageClient;
+import com.sjsu.rollbits.discovery.ClusterDirectory;
+import com.sjsu.rollbits.discovery.Node;
+
 import routing.Pipe.RaftMessage;
 import routing.Pipe.RaftMessage.RaftMsgType;
 import routing.Pipe.Route;
@@ -40,7 +44,7 @@ public class RaftFollowerState implements RaftState {
 			raftMessageBuilder.setSenderNodeid(RaftHelper.getMyNodeId());
 			RaftMessage raftMessage = raftMessageBuilder.build();
 			routeBuilder.setRaftMessage(raftMessage);
-			RaftHelper.broadcast(routeBuilder.build());
+			RaftHelper.broadcast(routeBuilder);
 		}
 	}
 
@@ -60,7 +64,7 @@ public class RaftFollowerState implements RaftState {
 				raftMessageBuilder.setSenderNodeid(RaftHelper.getMyNodeId());
 				RaftMessage raftMessage = raftMessageBuilder.build();
 				routeBuilder.setRaftMessage(raftMessage);
-				RaftHelper.sendMessageToNode(senderNodeId, routeBuilder.build());
+				RaftHelper.sendMessageToNode(senderNodeId, routeBuilder);
 				hasVoted = true;
 			}
 		}

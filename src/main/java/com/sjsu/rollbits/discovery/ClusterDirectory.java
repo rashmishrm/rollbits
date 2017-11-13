@@ -50,4 +50,9 @@ public class ClusterDirectory {
 	public static Map<String, Map<String, Node>> getGroupMap(){
     	return clusterMap;
     }
+
+	public static void handleFailover(String nodeName) {
+		ClusterDirectory.getNodeMap().remove(nodeName);
+		
+	}
 }

@@ -268,4 +268,10 @@ public class MessageClient {
 	private synchronized long nextId() {
 		return ++curID;
 	}
+
+	public boolean sendProto(Route.Builder routeBuilder) {
+		CommConnection conn = CommConnection.getInstance();
+		routeBuilder.setId(nextId());
+		return conn.write(routeBuilder.build());
+	}
 }

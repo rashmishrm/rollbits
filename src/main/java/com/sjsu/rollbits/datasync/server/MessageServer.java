@@ -43,7 +43,7 @@ public class MessageServer {
 	public static final String sPoolSize = "pool.size";
 
 	protected RoutingConf conf;
-	protected boolean background = false;
+	protected boolean background = true;
 
 	public MessageServer(RoutingConf conf) {
 		this.conf = conf;
@@ -153,6 +153,7 @@ public class MessageServer {
 
 				// block until the server socket is closed.
 				f.channel().closeFuture().sync();
+				System.out.println("Server started...");
 
 			} catch (Exception ex) {
 				// on bind().sync()
