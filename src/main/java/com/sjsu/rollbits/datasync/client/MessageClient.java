@@ -15,10 +15,13 @@
  */
 package com.sjsu.rollbits.datasync.client;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import routing.Pipe;
+import routing.Pipe.Message;
 import routing.Pipe.Route;
+import routing.Pipe.Route.Builder;
 
 /**
  * front-end (proxy) to our service - functional-based
@@ -273,5 +276,15 @@ public class MessageClient {
 		CommConnection conn = CommConnection.getInstance();
 		routeBuilder.setId(nextId());
 		return conn.write(routeBuilder.build());
+	}
+
+	public Boolean checkUserExists(String username) {
+		// TODO send message to check if a username exists
+		return false;
+	}
+
+	public List<Message> fetchMessages(String username) {
+		// TODO send message to fetch list of messages
+		return null;
 	}
 }

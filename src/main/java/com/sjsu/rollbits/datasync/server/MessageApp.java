@@ -19,6 +19,7 @@ import java.io.File;
 
 import com.sjsu.rollbits.discovery.UdpClient;
 import com.sjsu.rollbits.discovery.UdpServer;
+import com.sjsu.rollbits.raft.RaftContext;
 
 /**
  * @author gash1
@@ -40,15 +41,13 @@ public class MessageApp {
 		t.start();
 		Thread.sleep(1 * 1000L);
 		UdpClient.broadcast();
-		Thread.sleep(1*1000L);
+		Thread.sleep(15 * 1000L);
+		RaftContext.getInstance();//To Start Raft Engine
 		
-		System.out.println("hereeeee");
 		File cf = new File("/Users/nishantrathi/CMPE-275/project/rollbits/src/main/resources/routing.conf");
 		try {
 			MessageServer svr = new MessageServer(cf);
-			System.out.println("hereeeee");
 			svr.startServer();
-			System.out.println("hereeeee");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
