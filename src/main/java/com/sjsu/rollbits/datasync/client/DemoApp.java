@@ -79,7 +79,7 @@ public class DemoApp implements CommListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String host = "127.0.0.1";
+		String host = "10.0.0.1";
 		int port = 4567;
 		System.out.println(Pipe.Route.Path.USER);
 		long stime = System.currentTimeMillis();
@@ -88,18 +88,17 @@ public class DemoApp implements CommListener {
 			MessageClient mc = new MessageClient(host, port);
 			// DemoApp da = new DemoApp(mc);
 
-			// mc.addUser("sdkfslfdskjflsjfjsdlflksf", "abc", false, true);
+			//mc.addUser("nov12user", "abc", false, true);
 			// mc.addUser("nishantrathi", "rashmishrm74@gmail.com", false, true);
-
-			mc.ping();
+			//mc.ping();
 
 			Route.Builder rb = Route.newBuilder();
-
+			//mc.sendMessage("user1", "nov12user", 1, "hello message", false, true);
 			rb.setPath(Route.Path.USER_MESSAGES_REQUEST);
 			// rb.setAction(routing.Pipe.actionType.PUT);
 			Pipe.UserMessagesRequest.Builder ub = Pipe.UserMessagesRequest.newBuilder();
 
-			ub.setUname("akansha");
+			ub.setUname("nov12user");
 			rb.setUserMessagesRequest(ub);
 
 			Route r = mc.sendSyncronousMessage(rb);

@@ -22,7 +22,7 @@ public final class UdpClient {
 	 * "8080"));
 	 */
 
-	public static void main(String[] args) throws Exception {
+	public static void broadcast() throws Exception {
 
 		NetworkDiscoveryPacket.Builder builder = NetworkDiscoveryPacket.newBuilder();
 

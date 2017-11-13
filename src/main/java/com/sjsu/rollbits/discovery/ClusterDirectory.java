@@ -26,7 +26,7 @@ public class ClusterDirectory {
 			clusterMap.put(request.getGroupTag(), nMap);
 		}
 		
-		conf.loadyaml();
+		//conf.loadyaml();
 		printDirectory();
 	}
 

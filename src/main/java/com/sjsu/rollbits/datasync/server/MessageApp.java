@@ -17,6 +17,9 @@ package com.sjsu.rollbits.datasync.server;
 
 import java.io.File;
 
+import com.sjsu.rollbits.discovery.UdpClient;
+import com.sjsu.rollbits.discovery.UdpServer;
+
 /**
  * @author gash1
  * 
@@ -25,14 +28,18 @@ public class MessageApp {
 
 	/**
 	 * @param args
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 //		if (args.length == 0) {  
 //			System.out.println("usage: server <config file>");
 //			System.exit(1);
 //		}
-
-		File cf = new File("/Users/rashmisharma/Documents/GitHub/rollbits/src/main/resources/routing.conf");
+		UdpServer.start();
+		Thread.sleep(2 * 1000L);
+		UdpClient.broadcast();
+		Thread.sleep(60*1000L);
+		File cf = new File("/Users/nishantrathi/CMPE-275/project/rollbits/src/main/resources/routing.conf");
 		try {
 			MessageServer svr = new MessageServer(cf);
 			svr.startServer();
