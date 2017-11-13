@@ -37,9 +37,8 @@ public class MessageApp {
 //			System.exit(1);
 //		}
 		Thread t = new Thread(new UdpServer());
-		t.setDaemon(true);
 		t.start();
-		Thread.sleep(1 * 1000L);
+		Thread.sleep(4 * 1000L);
 		UdpClient.broadcast();
 		Thread.sleep(15 * 1000L);
 		RaftContext.getInstance();//To Start Raft Engine

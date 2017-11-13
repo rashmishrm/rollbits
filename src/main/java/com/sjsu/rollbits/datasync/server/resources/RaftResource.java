@@ -8,6 +8,7 @@ import com.sjsu.rollbits.raft.RaftState;
 
 import routing.Pipe;
 import routing.Pipe.RaftMessage;
+import routing.Pipe.Route;
 import routing.Pipe.RaftMessage.RaftMsgType;
 
 public class RaftResource  implements RouteResource {
@@ -48,7 +49,11 @@ public class RaftResource  implements RouteResource {
         	
         }
 
-        return "success";
+        Route.Builder rb = Route.newBuilder();
+		rb.setId(msg.getId());
+		rb.setPath(Route.Path.RAFT_MSG);
+		rb.setPayload("success");
+        return rb;
     }
 
 }

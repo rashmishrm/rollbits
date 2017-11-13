@@ -49,4 +49,9 @@ public final class UdpServer implements Runnable {
             group.shutdownGracefully();
         }
     }
+   
+   public static void main(String[]args){
+	   Thread t = new Thread(new UdpServer());
+		t.start();
+   }
 }

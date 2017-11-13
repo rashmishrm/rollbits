@@ -1,7 +1,4 @@
 package com.sjsu.rollbits.discovery;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import routing.Pipe;
 
 public class Node {
@@ -21,12 +18,6 @@ public class Node {
 	} 
 	
 	public String getNodeIp(){
-		try {
-			nodeIp = InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return nodeIp;
 		
 	}

@@ -76,5 +76,10 @@ public final class UdpClient {
 		} finally {
 			group.shutdownGracefully();
 		}
+		
+	}
+	
+	public static void main(String []args) throws Exception{
+		UdpClient.broadcast();
 	}
 }

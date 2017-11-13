@@ -1,7 +1,5 @@
 package com.sjsu.rollbits.discovery;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import io.netty.channel.ChannelHandlerContext;
