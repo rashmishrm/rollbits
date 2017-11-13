@@ -1,6 +1,8 @@
 package com.sjsu.rollbits.dao.interfaces;
 
 import com.sjsu.rollbits.dao.interfaces.model.Message;
+
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -81,8 +83,22 @@ public class MessageDao {
     
 	@SuppressWarnings("unchecked")
 	public List<Message> findAllForUname(String uname) {
-        List<Message> message = (List<Message>) getCurrentSession().createQuery("from Message m where m.touserid = '"+uname+"'").list();
-        return message;
+		String messages="FROM Message msg WHERE msg.touserid = :uname";
+		Query query = getCurrentSession().createQuery(messages);
+		query.setParameter("uname",uname);
+		//System.out.println(hql);
+        //List<Message> message = (List<Message>) getCurrentSession().createQuery(hql).list();
+        return query.list();
+    }
+	
+	@SuppressWarnings("unchecked")
+	public List<Message> findAllFromUname(String uname) {
+		String messages="FROM Message msg WHERE msg.fromuserid = :uname";
+		Query query = getCurrentSession().createQuery(messages);
+		query.setParameter("uname",uname);
+		//System.out.println(hql);
+        //List<Message> message = (List<Message>) getCurrentSession().createQuery(hql).list();
+        return query.list();
     }
 
     public void deleteAll() {
