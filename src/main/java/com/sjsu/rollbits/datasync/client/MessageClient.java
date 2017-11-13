@@ -217,8 +217,7 @@ public class MessageClient {
 	}
 
 	
-	public boolean sendMessage(String fromUserId, String toUserId, int type, String message, boolean internal,
-			boolean async) {
+	public boolean sendMessage(String fromUserId, String toUserId, String message, boolean internal, boolean async) {
 		// construct the message to send
 		boolean added = false;
 

@@ -1,7 +1,5 @@
 package com.sjsu.rollbits.client.serverdiscovery;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import io.netty.channel.ChannelHandlerContext;
@@ -32,26 +30,27 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<NetworkDiscove
 		if (request.getSender().equals(Sender.EXTERNAL_SERVER_NODE)) {
 			ClusterDirectory.addToDirectory(request);
 		}
-
-		if (request.getMode() == NetworkDiscoveryPacket.Mode.REQUEST) {
-
-			try {
-				NetworkDiscoveryPacket.Builder toSend = NetworkDiscoveryPacket.newBuilder();
-				toSend.setGroupTag(MyConstants.GROUP_NAME);
-
-				toSend.setNodeId(MyConstants.NODE_NAME);
-				toSend.setNodeAddress(MyConstants.NODE_IP);
-				toSend.setMode(Mode.RESPONSE);
-				toSend.setNodePort(MyConstants.NODE_PORT);
-				toSend.setSender(Sender.EXTERNAL_SERVER_NODE);
-				toSend.setSecret(MyConstants.SECRET);
-				NetworkDiscoveryPacket myResponse = toSend.build();
-				UdpClient.sendUDPMessage(myResponse, request.getNodeAddress(), MyConstants.UDP_PORT);
-			} catch (Exception e) {
-				System.err.println("Exception received");
-				e.printStackTrace();
-			}
-		}
+		
+//		COmmenting below section as end user client does not need to respond to any broadcast messages.
+//		if (request.getMode() == NetworkDiscoveryPacket.Mode.REQUEST) {
+//
+//			try {
+//				NetworkDiscoveryPacket.Builder toSend = NetworkDiscoveryPacket.newBuilder();
+//				toSend.setGroupTag(MyConstants.GROUP_NAME);
+//
+//				toSend.setNodeId(MyConstants.NODE_NAME);
+//				toSend.setNodeAddress(MyConstants.NODE_IP);
+//				toSend.setMode(Mode.RESPONSE);
+//				toSend.setNodePort(MyConstants.NODE_PORT);
+//				toSend.setSender(Sender.END_USER_CLIENT);
+//				toSend.setSecret(MyConstants.SECRET);
+//				NetworkDiscoveryPacket myResponse = toSend.build();
+//				UdpClient.sendUDPMessage(myResponse, request.getNodeAddress(), MyConstants.UDP_PORT);
+//			} catch (Exception e) {
+//				System.err.println("Exception received");
+//				e.printStackTrace();
+//			}
+//		}
 	}
 
 

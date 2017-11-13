@@ -16,14 +16,14 @@ import routing.Pipe.NetworkDiscoveryPacket;
 
 import java.util.List;
 
-public final class UdpServer {
+public final class UdpServer implements Runnable {
 
     private static final int PORT = Integer.parseInt(System.getProperty("port", "8080"));
     static AttributeKey<String> attkey = AttributeKey.valueOf("clientid");
     
     
-
-    public static void main(String[] args) throws Exception {
+   @Override
+    public void run() {
     	System.out.println("Server running at port 8080");
     	EventLoopGroup group = new NioEventLoopGroup();
         try {
@@ -42,7 +42,10 @@ public final class UdpServer {
                         }});
 
             b.bind(PORT).sync().channel().closeFuture().await();
-        } finally {
+        } catch(Exception e){
+        	e.printStackTrace();
+        }
+        finally {
             group.shutdownGracefully();
         }
     }

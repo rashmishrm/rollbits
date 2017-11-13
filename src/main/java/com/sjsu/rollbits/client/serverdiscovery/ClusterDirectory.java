@@ -1,14 +1,21 @@
 package com.sjsu.rollbits.client.serverdiscovery;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+
+import com.sjsu.rollbits.datasync.client.CommListener;
+import com.sjsu.rollbits.datasync.client.MessageClient;
 
 import routing.Pipe.NetworkDiscoveryPacket;
 
 public class ClusterDirectory {
 
 	public static Map<String, Map<String, Node>> clusterMap = new HashMap<String, Map<String, Node>>();
-
+	
+	public static String selectedClusterGroup = null;
+	
 	public static synchronized void addToDirectory(NetworkDiscoveryPacket request) {
 		Node node = new Node(request.getNodeId(), request.getNodeAddress(), request.getNodePort(),
 				request.getGroupTag(), request.getSender());
@@ -37,12 +44,28 @@ public class ClusterDirectory {
 		}*/
 	}
 	
-	public Map<String, Node> getNodeMap(){
-		
-		return clusterMap.get(MyConstants.GROUP_NAME);
-	}
+//	public Map<String, Node> getNodeMap(){
+//		
+//		return clusterMap.get(MyConstants.GROUP_NAME);
+//	}
 	
-	public Map<String, Map<String, Node>> getGroupMap(){
+	public static Map<String, Map<String, Node>> getGroupMap(){
     	return clusterMap;
     }
+	
+	public static void selectClusterGroup(String groupName){
+		selectedClusterGroup = groupName;
+	}
+	
+	private static Node getSelectedClusterNode() {
+		Map<String, Node> nodeMap = clusterMap.get(selectedClusterGroup);
+		return new ArrayList<>(nodeMap.values()).get(new Random().nextInt(nodeMap.size()));
+	}
+	
+	public static MessageClient getMessageClient(CommListener listener){
+		Node selectedNode = getSelectedClusterNode();
+		MessageClient mc = new MessageClient(selectedNode.getNodeIp(), selectedNode.getPort());
+		mc.addListener(listener);
+		return mc;
+	}
 }

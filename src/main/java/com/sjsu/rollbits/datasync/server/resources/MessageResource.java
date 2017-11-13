@@ -74,9 +74,9 @@ public class MessageResource implements RouteResource {
 			for (RNode node : set) {
 				MessageClient mc = new MessageClient(node.getIpAddress(), node.getPort());
 				if (node.getType().equals(RNode.Type.REPLICA)) {
-					mc.sendMessage(message.getFromuname(), message.getTouname(), 1, message.getMessage(), true, true);
+					mc.sendMessage(message.getFromuname(), message.getTouname(), message.getMessage(), true, true);
 				} else {
-					mc.sendMessage(message.getFromuname(), message.getTouname(), 1, message.getMessage(), true, false);
+					mc.sendMessage(message.getFromuname(), message.getTouname(), message.getMessage(), true, false);
 				}
 
 			}

@@ -104,51 +104,38 @@ class FetchMessageTask implements Callable<List<Message>>, CommListener {
 		
 	}
 	
-	public List<Future<Boolean>> doesUserExists(String userName){
+	public List<Future<Boolean>> doesUserExists(String userName) {
 		List<Future<Boolean>> resultList = new ArrayList<>();
 		ExecutorService executorService = Executors.newFixedThreadPool(ClusterDirectory.getGroupMap().size());
-		Map<String,Map<String, Node>> groupMap = ClusterDirectory.getGroupMap();
-		for (Map.Entry<String, Map<String,Node>> entry : groupMap.entrySet())
-		{
-		    Map<String,Node> nodeMap = entry.getValue();
-		    Node nodeOfEachGroup = null;
-		    if(nodeMap.size()==1){
-		    	for (Map.Entry<String, Node> e : nodeMap.entrySet()){
-		    		nodeOfEachGroup = e.getValue();
-		    	}
-		    } else if(nodeMap.size() >= 2) {
-		    	List<Node> nodeList = new ArrayList<>(nodeMap.values());
-		    	nodeOfEachGroup = nodeList.get(rand.nextInt(nodeList.size()));
-		    }
-		    CheckUserTask task = new CheckUserTask(nodeOfEachGroup.getNodeIp(), nodeOfEachGroup.getPort(), userName);
+		Map<String, Map<String, Node>> groupMap = ClusterDirectory.getGroupMap();
+		for (Map.Entry<String, Map<String, Node>> entry : groupMap.entrySet()) {
+			Map<String, Node> nodeMap = entry.getValue();
+			Node nodeOfEachGroup = null;
+			List<Node> nodeList = new ArrayList<>(nodeMap.values());
+			nodeOfEachGroup = nodeList.get(rand.nextInt(nodeList.size()));
+			CheckUserTask task = new CheckUserTask(nodeOfEachGroup.getNodeIp(), nodeOfEachGroup.getPort(), userName);
 			Future<Boolean> isUserFound = executorService.submit(task);
 			resultList.add(isUserFound);
 		}
-		
+
 		return resultList;
 	}
 	
-	public List<Future<List<Message>>> fetchAllMessages(String userName){
+	public List<Future<List<Message>>> fetchAllMessages(String userName) {
 		List<Future<List<Message>>> resultList = new ArrayList<>();
 		ExecutorService executorService = Executors.newFixedThreadPool(ClusterDirectory.getGroupMap().size());
-		Map<String,Map<String, Node>> groupMap = ClusterDirectory.getGroupMap();
-		for (Map.Entry<String, Map<String,Node>> entry : groupMap.entrySet())
-		{
-		    Map<String,Node> nodeMap = entry.getValue();
-		    Node nodeOfEachGroup = null;
-		    if(nodeMap.size()==1){
-		    	for (Map.Entry<String, Node> e : nodeMap.entrySet()){
-		    		nodeOfEachGroup = e.getValue();
-		    	}
-		    } else if(nodeMap.size() >= 2) {
-		    	List<Node> nodeList = new ArrayList<>(nodeMap.values());
-		    	nodeOfEachGroup = nodeList.get(rand.nextInt(nodeList.size()));
-		    }
-		    FetchMessageTask task = new FetchMessageTask(nodeOfEachGroup.getNodeIp(), nodeOfEachGroup.getPort(), userName);
+		Map<String, Map<String, Node>> groupMap = ClusterDirectory.getGroupMap();
+		for (Map.Entry<String, Map<String, Node>> entry : groupMap.entrySet()) {
+			Map<String, Node> nodeMap = entry.getValue();
+			Node nodeOfEachGroup = null;
+			List<Node> nodeList = new ArrayList<>(nodeMap.values());
+			nodeOfEachGroup = nodeList.get(rand.nextInt(nodeList.size()));
+			FetchMessageTask task = new FetchMessageTask(nodeOfEachGroup.getNodeIp(), nodeOfEachGroup.getPort(),
+					userName);
 			Future<List<Message>> messgeList = executorService.submit(task);
 			resultList.add(messgeList);
 		}
-		
+
 		return resultList;
 	}
 

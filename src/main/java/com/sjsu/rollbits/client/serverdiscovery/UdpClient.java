@@ -14,7 +14,6 @@ import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.internal.SocketUtils;
 import routing.Pipe.NetworkDiscoveryPacket;
-import routing.Pipe.NetworkDiscoveryPacket.Sender;
 
 public final class UdpClient {
 
@@ -23,13 +22,13 @@ public final class UdpClient {
 	 * "8080"));
 	 */
 
-	public static void main(String[] args) throws Exception {
+	public static void broadcast() throws Exception {
 
 		NetworkDiscoveryPacket.Builder builder = NetworkDiscoveryPacket.newBuilder();
 
 		builder.setGroupTag(MyConstants.GROUP_NAME);
 		// builder.setSender(NetworkDiscoveryPacket.Sender.END_USER_CLIENT);
-		builder.setSender(NetworkDiscoveryPacket.Sender.EXTERNAL_SERVER_NODE);
+		builder.setSender(NetworkDiscoveryPacket.Sender.END_USER_CLIENT);
 		builder.setMode(NetworkDiscoveryPacket.Mode.REQUEST);
 		builder.setNodeId(MyConstants.NODE_NAME);
 		builder.setNodeAddress(MyConstants.NODE_IP);
