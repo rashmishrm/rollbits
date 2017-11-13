@@ -21,12 +21,6 @@ public class Node {
 	} 
 	
 	public String getNodeIp(){
-		try {
-			nodeIp = InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return nodeIp;
 		
 	}

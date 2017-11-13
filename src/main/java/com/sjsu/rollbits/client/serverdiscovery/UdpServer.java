@@ -18,13 +18,13 @@ import java.util.List;
 
 public final class UdpServer implements Runnable {
 
-    private static final int PORT = Integer.parseInt(System.getProperty("port", "8181"));
+    private static final int PORT = Integer.parseInt(System.getProperty("port", "8080"));
     static AttributeKey<String> attkey = AttributeKey.valueOf("clientid");
     
     
    @Override
     public void run() {
-    	System.out.println("Server running at port 8181");
+    	System.out.println("Server running at port 8080");
     	EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
