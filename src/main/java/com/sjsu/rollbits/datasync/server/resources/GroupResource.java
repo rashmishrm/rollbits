@@ -12,6 +12,8 @@ import com.sjsu.rollbits.sharding.hashing.Message;
 import com.sjsu.rollbits.sharding.hashing.RNode;
 import routing.Pipe;
 import routing.Pipe.Route;
+import routing.Pipe.Route.Path;
+
 import com.sjsu.rollbits.sharding.hashing.ShardingService;
 
 public class GroupResource implements RouteResource {
@@ -75,7 +77,10 @@ public class GroupResource implements RouteResource {
 			break;
 		}
 		Route.Builder rb = Route.newBuilder();
-		rb.setPayload(success ? "sucess" : "Failed");
+		rb.setPath(Path.MSG);
+		rb.setId(msg.getId());
+
+		rb.setPayload(success ? "success" : "failed");
 		return rb;
 
 	}

@@ -11,23 +11,30 @@ import com.sjsu.rollbits.sharding.hashing.ShardingService;
 import routing.Pipe;
 import routing.Pipe.FailoverMessage;
 import routing.Pipe.RaftMessage;
+import routing.Pipe.Route;
 import routing.Pipe.RaftMessage.RaftMsgType;
+import routing.Pipe.Route.Path;
 
-public class FailoverResource  implements RouteResource {
-    protected static Logger logger = LoggerFactory.getLogger("raft");
+public class FailoverResource implements RouteResource {
+	protected static Logger logger = LoggerFactory.getLogger("raft");
 
-    @Override
-    public Pipe.Route.Path getPath() {
-        return Pipe.Route.Path.RAFT_MSG;
-    }
+	@Override
+	public Pipe.Route.Path getPath() {
+		return Pipe.Route.Path.RAFT_MSG;
+	}
 
-    @Override
-    public Object process(Pipe.Route msg) {
-    	FailoverMessage failoverMessage = msg.getFailoverMessage();
-    	ClusterDirectory.handleFailover(failoverMessage.getNodeName());
-    	ShardingService.getInstance().reset();
-        return "success";
-    }
+	@Override
+	public Object process(Pipe.Route msg) {
+		FailoverMessage failoverMessage = msg.getFailoverMessage();
+		ClusterDirectory.handleFailover(failoverMessage.getNodeName());
+		ShardingService.getInstance().reset();
+
+		Route.Builder rb = Route.newBuilder();
+		rb.setId(msg.getId());
+		rb.setPath(Path.MSG);
+		rb.setPayload("sucess");
+
+		return rb;
+	}
 
 }
-

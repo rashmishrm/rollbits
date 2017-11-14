@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import routing.Pipe;
 import routing.Pipe.Route;
+import routing.Pipe.Route.Path;
 
 /**
  * processes requests of message passing - demonstration
@@ -43,6 +44,8 @@ public class MsgResource implements RouteResource {
 		logger.info(body);
 
 		Route.Builder rb = Route.newBuilder(msg);
+		rb.setPath(Path.MSG);
+		
 		rb.setPayload("good");
 		return rb;
 	}

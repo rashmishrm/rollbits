@@ -70,9 +70,9 @@ public class UserMessageResource implements RouteResource {
 
 		} else {
 
-			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = dbService.findAll();
+			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = dbService
+					.findAllforuname(message.getUname());
 
-			System.out.println("hererrerererrerer in message resource");
 			rb = Route.newBuilder();
 			rb.setId(msg.getId());
 			rb.setPath(Route.Path.USER_MESSAGES_RESPONSE);
@@ -90,14 +90,13 @@ public class UserMessageResource implements RouteResource {
 					m.setTouname(mesg.getTouserid() == null ? "" : mesg.getTouserid());
 					m.setAction(actionType.GET);
 					m.setMessage(mesg.getMessage() == null ? "" : mesg.getMessage());
-				
+
 					list.add(m.build());
 				}
 			}
 			ub.addAllMessages(list);
 			ub.setUname(message.getUname());
 			rb.setUserMessagesResponse(ub);
-			
 
 		}
 		return rb;

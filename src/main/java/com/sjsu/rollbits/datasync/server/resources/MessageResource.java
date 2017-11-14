@@ -31,6 +31,7 @@ import com.sjsu.rollbits.sharding.hashing.ShardingService;
 
 import routing.Pipe;
 import routing.Pipe.Route;
+import routing.Pipe.Route.Path;
 
 /**
  * processes requests of message passing - demonstration
@@ -93,6 +94,7 @@ public class MessageResource implements RouteResource {
 
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(msg.getId());
+		rb.setPath(Path.MSG);
 		rb.setPayload(isSuccess ? "sucess" : "Failed");
 
 		return rb;
