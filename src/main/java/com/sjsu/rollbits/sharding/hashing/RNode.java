@@ -61,7 +61,7 @@ public class RNode implements Comparable<RNode> {
 		this.ipAddress = ipAddress;
 	}
 
-	public int getPort() {
+	public long getPort() {
 		return port;
 	}
 

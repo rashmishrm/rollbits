@@ -103,28 +103,27 @@ message User {
 
  }
  
- message NetworkDiscoveryPacket{
- 	
- 	enum Sender{
-    EXTERNAL_SERVER_NODE=0;
-    INTERNAL_SERVER_NODE=1;
-    END_USER_CLIENT=2;
+message NetworkDiscoveryPacket {
+
+    enum Sender {
+        EXTERNAL_SERVER_NODE = 0;
+        INTERNAL_SERVER_NODE = 1;
+        END_USER_CLIENT = 2;
     }
-    
-    	enum Mode{
-    REQUEST=0;
-    RESPONSE=1;
+
+    enum Mode {
+        REQUEST = 0;
+        RESPONSE = 1;
     }
-    
+
     required Mode mode = 1;
-    required Sender sender = 2 [default = EXTERNAL_SERVER_NODE];
+    required Sender sender = 2 [default = INTERNAL_SERVER_NODE];
     optional string groupTag = 3; //If sender is a server node, then this field can contain its group id. If sender is end user client, then this field is not required.
     optional string nodeId = 4; //node id of the sender
     required string nodeAddress = 5;
-    required string nodePort = 6;
+    required int64 nodePort = 6;
     required string secret = 7;
- 
- }
+}
  
  message Header{
  	required string type=1;

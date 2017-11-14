@@ -13,7 +13,9 @@ import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.internal.SocketUtils;
+import routing.Pipe;
 import routing.Pipe.NetworkDiscoveryPacket;
+import routing.Pipe.Route;
 
 public final class UdpClient {
 
@@ -23,22 +25,27 @@ public final class UdpClient {
 	 */
 
 	public static void broadcast() throws Exception {
-
+		Route.Builder rb = Route.newBuilder();
+		rb.setPath(Route.Path.NETWORK_DISCOVERY);
+	
+	
+		
 		NetworkDiscoveryPacket.Builder builder = NetworkDiscoveryPacket.newBuilder();
-
+		
 		builder.setGroupTag(MyConstants.GROUP_NAME);
 		// builder.setSender(NetworkDiscoveryPacket.Sender.END_USER_CLIENT);
 		builder.setSender(NetworkDiscoveryPacket.Sender.EXTERNAL_SERVER_NODE);
 		builder.setMode(NetworkDiscoveryPacket.Mode.REQUEST);
 		builder.setNodeId(MyConstants.NODE_NAME);
 		builder.setNodeAddress(MyConstants.NODE_IP);
-		builder.setNodePort(MyConstants.NODE_PORT);
+		builder.setNodePort(Integer.parseInt(MyConstants.NODE_PORT));
 		builder.setSecret(MyConstants.SECRET);
 
 		// builder.setIp(InetAddress.getLocalHost().getHostAddress());
 		// System.out.println("******"+InetAddress.getLocalHost().getHostAddress());
-
-		NetworkDiscoveryPacket request = builder.build();// build() builds the
+		rb.setNetworkDiscoveryPacket(builder);
+		rb.setId(1);
+		Route request = rb.build();// build() builds the
 															// stream,
 															// transitioning
 															// this builder to
@@ -47,7 +54,7 @@ public final class UdpClient {
 		sendUDPMessage(request, MyConstants.UDP_IP_BROADCAST, MyConstants.UDP_PORT);
 	}
 
-	public static void sendUDPMessage(NetworkDiscoveryPacket request, String IP, int port) throws InterruptedException {
+	public static void sendUDPMessage(Route request, String IP, int port) throws InterruptedException {
 		EventLoopGroup group = new NioEventLoopGroup();
 		try {
 			Bootstrap b = new Bootstrap();

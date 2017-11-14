@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.sjsu.rollbits.client.serverdiscovery.MyConstants;
 import com.sjsu.rollbits.discovery.ClusterDirectory;
+import com.sjsu.rollbits.discovery.MyConstants;
 import com.sjsu.rollbits.discovery.Node;
 
 public class ShardingService {

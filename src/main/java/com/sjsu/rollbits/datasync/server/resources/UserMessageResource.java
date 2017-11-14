@@ -65,7 +65,7 @@ public class UserMessageResource implements RouteResource {
 		RNode primaryNode = nodes.get(0);
 		Route.Builder rb = null;
 		if (!primaryNode.getIpAddress().equals(MyConstants.NODE_IP)) {
-			MessageClient msgClient = new MessageClient(primaryNode.getIpAddress(), primaryNode.getPort());
+			MessageClient msgClient = new MessageClient(primaryNode.getIpAddress(), (int)primaryNode.getPort());
 			Route r = msgClient.sendSyncronousMessage(msg.toBuilder());
 			rb = r.toBuilder();
 

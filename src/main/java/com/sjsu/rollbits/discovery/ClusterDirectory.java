@@ -14,7 +14,7 @@ public class ClusterDirectory {
 	public static Map<String, Map<String, Node>> clusterMap = new HashMap<String, Map<String, Node>>();
 
 	public static synchronized void addToDirectory(NetworkDiscoveryPacket request) {
-		Node node = new Node(request.getNodeId(), request.getNodeAddress(), request.getNodePort(),
+		Node node = new Node(request.getNodeId(), request.getNodeAddress(), request.getNodePort()+"",
 				request.getGroupTag(), request.getSender());
 		
 		if (clusterMap.containsKey(request.getGroupTag())) {

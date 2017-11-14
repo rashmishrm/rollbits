@@ -57,7 +57,7 @@ public class UserResource implements RouteResource {
 				// save to database
 
 				for (RNode node : nodes) {
-					MessageClient mc = new MessageClient(node.getIpAddress(), node.getPort());
+					MessageClient mc = new MessageClient(node.getIpAddress(),(int) node.getPort());
 					if (node.getType().equals(RNode.Type.REPLICA)) {
 						mc.addUser(user.getUname(), user.getEmail(), true, true);
 					} else {

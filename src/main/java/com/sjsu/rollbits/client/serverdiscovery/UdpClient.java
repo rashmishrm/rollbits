@@ -32,7 +32,7 @@ public final class UdpClient {
 		builder.setMode(NetworkDiscoveryPacket.Mode.REQUEST);
 		builder.setNodeId(MyConstants.NODE_NAME);
 		builder.setNodeAddress(MyConstants.NODE_IP);
-		builder.setNodePort(MyConstants.NODE_PORT);
+		builder.setNodePort(Integer.parseInt(MyConstants.NODE_PORT));
 		builder.setSecret(MyConstants.SECRET);
 
 		// builder.setIp(InetAddress.getLocalHost().getHostAddress());
