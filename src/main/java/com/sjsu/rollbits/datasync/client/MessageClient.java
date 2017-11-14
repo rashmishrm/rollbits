@@ -15,8 +15,12 @@
  */
 package com.sjsu.rollbits.datasync.client;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.sjsu.rollbits.dao.interfaces.service.MessageService;
+
 
 import routing.Pipe;
 import routing.Pipe.Message;
@@ -283,7 +287,20 @@ public class MessageClient {
 	}
 
 	public List<Message> fetchMessages(String username) {
-		// TODO send message to fetch list of messages
-		return null;
+		List<Message> messages = new ArrayList<Message>();
+		Route.Builder rb = Route.newBuilder();
+		rb.setPath(Route.Path.USER_MESSAGES_REQUEST);
+		Pipe.UserMessagesRequest.Builder ub = Pipe.UserMessagesRequest.newBuilder();
+
+		ub.setUname(username);
+		rb.setUserMessagesRequest(ub);
+
+		Route r = sendSyncronousMessage(rb);
+		if(r!=null){
+			
+			messages= r.getUserMessagesResponse().getMessagesList();
+		}
+		
+		return messages;
 	}
 }
