@@ -24,7 +24,7 @@ public final class UdpServer implements Runnable {
     
    @Override
     public void run() {
-    	System.out.println("Server running at port 8080");
+    	System.out.println("Server running at port 8181");
     	EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
