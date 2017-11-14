@@ -77,7 +77,7 @@ public class MessageResource implements RouteResource {
 				if (node.getType().equals(RNode.Type.REPLICA)) {
 					mc.sendMessage(message.getFromuname(), message.getTouname(), message.getMessage(), true, true);
 				} else {
-					mc.sendMessage(message.getFromuname(), message.getTouname(), message.getMessage(), true, false);
+					isSuccess=mc.sendMessage(message.getFromuname(), message.getTouname(), message.getMessage(), true, false);
 				}
 
 			}

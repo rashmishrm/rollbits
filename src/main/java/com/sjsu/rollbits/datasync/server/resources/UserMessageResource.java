@@ -25,6 +25,7 @@ import com.google.protobuf.Extension.MessageType;
 import com.sjsu.rollbits.Constants;
 import com.sjsu.rollbits.dao.interfaces.service.MessageService;
 import com.sjsu.rollbits.datasync.client.MessageClient;
+import com.sjsu.rollbits.discovery.MyConstants;
 import com.sjsu.rollbits.sharding.hashing.Message;
 import com.sjsu.rollbits.sharding.hashing.RNode;
 import com.sjsu.rollbits.sharding.hashing.ShardingService;
@@ -63,7 +64,7 @@ public class UserMessageResource implements RouteResource {
 
 		RNode primaryNode = nodes.get(0);
 		Route.Builder rb = null;
-		if (!primaryNode.getIpAddress().equals(Constants.MY_IP)) {
+		if (!primaryNode.getIpAddress().equals(MyConstants.NODE_IP)) {
 			MessageClient msgClient = new MessageClient(primaryNode.getIpAddress(), primaryNode.getPort());
 			Route r = msgClient.sendSyncronousMessage(msg.toBuilder());
 			rb = r.toBuilder();
