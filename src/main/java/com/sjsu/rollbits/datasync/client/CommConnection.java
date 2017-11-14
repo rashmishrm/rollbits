@@ -188,15 +188,17 @@ public class CommConnection {
 			System.out.println(channel.channel().localAddress() + " -> open: " + channel.channel().isOpen()
 					+ ", write: " + channel.channel().isWritable() + ", reg: " + channel.channel().isRegistered());
 
+			
+			// start outbound message processor
+			worker = new CommWorker(this);
+			worker.setDaemon(true);
+			worker.start();
+			
 		} catch (Throwable ex) {
 			logger.error("failed to initialize the client connection", ex);
-			ex.printStackTrace();
+			
 		}
 
-		// start outbound message processor
-		worker = new CommWorker(this);
-		worker.setDaemon(true);
-		worker.start();
 	}
 
 	/**
