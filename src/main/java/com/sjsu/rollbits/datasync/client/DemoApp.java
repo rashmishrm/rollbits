@@ -50,7 +50,7 @@ public class DemoApp implements CommListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String host = "169.254.227.79";
+		String host = "10.42.0.30";
 		int port = 4567;
 		System.out.println(Pipe.Route.Path.USER);
 		long stime = System.currentTimeMillis();

@@ -7,6 +7,7 @@ import routing.Pipe;
 import routing.Pipe.Message;
 import routing.Pipe.Message.ActionType;
 import routing.Pipe.MessagesRequest.Type;
+import routing.Pipe.MessagesResponse;
 import routing.Pipe.Response;
 import routing.Pipe.Route;
 import routing.Pipe.Route.Path;
@@ -42,7 +43,7 @@ public class ProtoUtil {
 	}
 
 	public static Route.Builder createMessageResponseRoute(long id,
-			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages, String uname) {
+			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages, String uname,boolean user) {
 
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(id);
@@ -69,8 +70,10 @@ public class ProtoUtil {
 		messageBuilder.addAllMessages(list);
 
 		messageBuilder.setId(uname);
+		messageBuilder.setType(user?MessagesResponse.Type.USER:MessagesResponse.Type.GROUP);
 
 		rb.setMessagesResponse(messageBuilder);
+		
 
 		Response.Builder resp = createResponseBuilder(true, "", RollbitsConstants.SUCCESS);
 

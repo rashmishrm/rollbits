@@ -70,7 +70,7 @@ public class UserMessageResource implements RouteResource {
 
 			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = dbService.findAllforuname(message.getId());
 
-			rb = ProtoUtil.createMessageResponseRoute(msg.getId(), messages, message.getId());
+			rb = ProtoUtil.createMessageResponseRoute(msg.getId(), messages, message.getId(),true);
 
 		}
 
