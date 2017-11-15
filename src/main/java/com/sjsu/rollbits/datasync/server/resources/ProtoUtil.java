@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import routing.Pipe;
+import routing.Pipe.Message;
 import routing.Pipe.Message.ActionType;
 import routing.Pipe.MessagesRequest.Type;
 import routing.Pipe.Response;
@@ -57,6 +58,8 @@ public class ProtoUtil {
 				m.setSenderId(mesg.getFromuserid() == null ? "" : mesg.getMessage());
 				m.setReceiverId(mesg.getTouserid() == null ? "" : mesg.getTouserid());
 				m.setAction(ActionType.POST);
+				m.setTimestamp(mesg.getTimestamp().toString());
+				m.setType(mesg.getTogroupid() == null ? Message.Type.GROUP : Message.Type.SINGLE);
 				m.setPayload(mesg.getMessage());
 
 				list.add(m.build());

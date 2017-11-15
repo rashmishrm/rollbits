@@ -198,10 +198,10 @@ public class MessageClient {
 		return false;
 	}
 
-	public List<Message> fetchMessages(String username) {
+	public List<Message> fetchMessages(String username, boolean user) {
 		List<Message> messages = new ArrayList<Message>();
 
-		Route.Builder msg = ProtoUtil.createMessageRequest(nextId(), username,true);
+		Route.Builder msg = ProtoUtil.createMessageRequest(nextId(), username,user);
 
 		Route r = sendSyncronousMessage(msg);
 
