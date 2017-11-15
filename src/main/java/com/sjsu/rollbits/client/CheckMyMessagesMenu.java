@@ -37,7 +37,7 @@ public class CheckMyMessagesMenu implements Menu, CommListener {
 			Thread.sleep(5 * 1000L);
 			MessageClient mc = ClusterDirectory.getMessageClient(this);
 
-			List<Message> messages = mc.fetchMessages(name);
+			List<Message> messages = mc.fetchMessages(name,true);
 			if (messages != null) {
 
 				for (Message message : messages) {

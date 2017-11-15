@@ -19,13 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.sjsu.rollbits.dao.interfaces.service.MessageService;
 import com.sjsu.rollbits.datasync.server.resources.ProtoUtil;
 
 import routing.Pipe;
 import routing.Pipe.Message;
 import routing.Pipe.Route;
-import routing.Pipe.Route.Builder;
 
 /**
  * front-end (proxy) to our service - functional-based
@@ -200,10 +198,10 @@ public class MessageClient {
 		return false;
 	}
 
-	public List<Message> fetchMessages(String username) {
+	public List<Message> fetchMessages(String username, boolean user) {
 		List<Message> messages = new ArrayList<Message>();
 
-		Route.Builder msg = ProtoUtil.createMessageRequest(nextId(), username);
+		Route.Builder msg = ProtoUtil.createMessageRequest(nextId(), username,user);
 
 		Route r = sendSyncronousMessage(msg);
 

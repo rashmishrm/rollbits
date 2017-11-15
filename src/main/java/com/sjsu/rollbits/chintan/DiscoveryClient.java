@@ -4,8 +4,10 @@ package com.sjsu.rollbits.chintan;
 
 import java.net.InetAddress;
 
+
+
 import com.sjsu.rollbits.datasync.container.RoutingConf;
-import com.sjsu.rollbits.discovery.MyConstants;
+import com.sjsu.rollbits.yml.Loadyaml;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
@@ -46,12 +48,12 @@ public final class DiscoveryClient implements Runnable {
             NetworkDiscoveryPacket.Builder ndpb = NetworkDiscoveryPacket.newBuilder();
             ndpb.setMode(NetworkDiscoveryPacket.Mode.REQUEST);
             ndpb.setSender(NetworkDiscoveryPacket.Sender.INTERNAL_SERVER_NODE);
-            ndpb.setGroupTag(MyConstants.GROUP_NAME);
+            ndpb.setGroupTag(Loadyaml.getProperty("ClusterName"));
             //ndpb.setGroupTag("weCAN");
             ndpb.setNodeAddress(InetAddress.getLocalHost().getHostAddress());
-            ndpb.setNodePort(Long.parseLong(MyConstants.NODE_PORT));
+            ndpb.setNodePort(Long.parseLong(Loadyaml.getProperty("NodePort")));
             //ndpb.setNodePort(8887);
-            ndpb.setSecret(MyConstants.SECRET);
+            ndpb.setSecret(Loadyaml.getProperty("NodeIP"));
             //ndpb.setSecret("secret");
 
             Route.Builder rb = Route.newBuilder();

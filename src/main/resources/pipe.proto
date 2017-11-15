@@ -105,7 +105,7 @@ message Message {
     required string payload = 3;
     required string receiverId = 4; //would be groupId if the type is GROUP or else userId if the type is SINGLE
     required string timestamp = 5;
-    required Status status = 6;
+    optional Status status = 6;
     required ActionType action = 7;
 }
 

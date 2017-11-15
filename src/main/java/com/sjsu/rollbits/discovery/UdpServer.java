@@ -19,13 +19,10 @@ import java.util.List;
 
 public final class UdpServer implements Runnable {
 
-    private static final int PORT = Integer.parseInt(System.getProperty("port", "8888"));
-    static AttributeKey<String> attkey = AttributeKey.valueOf("clientid");
-    
     
    @Override
     public void run() {
-    	System.out.println("Server running at port 8080");
+    	System.out.println("Server running at port "+MyConstants.UDP_PORT);
     	EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
@@ -42,7 +39,7 @@ public final class UdpServer implements Runnable {
 
                         }});
 
-            b.bind(PORT).sync().channel().closeFuture().await();
+            b.bind(MyConstants.UDP_PORT).sync().channel().closeFuture().await();
         } catch(Exception e){
         	e.printStackTrace();
         }

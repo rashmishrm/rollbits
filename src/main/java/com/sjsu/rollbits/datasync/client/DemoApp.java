@@ -50,7 +50,7 @@ public class DemoApp implements CommListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String host = "10.0.0.2";
+		String host = "10.42.0.30";
 		int port = 4567;
 		System.out.println(Pipe.Route.Path.USER);
 		long stime = System.currentTimeMillis();
@@ -58,7 +58,10 @@ public class DemoApp implements CommListener {
 		try {
 			MessageClient mc = new MessageClient(host, port);
 
-			Route.Builder msg = ProtoUtil.createMessageRequest(1, "nishant");
+			
+			
+			
+			Route.Builder msg = ProtoUtil.createMessageRequest(1, "nishant",true);
 
 			Route r = mc.sendSyncronousMessage(msg);
 
