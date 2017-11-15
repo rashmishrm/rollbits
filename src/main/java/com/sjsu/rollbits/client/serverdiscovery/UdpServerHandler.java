@@ -23,7 +23,7 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<NetworkDiscove
 	public void channelRead0(ChannelHandlerContext ctx, NetworkDiscoveryPacket request) throws Exception {
 		
 		//Dont do anything when youare yourself sending the broadcast
-		if(MyConstants.NODE_IP.equals(request.getNodeAddress())){
+		if(ClientConstants.NODE_IP.equals(request.getNodeAddress())){
 			return;
 		}
 		

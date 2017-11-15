@@ -26,14 +26,14 @@ public final class UdpClient {
 
 		NetworkDiscoveryPacket.Builder builder = NetworkDiscoveryPacket.newBuilder();
 
-		builder.setGroupTag(MyConstants.GROUP_NAME);
+		builder.setGroupTag(ClientConstants.GROUP_NAME);
 		// builder.setSender(NetworkDiscoveryPacket.Sender.END_USER_CLIENT);
 		builder.setSender(NetworkDiscoveryPacket.Sender.END_USER_CLIENT);
 		builder.setMode(NetworkDiscoveryPacket.Mode.REQUEST);
-		builder.setNodeId(MyConstants.NODE_NAME);
-		builder.setNodeAddress(MyConstants.NODE_IP);
-		builder.setNodePort(Integer.parseInt(MyConstants.NODE_PORT));
-		builder.setSecret(MyConstants.SECRET);
+		builder.setNodeId(ClientConstants.NODE_NAME);
+		builder.setNodeAddress(ClientConstants.NODE_IP);
+		builder.setNodePort(Integer.parseInt(ClientConstants.NODE_PORT));
+		builder.setSecret(ClientConstants.SECRET);
 
 		// builder.setIp(InetAddress.getLocalHost().getHostAddress());
 		// System.out.println("******"+InetAddress.getLocalHost().getHostAddress());
@@ -44,7 +44,7 @@ public final class UdpClient {
 															// this builder to
 															// the built state.
 
-		sendUDPMessage(request, MyConstants.UDP_IP_BROADCAST, MyConstants.UDP_PORT);
+		sendUDPMessage(request, ClientConstants.UDP_IP_BROADCAST, ClientConstants.UDP_PORT);
 	}
 
 	public static void sendUDPMessage(NetworkDiscoveryPacket request, String IP, int port) throws InterruptedException {
