@@ -8,6 +8,7 @@ import java.util.Scanner;
 import com.sjsu.rollbits.client.serverdiscovery.ClusterDirectory;
 import com.sjsu.rollbits.datasync.client.CommListener;
 import com.sjsu.rollbits.datasync.client.MessageClient;
+import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 
 import routing.Pipe.Route;
 
@@ -27,7 +28,8 @@ public class RegisterGroupMenu implements Menu, CommListener {
 		String gnm = sc.next();
 		System.out.println("Requesting server to creating group");
 		MessageClient mc = ClusterDirectory.getMessageClient(this);
-		mc.addGroup(gnm, 1, false, false);
+		mc.addGroup(gnm, 1, RollbitsConstants.CLIENT, false);
+
 	}
 
 	@Override

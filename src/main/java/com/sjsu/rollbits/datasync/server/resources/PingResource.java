@@ -37,14 +37,8 @@ public class PingResource implements RouteResource {
 
 	@Override
 	public Object process(Pipe.Route body) {
-	logger.info(body.getPayload());
-	System.out.println(body.getPayload());	
-		Route.Builder rb = Route.newBuilder();
-		rb.setId(body.getId());
-		rb.setPath(Route.Path.PING);
-		rb.setPayload("success");
-		
-		return rb;
+
+		return null;
 	}
 
 

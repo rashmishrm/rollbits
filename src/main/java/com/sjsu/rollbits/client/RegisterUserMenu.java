@@ -8,6 +8,7 @@ import java.util.Scanner;
 import com.sjsu.rollbits.client.serverdiscovery.ClusterDirectory;
 import com.sjsu.rollbits.datasync.client.CommListener;
 import com.sjsu.rollbits.datasync.client.MessageClient;
+import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 
 import routing.Pipe.Route;
 
@@ -17,7 +18,9 @@ import routing.Pipe.Route;
  */
 public class RegisterUserMenu implements Menu, CommListener {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.sjsu.rollbits.client.Menu#playMenu()
 	 */
 	@Override
@@ -27,7 +30,7 @@ public class RegisterUserMenu implements Menu, CommListener {
 		String unm = sc.next();
 		System.out.println("Requesting server to creating user...");
 		MessageClient mc = ClusterDirectory.getMessageClient(this);
-		mc.addUser(unm, unm, false, false);
+		mc.addUser(unm, unm, RollbitsConstants.CLIENT, false);
 	}
 
 	@Override
@@ -37,10 +40,10 @@ public class RegisterUserMenu implements Menu, CommListener {
 
 	@Override
 	public void onMessage(Route msg) {
-		System.out.println("User created Successfully\n"+msg);
+		System.out.println("User created Successfully\n" + msg);
 		RollbitsClient.getInstance().setMenu(new MainMenu());
 		RollbitsClient.getInstance().play();
-		
+
 	}
 
 }

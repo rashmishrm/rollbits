@@ -15,14 +15,11 @@
  */
 package com.sjsu.rollbits.datasync.server.resources;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.protobuf.Extension.MessageType;
-import com.sjsu.rollbits.Constants;
 import com.sjsu.rollbits.dao.interfaces.service.MessageService;
 import com.sjsu.rollbits.datasync.client.MessageClient;
 import com.sjsu.rollbits.discovery.MyConstants;
@@ -32,7 +29,6 @@ import com.sjsu.rollbits.sharding.hashing.ShardingService;
 
 import routing.Pipe;
 import routing.Pipe.Route;
-import routing.Pipe.actionType;
 
 /**
  * processes requests of message passing - demonstration
@@ -52,54 +48,32 @@ public class UserMessageResource implements RouteResource {
 
 	@Override
 	public Pipe.Route.Path getPath() {
-		return Pipe.Route.Path.USER_MESSAGES_REQUEST;
+		return Pipe.Route.Path.MESSAGES_REQUEST;
 	}
 
 	@Override
 	public Object process(Pipe.Route msg) {
 		boolean isSuccess = false;
-		routing.Pipe.UserMessagesRequest message = msg.getUserMessagesRequest();
 
-		List<RNode> nodes = shardingService.getNodes(new Message(message.getUname()));
+		routing.Pipe.MessagesRequest message = msg.getMessagesRequest();
+
+		List<RNode> nodes = shardingService.getNodes(new Message(message.getId()));
 
 		RNode primaryNode = nodes.get(0);
 		Route.Builder rb = null;
 		if (!primaryNode.getIpAddress().equals(MyConstants.NODE_IP)) {
-			MessageClient msgClient = new MessageClient(primaryNode.getIpAddress(), (int)primaryNode.getPort());
+			MessageClient msgClient = new MessageClient(primaryNode.getIpAddress(), (int) primaryNode.getPort());
 			Route r = msgClient.sendSyncronousMessage(msg.toBuilder());
 			rb = r.toBuilder();
 
 		} else {
 
-			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = dbService
-					.findAllforuname(message.getUname());
+			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = dbService.findAllforuname(message.getId());
 
-			rb = Route.newBuilder();
-			rb.setId(msg.getId());
-			rb.setPath(Route.Path.USER_MESSAGES_RESPONSE);
-
-			Pipe.UserMessagesResponse.Builder ub = Pipe.UserMessagesResponse.newBuilder();
-
-			int i = 0;
-
-			List<Pipe.Message> list = new ArrayList<>();
-
-			for (com.sjsu.rollbits.dao.interfaces.model.Message mesg : messages) {
-				if (mesg != null) {
-					Pipe.Message.Builder m = Pipe.Message.newBuilder();
-					m.setFromuname(mesg.getMessage() == null ? "" : mesg.getMessage());
-					m.setTouname(mesg.getTouserid() == null ? "" : mesg.getTouserid());
-					m.setAction(actionType.GET);
-					m.setMessage(mesg.getMessage() == null ? "" : mesg.getMessage());
-
-					list.add(m.build());
-				}
-			}
-			ub.addAllMessages(list);
-			ub.setUname(message.getUname());
-			rb.setUserMessagesResponse(ub);
+			rb = ProtoUtil.createMessageResponseRoute(msg.getId(), messages, message.getId());
 
 		}
+
 		return rb;
 	}
 

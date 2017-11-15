@@ -14,7 +14,6 @@ import com.sjsu.rollbits.sharding.hashing.ShardingService;
 
 import routing.Pipe;
 import routing.Pipe.Route;
-import routing.Pipe.Route.Path;
 
 public class UserResource implements RouteResource {
 	protected static Logger logger = LoggerFactory.getLogger("user");
@@ -36,32 +35,30 @@ public class UserResource implements RouteResource {
 	@Override
 	public Object process(Pipe.Route msg) {
 		boolean success = false;
-		Pipe.actionType option = msg.getUser().getAction();
+		Pipe.User.ActionType option = msg.getUser().getAction();
 
 		switch (option) {
-		case GET:
+		case ACCESS:
 
 			break;
 
-		case PUT:
+		case REGISTER:
 			Pipe.User user = msg.getUser();
 
 			Pipe.Header header = msg.getHeader();
 
-			if (header.getType() != null && !header.getType().equals("INTERNAL")) {
+			if (header != null && header.getType() != null && !header.getType().equals(Pipe.Header.Type.INTERNAL)) {
 
-				// Set<RNode> nodes = new HashSet<>(shardingService.getNodes(new
-				// Message(user.getUname())));
 				List<RNode> nodes = shardingService.getNodes(new Message(user.getUname()));
 
 				// save to database
 
 				for (RNode node : nodes) {
-					MessageClient mc = new MessageClient(node.getIpAddress(),(int) node.getPort());
+					MessageClient mc = new MessageClient(node.getIpAddress(), (int) node.getPort());
 					if (node.getType().equals(RNode.Type.REPLICA)) {
-						mc.addUser(user.getUname(), user.getEmail(), true, true);
+						mc.addUser(user.getUname(), user.getEmail(), RollbitsConstants.INTERNAL, true);
 					} else {
-						success = mc.addUser(user.getUname(), user.getEmail(), true, false);
+						success = mc.addUser(user.getUname(), user.getEmail(), RollbitsConstants.INTERNAL, false);
 
 					}
 
@@ -89,10 +86,10 @@ public class UserResource implements RouteResource {
 			break;
 
 		}
-		Route.Builder rb = Route.newBuilder();
-		rb.setId(msg.getId());
-		rb.setPath(Path.MESSAGE);
-		rb.setPayload(success ? "sucess" : "Failed");
+
+		Route.Builder rb = ProtoUtil.createResponseRoute(msg.getId(), success, null,
+				success ? RollbitsConstants.SUCCESS : RollbitsConstants.FAILED);
+
 		return rb;
 	}
 

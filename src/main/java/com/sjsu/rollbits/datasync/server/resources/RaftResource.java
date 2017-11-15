@@ -11,50 +11,46 @@ import routing.Pipe.RaftMessage;
 import routing.Pipe.Route;
 import routing.Pipe.RaftMessage.RaftMsgType;
 
-public class RaftResource  implements RouteResource {
-    protected static Logger logger = LoggerFactory.getLogger("raft");
+public class RaftResource implements RouteResource {
+	protected static Logger logger = LoggerFactory.getLogger("raft");
 
-    @Override
-    public Pipe.Route.Path getPath() {
-        return Pipe.Route.Path.RAFT_MSG;
-    }
+	@Override
+	public Pipe.Route.Path getPath() {
+		return Pipe.Route.Path.RAFT_MSG;
+	}
 
-    @Override
-    public Object process(Pipe.Route msg) {
+	@Override
+	public Object process(Pipe.Route msg) {
 
+		RaftMessage raftMessage = msg.getRaftMessage();
+		RaftMsgType raftMsgType = raftMessage.getType();
 
-        RaftMessage raftMessage= msg.getRaftMessage();
-        RaftMsgType raftMsgType = raftMessage.getType();
-        
-        RaftContext raftContext = RaftContext.getInstance();
-        RaftState raftState = raftContext.getRaftState();
-        
-        String senderNodeId = raftMessage.getSenderNodeid();
-        
-        if(RaftMsgType.RequestVote.equals(raftMsgType)) {
-        	//Received voting request from a candidate
-        	raftState.handleVoteRequest(senderNodeId);
-        	
-        } else if(RaftMsgType.VoteResponse.equals(raftMsgType)) {
-        	//Received vote from a follower, you being a candidate
-        	raftState.handleVoteResponse(senderNodeId);
-        	
-        } else if(RaftMsgType.LeaderHeartBeat.equals(raftMsgType)) {
-        	//Received Heart beat from leader
-        	raftState.handleLeaderHeartBeat(senderNodeId);
-        	
-        } else if(RaftMsgType.LeaderElectionResult.equals(raftMsgType)) {
-        	//Received Confirmation from a newly elected Leader
-        	raftState.handleLeaderElectionResult(senderNodeId);
-        	
-        }
+		RaftContext raftContext = RaftContext.getInstance();
+		RaftState raftState = raftContext.getRaftState();
 
-        Route.Builder rb = Route.newBuilder();
-		rb.setId(msg.getId());
-		rb.setPath(Route.Path.RAFT_MSG);
-		rb.setPayload("success");
-        return rb;
-    }
+		String senderNodeId = raftMessage.getSenderNodeid();
+
+		if (RaftMsgType.RequestVote.equals(raftMsgType)) {
+			// Received voting request from a candidate
+			raftState.handleVoteRequest(senderNodeId);
+
+		} else if (RaftMsgType.VoteResponse.equals(raftMsgType)) {
+			// Received vote from a follower, you being a candidate
+			raftState.handleVoteResponse(senderNodeId);
+
+		} else if (RaftMsgType.LeaderHeartBeat.equals(raftMsgType)) {
+			// Received Heart beat from leader
+			raftState.handleLeaderHeartBeat(senderNodeId);
+
+		} else if (RaftMsgType.LeaderElectionResult.equals(raftMsgType)) {
+			// Received Confirmation from a newly elected Leader
+			raftState.handleLeaderElectionResult(senderNodeId);
+
+		}
+		Route.Builder rb = ProtoUtil.createResponseRoute(msg.getId(), true, null, RollbitsConstants.SUCCESS);
+
+		return rb;
+
+	}
 
 }
-

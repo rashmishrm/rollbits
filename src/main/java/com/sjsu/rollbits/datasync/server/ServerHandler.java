@@ -61,7 +61,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Route> {
 			return;
 		}
 
-		System.out.println("---> " + msg.getId() + ": " + msg.getPath() + ", " + msg.getPayload());
+		System.out.println("---> " + msg.getId() + ": " + msg.getPath() + ", " );
 		System.out.println("all key set--->" + routing.keySet());
 		try {
 			String clazz = routing.get(msg.getPath().toString());
@@ -78,7 +78,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Route> {
 				} catch (Exception e) {
 					// TODO add logging
 					Route.Builder rb = Route.newBuilder(msg);
-					rb.setPayload("Error: " + e.getMessage());
+				
 					e.printStackTrace();
 					channel.write(rb.build());
 				}

@@ -19,38 +19,39 @@ import com.sjsu.rollbits.datasync.client.MessageClient;
  */
 public class CheckMyMessagesMenu implements Menu, CommListener {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.sjsu.rollbits.client.Menu#playMenu()
 	 */
 	@Override
 	public void playMenu() {
-	
+
 		System.out.println("Enter name:");
-		Scanner sc=new Scanner(System.in);
-		String name=sc.next();
-		
+		Scanner sc = new Scanner(System.in);
+		String name = sc.next();
+
 		System.out.println("Fetching your messages");
-		
+
 		try {
 			Thread.sleep(5 * 1000L);
 			MessageClient mc = ClusterDirectory.getMessageClient(this);
-			
-			List<Message> messages =mc.fetchMessages(name);
-			if(messages!=null){
-			
-			for(Message message: messages){
-				System.out.println("Message from: "+message.getFromuname() +" : "+message.getMessage());
-			}
-			if(messages.size()==0){
-				System.out.println("No Messages for you");
-			}
-			
-			}
-			else{
+
+			List<Message> messages = mc.fetchMessages(name);
+			if (messages != null) {
+
+				for (Message message : messages) {
+					System.out.println("Message from: " + message.getReceiverId() + " : " + message.getPayload());
+				}
+				if (messages.size() == 0) {
+					System.out.println("No Messages for you");
+				}
+
+			} else {
 				System.out.println("No Messages for you");
 			}
 			System.out.println("Fetched Successfully");
-			
+
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,8 +67,7 @@ public class CheckMyMessagesMenu implements Menu, CommListener {
 
 	@Override
 	public void onMessage(Route msg) {
-		
-		
+
 	}
 
 }

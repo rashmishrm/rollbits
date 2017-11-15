@@ -10,11 +10,10 @@ import com.sjsu.rollbits.dao.interfaces.service.GroupService;
 import com.sjsu.rollbits.datasync.client.MessageClient;
 import com.sjsu.rollbits.sharding.hashing.Message;
 import com.sjsu.rollbits.sharding.hashing.RNode;
+import com.sjsu.rollbits.sharding.hashing.ShardingService;
+
 import routing.Pipe;
 import routing.Pipe.Route;
-import routing.Pipe.Route.Path;
-
-import com.sjsu.rollbits.sharding.hashing.ShardingService;
 
 public class GroupResource implements RouteResource {
 	protected static Logger logger = LoggerFactory.getLogger("group");
@@ -34,19 +33,15 @@ public class GroupResource implements RouteResource {
 	@Override
 	public Object process(Pipe.Route msg) {
 		boolean success = false;
-		Pipe.actionType option = msg.getUser().getAction();
+		Pipe.Group.ActionType option = msg.getGroup().getAction();
 
 		switch (option) {
-		case GET:
-
-			break;
-
-		case PUT:
+		case CREATE:
 			Pipe.Group group = msg.getGroup();
 
 			Pipe.Header header = msg.getHeader();
 
-			if (header.getType() != null && !header.getType().equals("INTERNAL")) {
+			if (header != null && header.getType() != null && !header.getType().equals(Pipe.Header.Type.INTERNAL)) {
 
 				System.out.println(group.getGname());
 
@@ -55,11 +50,12 @@ public class GroupResource implements RouteResource {
 				// save to database
 
 				for (RNode node : nodes) {
-					MessageClient mc = new MessageClient(node.getIpAddress(),(int) node.getPort());
+					MessageClient mc = new MessageClient(node.getIpAddress(), (int) node.getPort());
 					if (node.getType().equals(RNode.Type.REPLICA)) {
-						mc.addGroup(group.getGname(), (int) group.getGid(), true, true);
+						mc.addGroup(group.getGname(), (int) group.getGid(), RollbitsConstants.INTERNAL, true);
 					} else {
-						success = mc.addGroup(group.getGname(), (int) group.getGid(), true, false);
+						success = mc.addGroup(group.getGname(), (int) group.getGid(), RollbitsConstants.INTERNAL,
+								false);
 
 					}
 
@@ -76,11 +72,10 @@ public class GroupResource implements RouteResource {
 			}
 			break;
 		}
-		Route.Builder rb = Route.newBuilder();
-		rb.setPath(Path.MSG);
-		rb.setId(msg.getId());
 
-		rb.setPayload(success ? "success" : "failed");
+		Route.Builder rb = ProtoUtil.createResponseRoute(msg.getId(), success, null,
+				success ? RollbitsConstants.SUCCESS : RollbitsConstants.FAILED);
+
 		return rb;
 
 	}

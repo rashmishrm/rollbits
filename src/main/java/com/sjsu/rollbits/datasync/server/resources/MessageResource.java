@@ -30,6 +30,7 @@ import com.sjsu.rollbits.sharding.hashing.RNode;
 import com.sjsu.rollbits.sharding.hashing.ShardingService;
 
 import routing.Pipe;
+import routing.Pipe.Header;
 import routing.Pipe.Route;
 import routing.Pipe.Route.Path;
 
@@ -60,12 +61,12 @@ public class MessageResource implements RouteResource {
 		routing.Pipe.Message message = msg.getMessage();
 
 		if (msg.getHeader() != null && msg.getHeader().getType() != null
-				&& "EXTERNAL".equals(msg.getHeader().getType())) {
+				&& Header.Type.CLIENT.equals(msg.getHeader().getType())) {
 
-			System.out.println("Message recieved from :" + message.getFromuname());
+			System.out.println("Message recieved from :" + message.getReceiverId());
 
-			List<RNode> fromNames = shardingService.getNodes(new Message(message.getFromuname()));
-			List<RNode> toNames = shardingService.getNodes(new Message(message.getTouname()));
+			List<RNode> fromNames = shardingService.getNodes(new Message(message.getSenderId()));
+			List<RNode> toNames = shardingService.getNodes(new Message(message.getReceiverId()));
 			Set<RNode> set = new HashSet<RNode>();
 			set.addAll(fromNames);
 			set.addAll(toNames);
@@ -73,11 +74,12 @@ public class MessageResource implements RouteResource {
 			// save to database
 
 			for (RNode node : set) {
-				MessageClient mc = new MessageClient(node.getIpAddress(), (int)  node.getPort());
+				MessageClient mc = new MessageClient(node.getIpAddress(), (int) node.getPort());
 				if (node.getType().equals(RNode.Type.REPLICA)) {
-					mc.sendMessage(message.getFromuname(), message.getTouname(), message.getMessage(), true, true);
+					mc.sendMessage(message.getSenderId(), message.getReceiverId(), message.getPayload(), true, true);
 				} else {
-					isSuccess=mc.sendMessage(message.getFromuname(), message.getTouname(), message.getMessage(), true, false);
+					isSuccess = mc.sendMessage(message.getSenderId(), message.getReceiverId(), message.getPayload(),
+							true, false);
 				}
 
 			}
@@ -86,16 +88,14 @@ public class MessageResource implements RouteResource {
 			System.out.println("Adding to database!!!!!");
 			// User dbuser = new User(user.getUname(), user.getEmail());
 			com.sjsu.rollbits.dao.interfaces.model.Message messageModel = new com.sjsu.rollbits.dao.interfaces.model.Message(
-					1, new Date(), message.getFromuname(), message.getTouname(), message.getTogname(),
-					message.getMessage());
+					1, new Date(), message.getSenderId(), message.getReceiverId(), message.getSenderId(),
+					message.getPayload());
 			dbService.persist(messageModel);
 			isSuccess = true;
 		}
 
-		Route.Builder rb = Route.newBuilder();
-		rb.setId(msg.getId());
-		rb.setPath(Path.MSG);
-		rb.setPayload(isSuccess ? "sucess" : "Failed");
+		Route.Builder rb = ProtoUtil.createResponseRoute(msg.getId(), isSuccess, null,
+				isSuccess ? RollbitsConstants.SUCCESS : RollbitsConstants.FAILED);
 
 		return rb;
 	}

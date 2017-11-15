@@ -83,8 +83,8 @@ public class RaftListener implements CommListener {
 		// TODO Auto-generated method stub
 		System.out.println("RaftListener On Message printing:\n"+msg);
 		//Retry if it is not success
-		if(!"success".equals(msg.getPayload())){
-			mc.sendProto(msgToSend);
-		}
+//		if(!"success".equals(msg.getPayload())){
+//			mc.sendProto(msgToSend);
+//		}
 	}
 }

@@ -15,6 +15,8 @@
  */
 package com.sjsu.rollbits.datasync.client;
 
+import com.sjsu.rollbits.datasync.server.resources.ProtoUtil;
+
 import routing.Pipe;
 import routing.Pipe.Route;
 
@@ -30,38 +32,7 @@ public class DemoApp implements CommListener {
 		this.mc.addListener(this);
 	}
 
-	private void ping(int N) {
-		// test round-trip overhead (note overhead for initial connection)
-		final int maxN = 10;
-		long[] dt = new long[N];
-		long st = System.currentTimeMillis(), ft = 0;
-		for (int n = 0; n < N; n++) {
-			mc.ping();
-			ft = System.currentTimeMillis();
-			dt[n] = ft - st;
-			st = ft;
-		}
-
-		System.out.println("Round-trip ping times (msec)");
-		for (int n = 0; n < N; n++)
-			System.out.print(dt[n] + " ");
-		System.out.println("");
-
-		// send a message
-		st = System.currentTimeMillis();
-		ft = 0;
-		for (int n = 0; n < N; n++) {
-			mc.postMessage("hello world " + n);
-			ft = System.currentTimeMillis();
-			dt[n] = ft - st;
-			st = ft;
-		}
-
-		System.out.println("Round-trip post times (msec)");
-		for (int n = 0; n < N; n++)
-			System.out.print(dt[n] + " ");
-		System.out.println("");
-	}
+	
 
 	@Override
 	public String getListenerID() {
@@ -86,27 +57,10 @@ public class DemoApp implements CommListener {
 
 		try {
 			MessageClient mc = new MessageClient(host, port);
-			// DemoApp da = new DemoApp(mc);
 
-			//mc.addUser("nov12user", "abc", false, true);
-			// mc.addUser("nishantrathi", "rashmishrm74@gmail.com", false, true);
-			//mc.ping();
+			Route.Builder msg = ProtoUtil.createMessageRequest(1, "nishant");
 
-			Route.Builder rb = Route.newBuilder();
-			//mc.sendMessage("user1", "nov12user", 1, "hello message", false, true);
-			rb.setPath(Route.Path.USER_MESSAGES_REQUEST);
-			// rb.setAction(routing.Pipe.actionType.PUT);
-			Pipe.UserMessagesRequest.Builder ub = Pipe.UserMessagesRequest.newBuilder();
-
-			ub.setUname("nov12user");
-			rb.setUserMessagesRequest(ub);
-
-			Route r = mc.sendSyncronousMessage(rb);
-			// System.out.println(r.getId());
-
-			// construct the message to send
-
-			// mc.sendMessage("yahoooooo", "seconduser", 1, "Sending MEssage", false, true);
+			Route r = mc.sendSyncronousMessage(msg);
 
 			long etime = System.currentTimeMillis();
 

@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.sjsu.rollbits.dao.interfaces.service.MessageService;
-
+import com.sjsu.rollbits.datasync.server.resources.ProtoUtil;
 
 import routing.Pipe;
 import routing.Pipe.Message;
@@ -51,51 +51,15 @@ public class MessageClient {
 		CommConnection.getInstance().addListener(listener);
 	}
 
-	public void ping() {
-		// construct the message to send
-		Route.Builder rb = Route.newBuilder();
-		rb.setId(nextId());
-		rb.setPath(Route.Path.PING);
-		rb.setPayload("ping");
-
-		try {
-			// direct no queue
-			 CommConnection.getInstance().write(rb.build());
-
-			// using queue
-			//CommConnection.getInstance().enqueue(rb.build());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void postMessage(String msg) {
-		// construct the message to send
-		Route.Builder rb = Route.newBuilder();
-		rb.setId(nextId());
-		rb.setPath(Route.Path.MSG);
-		rb.setPayload(msg);
-
-		try {
-			CommConnection.getInstance().enqueue(rb.build());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	
-	
-	//
 	public Route sendSyncronousMessage(Route.Builder msg) {
 		// construct the message to send
 
 		Route response = null;
 		long id = nextId();
 		msg.setId(id);
-		
-		
+
 		try {
-			
+
 			this.addListener(new CommListener() {
 
 				@Override
@@ -110,10 +74,8 @@ public class MessageClient {
 					return "userresource";
 				}
 			});
-			
-			CommConnection.getInstance().write(msg.build());
 
-			
+			CommConnection.getInstance().write(msg.build());
 
 			while (true) {
 
@@ -141,31 +103,10 @@ public class MessageClient {
 		}
 	}
 
-	public boolean addUser(String name, String email, boolean internal, boolean async) {
-		// construct the message to send
+	public boolean addUser(String name, String email, String type, boolean async) {
 		boolean added = false;
-		Route.Builder rb = Route.newBuilder();
-		rb.setId(nextId());
-		rb.setPath(Route.Path.USER);
-		// rb.setAction(routing.Pipe.actionType.PUT);
-		Pipe.User.Builder ub = Pipe.User.newBuilder();
-		ub.setEmail(email);
-		ub.setUname(name);
-		ub.setAction(routing.Pipe.actionType.PUT);
-		rb.setUser(ub);
-
-		Pipe.Header.Builder header = Pipe.Header.newBuilder();
-
-		if (internal) {
-			header.setType("INTERNAL");
-
-		} else {
-			header.setType("EXTERNAL");
-
-		}
-		rb.setHeader(header);
+		Route.Builder rb = ProtoUtil.createAddUserRequest(nextId(), name, type);
 		CommConnection conn = CommConnection.getInstance();
-
 		try {
 			if (async)
 				conn.enqueue(rb.build());
@@ -173,38 +114,14 @@ public class MessageClient {
 				added = conn.write(rb.build());
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			// conn.release();
-
-		}
+		} 
 		return added;
 	}
 
-	public boolean addGroup(String gname, int gid, boolean internal, boolean async) {
-		// TODO Auto-generated method stub
-		boolean added = false;
-		Route.Builder rb = Route.newBuilder();
-		rb.setId(nextId());
-		rb.setPath(Route.Path.GROUP);
-		// rb.setAction(routing.Pipe.actionType.PUT);
-		Pipe.Group.Builder gb = Pipe.Group.newBuilder();
-		gb.setGname(gname);
-		gb.setGid(gid);
-		gb.setAction(routing.Pipe.actionType.PUT);
-		rb.setGroup(gb);
-
-		Pipe.Header.Builder header = Pipe.Header.newBuilder();
-
-		if (internal) {
-			header.setType("INTERNAL");
-
-		} else {
-			header.setType("EXTERNAL");
-
-		}
-		rb.setHeader(header);
+	public boolean addGroup(String name, int gid, String type , boolean async) {
+		Route.Builder rb = ProtoUtil.createAddGroupRequest( gid, name,  type);
 		CommConnection conn = CommConnection.getInstance();
-
+		boolean added=false;
 		try {
 			if (async)
 				conn.enqueue(rb.build());
@@ -212,15 +129,11 @@ public class MessageClient {
 				added = conn.write(rb.build());
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			// conn.release();
-
-		}
+		} 
 		return added;
 
 	}
 
-	
 	public boolean sendMessage(String fromUserId, String toUserId, String message, boolean internal, boolean async) {
 		// construct the message to send
 		boolean added = false;
@@ -229,19 +142,20 @@ public class MessageClient {
 		rb.setId(nextId());
 		rb.setPath(Route.Path.MESSAGE);
 		Pipe.Message.Builder msg = Pipe.Message.newBuilder();
-		msg.setMessage(message);
-		msg.setFromuname(fromUserId);
-		msg.setTouname(toUserId);
+		msg.setPayload(message);
+		msg.setSenderId(fromUserId);
+		msg.setReceiverId(toUserId);
 
-		msg.setAction(routing.Pipe.actionType.PUT);
+		msg.setAction(routing.Pipe.Message.ActionType.POST);
+
 		rb.setMessage(msg);
 		Pipe.Header.Builder header = Pipe.Header.newBuilder();
 
 		if (internal) {
-			header.setType("INTERNAL");
+			header.setType(header.getType().INTERNAL);
 
 		} else {
-			header.setType("EXTERNAL");
+			header.setType(header.getType().CLIENT);
 
 		}
 		rb.setHeader(header);
@@ -288,19 +202,16 @@ public class MessageClient {
 
 	public List<Message> fetchMessages(String username) {
 		List<Message> messages = new ArrayList<Message>();
-		Route.Builder rb = Route.newBuilder();
-		rb.setPath(Route.Path.USER_MESSAGES_REQUEST);
-		Pipe.UserMessagesRequest.Builder ub = Pipe.UserMessagesRequest.newBuilder();
 
-		ub.setUname(username);
-		rb.setUserMessagesRequest(ub);
+		Route.Builder msg = ProtoUtil.createMessageRequest(nextId(), username);
 
-		Route r = sendSyncronousMessage(rb);
-		if(r!=null){
-			
-			messages= r.getUserMessagesResponse().getMessagesList();
+		Route r = sendSyncronousMessage(msg);
+
+		if (r != null) {
+
+			messages = r.getMessagesResponse().getMessagesList();
 		}
-		
+
 		return messages;
 	}
 }

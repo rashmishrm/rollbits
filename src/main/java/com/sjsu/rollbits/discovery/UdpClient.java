@@ -72,6 +72,9 @@ public final class UdpClient {
 			ByteBuf buf = Unpooled.copiedBuffer(request.toByteArray());
 
 			ch.writeAndFlush(new DatagramPacket(buf, SocketUtils.socketAddress(IP, port))).sync();
+			
+			
+			
 
 			// UdpClientHandler will close the DatagramChannel when a
 			// response is received. If the channel is not closed within 5

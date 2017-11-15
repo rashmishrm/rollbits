@@ -141,7 +141,7 @@ public class CommConnection {
 //		});
 //	
 		if (cf.isDone() && !cf.isSuccess()) {
-			logger.error("failed to send message to server - " + msg.getPayload());
+			logger.error("failed to send message to server - " +msg.getId());
 			return false;
 		}
 
