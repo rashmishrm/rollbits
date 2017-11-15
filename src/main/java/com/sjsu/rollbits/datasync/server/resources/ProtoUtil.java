@@ -5,6 +5,7 @@ import java.util.List;
 
 import routing.Pipe;
 import routing.Pipe.Message.ActionType;
+import routing.Pipe.MessagesRequest.Type;
 import routing.Pipe.Response;
 import routing.Pipe.Route;
 import routing.Pipe.Route.Path;
@@ -18,7 +19,7 @@ public class ProtoUtil {
 		rb.setPath(Path.RESPONSE);
 
 		Response.Builder p = Response.newBuilder();
-		p.setErrorCode(errorCode);
+		p.setErrorCode(errorCode == null ? "" : errorCode);
 		p.setMessage(message);
 		p.setSuccess(success);
 
@@ -76,13 +77,19 @@ public class ProtoUtil {
 
 	}
 
-	public static Route.Builder createMessageRequest(long id, String uname) {
+	public static Route.Builder createMessageRequest(long id, String uname, boolean user) {
 
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(id);
 		rb.setPath(Route.Path.MESSAGES_REQUEST);
 		Pipe.MessagesRequest.Builder ub = Pipe.MessagesRequest.newBuilder();
 		ub.setId(uname);
+		ub.setType(Type.GROUP);
+
+		if (user) {
+			ub.setType(Type.USER);
+		}
+
 		rb.setMessagesRequest(ub);
 
 		return rb;

@@ -32,6 +32,9 @@ public class RaftHelper {
 	public static void broadcast(Route.Builder routeBuilder){
 		Map<String,Node> nodeMap = ClusterDirectory.getNodeMap();
 		List<Node> failedList = new ArrayList<>();
+		if(nodeMap==null) {
+			return;
+		}
 		for (Map.Entry<String, Node> entry : nodeMap.entrySet())
 		{
 			Node node = entry.getValue();
