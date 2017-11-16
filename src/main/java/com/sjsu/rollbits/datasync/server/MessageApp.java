@@ -43,7 +43,7 @@ public class MessageApp {
 		//Thread.sleep(15 * 1000L);
 		RaftContext.getInstance();//To Start Raft Engine
 		
-		File cf = new File("/Users/rashmisharma/Documents/GitHub/rollbits/src/main/resources/routing.conf");
+		File cf = new File("./src/main/resources/routing.conf");
 		try {
 			MessageServer svr = new MessageServer(cf);
 			svr.startServer();
