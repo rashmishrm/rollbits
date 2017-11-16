@@ -1,5 +1,7 @@
 package com.sjsu.rollbits.discovery;
 
+import com.sjsu.rollbits.yml.Loadyaml;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -32,14 +34,14 @@ public final class UdpClient {
 		
 		NetworkDiscoveryPacket.Builder builder = NetworkDiscoveryPacket.newBuilder();
 		
-		builder.setGroupTag(MyConstants.GROUP_NAME);
+		builder.setGroupTag(Loadyaml.getProperty("ClusterName"));
 		// builder.setSender(NetworkDiscoveryPacket.Sender.END_USER_CLIENT);
 		builder.setSender(NetworkDiscoveryPacket.Sender.EXTERNAL_SERVER_NODE);
 		builder.setMode(NetworkDiscoveryPacket.Mode.REQUEST);
-		builder.setNodeId(MyConstants.NODE_NAME);
-		builder.setNodeAddress(MyConstants.NODE_IP);
-		builder.setNodePort(Integer.parseInt(MyConstants.NODE_PORT));
-		builder.setSecret(MyConstants.SECRET);
+		builder.setNodeId(Loadyaml.getProperty("NodeName"));
+		builder.setNodeAddress(Loadyaml.getProperty("NodeIP"));
+		builder.setNodePort(Integer.parseInt(Loadyaml.getProperty("NodePort")));
+		builder.setSecret(Loadyaml.getProperty("Secret"));
 
 		// builder.setIp(InetAddress.getLocalHost().getHostAddress());
 		// System.out.println("******"+InetAddress.getLocalHost().getHostAddress());
@@ -51,7 +53,7 @@ public final class UdpClient {
 															// this builder to
 															// the built state.
 
-		sendUDPMessage(request, MyConstants.UDP_IP_BROADCAST, MyConstants.UDP_PORT);
+		sendUDPMessage(request, Loadyaml.getProperty("UDP_IP_Broadcast"), Integer.parseInt(Loadyaml.getProperty("UDP_Port")));
 	}
 
 	public static void sendUDPMessage(Route request, String IP, int port) throws InterruptedException {

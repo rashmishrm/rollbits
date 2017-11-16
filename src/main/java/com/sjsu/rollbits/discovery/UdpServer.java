@@ -17,12 +17,14 @@ import routing.Pipe.Route;
 
 import java.util.List;
 
+import com.sjsu.rollbits.yml.Loadyaml;
+
 public final class UdpServer implements Runnable {
 
     
    @Override
     public void run() {
-    	System.out.println("Server running at port "+MyConstants.UDP_PORT);
+    	System.out.println("Server running at port "+Integer.parseInt(Loadyaml.getProperty("UDP_Port")));
     	EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
@@ -39,7 +41,7 @@ public final class UdpServer implements Runnable {
 
                         }});
 
-            b.bind(MyConstants.UDP_PORT).sync().channel().closeFuture().await();
+            b.bind(Integer.parseInt(Loadyaml.getProperty("UDP_Port"))).sync().channel().closeFuture().await();
         } catch(Exception e){
         	e.printStackTrace();
         }

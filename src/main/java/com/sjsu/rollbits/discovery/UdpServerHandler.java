@@ -2,6 +2,8 @@ package com.sjsu.rollbits.discovery;
 
 import java.util.Random;
 
+import com.sjsu.rollbits.yml.Loadyaml;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import routing.Pipe.NetworkDiscoveryPacket;
@@ -29,7 +31,7 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<Route> {
 		NetworkDiscoveryPacket request = route.getNetworkDiscoveryPacket();
 		System.out.println("Recieved a packet from" + request.getNodeAddress());
 		// Dont do anything when youare yourself sending the broadcast
-		if (MyConstants.NODE_IP.equals(request.getNodeAddress())) {
+		if (Loadyaml.getProperty("NodeIP").equals(request.getNodeAddress())) {
 			return;
 		}
 
@@ -45,18 +47,18 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<Route> {
 				rb.setPath(Route.Path.NETWORK_DISCOVERY);
 
 				NetworkDiscoveryPacket.Builder toSend = NetworkDiscoveryPacket.newBuilder();
-				toSend.setGroupTag(MyConstants.GROUP_NAME);
+				toSend.setGroupTag(Loadyaml.getProperty("ClusterName"));
 
-				toSend.setNodeId(MyConstants.NODE_NAME);
-				toSend.setNodeAddress(MyConstants.NODE_IP);
+				toSend.setNodeId(Loadyaml.getProperty("NodeName"));
+				toSend.setNodeAddress(Loadyaml.getProperty("NodeIP"));
 				toSend.setMode(Mode.RESPONSE);
-				toSend.setNodePort(Integer.parseInt(MyConstants.NODE_PORT));
+				toSend.setNodePort(Integer.parseInt(Loadyaml.getProperty("NodePort")));
 				toSend.setSender(Sender.EXTERNAL_SERVER_NODE);
-				toSend.setSecret(MyConstants.SECRET);
+				toSend.setSecret(Loadyaml.getProperty("Secret"));
 
 				rb.setNetworkDiscoveryPacket(toSend);
 				rb.setId(1);
-				UdpClient.sendUDPMessage(rb.build(), request.getNodeAddress(), MyConstants.UDP_PORT);
+				UdpClient.sendUDPMessage(rb.build(), request.getNodeAddress(), Integer.parseInt(Loadyaml.getProperty("UDP_Port")));
 			} catch (Exception e) {
 				System.err.println("Exception received");
 				e.printStackTrace();
