@@ -16,7 +16,9 @@ import routing.Pipe.Route;
  */
 public class SendMessageToUserMenu implements Menu, CommListener {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.sjsu.rollbits.client.Menu#playMenu()
 	 */
 	@Override
@@ -30,7 +32,7 @@ public class SendMessageToUserMenu implements Menu, CommListener {
 		String msg = sc.next();
 		System.out.println("Sending Message...");
 		MessageClient mc = ClusterDirectory.getMessageClient(this);
-		mc.sendMessage(fromUnm, toUnm, msg, false, false);
+		mc.sendMessage(fromUnm, toUnm, msg, "CLIENT", false);
 	}
 
 	@Override
@@ -40,7 +42,7 @@ public class SendMessageToUserMenu implements Menu, CommListener {
 
 	@Override
 	public void onMessage(Route msg) {
-		System.out.println("Sent message to user Successfully\n"+msg);
+		System.out.println("Sent message to user Successfully\n" + msg);
 		RollbitsClient.getInstance().setMenu(new MainMenu());
 		RollbitsClient.getInstance().play();
 	}

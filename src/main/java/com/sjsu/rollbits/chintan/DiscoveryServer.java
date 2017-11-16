@@ -1,5 +1,7 @@
 package com.sjsu.rollbits.chintan;
 
+import java.io.File;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,4 +53,11 @@ public class DiscoveryServer implements Runnable {
             group.shutdownGracefully();
         }
     }
+    
+    public static void main(String[] args) {
+		File cf = new File("/Users/rashmisharma/Documents/GitHub/rollbits/src/main/resources/routing.conf");
+
+		Thread t=new Thread(new DiscoveryServer(null));
+		t.start();
+	}
 }

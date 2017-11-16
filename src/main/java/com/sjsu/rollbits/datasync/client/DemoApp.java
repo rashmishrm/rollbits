@@ -15,7 +15,7 @@
  */
 package com.sjsu.rollbits.datasync.client;
 
-import com.sjsu.rollbits.datasync.server.resources.ProtoUtil;
+import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 
 import routing.Pipe;
 import routing.Pipe.Route;
@@ -50,7 +50,7 @@ public class DemoApp implements CommListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String host = "10.42.0.30";
+		String host = "10.0.0.11";
 		int port = 4567;
 		System.out.println(Pipe.Route.Path.USER);
 		long stime = System.currentTimeMillis();
@@ -58,12 +58,16 @@ public class DemoApp implements CommListener {
 		try {
 			MessageClient mc = new MessageClient(host, port);
 
+			//mc.addUser("Rashmi", "Rashmi", RollbitsConstants.CLIENT, false);
+			
+			mc.sendMessage("rashmishrm", "nishantrathi", "tsdhvsdkcsdkvnvnksnvksndvskvs", "CLIENT", false);
 			
 			
-			
-			Route.Builder msg = ProtoUtil.createMessageRequest(1, "nishant",true);
+			//Route.Builder msg = ProtoUtil.createMessageRequest(1, "nishant",true);
 
-			Route r = mc.sendSyncronousMessage(msg);
+			//Route r = mc.sendSyncronousMessage(msg);
+			
+			//mc.addGroup("group", 1, RollbitsConstants.CLIENT, false);
 
 			long etime = System.currentTimeMillis();
 

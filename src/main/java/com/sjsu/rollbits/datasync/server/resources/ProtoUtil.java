@@ -1,6 +1,7 @@
 package com.sjsu.rollbits.datasync.server.resources;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import routing.Pipe;
@@ -43,7 +44,7 @@ public class ProtoUtil {
 	}
 
 	public static Route.Builder createMessageResponseRoute(long id,
-			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages, String uname,boolean user) {
+			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages, String uname, boolean user) {
 
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(id);
@@ -70,10 +71,9 @@ public class ProtoUtil {
 		messageBuilder.addAllMessages(list);
 
 		messageBuilder.setId(uname);
-		messageBuilder.setType(user?MessagesResponse.Type.USER:MessagesResponse.Type.GROUP);
+		messageBuilder.setType(user ? MessagesResponse.Type.USER : MessagesResponse.Type.GROUP);
 
 		rb.setMessagesResponse(messageBuilder);
-		
 
 		Response.Builder resp = createResponseBuilder(true, "", RollbitsConstants.SUCCESS);
 
@@ -97,6 +97,42 @@ public class ProtoUtil {
 		}
 
 		rb.setMessagesRequest(ub);
+
+		return rb;
+	}
+
+	public static Route.Builder addMessageRequest(long id, String senderId, String recieverId, String message,
+			String type) {
+
+		Route.Builder rb = Route.newBuilder();
+		rb.setId(id);
+		rb.setPath(Route.Path.MESSAGE);
+		Pipe.Message.Builder msg = Pipe.Message.newBuilder();
+		msg.setPayload(message);
+		msg.setSenderId(senderId);
+		msg.setReceiverId(recieverId);
+
+		msg.setAction(routing.Pipe.Message.ActionType.POST);
+		
+		
+		Pipe.Header.Builder header = Pipe.Header.newBuilder();
+
+		if (type.equals(RollbitsConstants.INTERNAL)) {
+			header.setType(header.getType().INTERNAL);
+
+		}
+		if (type.equals(RollbitsConstants.CLIENT)) {
+			header.setType(header.getType().CLIENT);
+
+		} else {
+			header.setType(header.getType().INTER_CLUSTER);
+
+		}
+		msg.setType(Message.Type.SINGLE);
+
+		msg.setTimestamp(new Date().toString());
+		rb.setMessage(msg);
+		rb.setHeader(header);
 
 		return rb;
 	}

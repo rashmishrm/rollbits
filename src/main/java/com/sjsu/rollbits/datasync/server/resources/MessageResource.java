@@ -76,10 +76,11 @@ public class MessageResource implements RouteResource {
 			for (RNode node : set) {
 				MessageClient mc = new MessageClient(node.getIpAddress(), (int) node.getPort());
 				if (node.getType().equals(RNode.Type.REPLICA)) {
-					mc.sendMessage(message.getSenderId(), message.getReceiverId(), message.getPayload(), true, true);
+					mc.sendMessage(message.getSenderId(), message.getReceiverId(), message.getPayload(),
+							RollbitsConstants.INTERNAL, true);
 				} else {
 					isSuccess = mc.sendMessage(message.getSenderId(), message.getReceiverId(), message.getPayload(),
-							true, false);
+							RollbitsConstants.INTERNAL, false);
 				}
 
 			}

@@ -112,14 +112,14 @@ public class MessageClient {
 				added = conn.write(rb.build());
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 		return added;
 	}
 
-	public boolean addGroup(String name, int gid, String type , boolean async) {
-		Route.Builder rb = ProtoUtil.createAddGroupRequest( gid, name,  type);
+	public boolean addGroup(String name, int gid, String type, boolean async) {
+		Route.Builder rb = ProtoUtil.createAddGroupRequest(gid, name, type);
 		CommConnection conn = CommConnection.getInstance();
-		boolean added=false;
+		boolean added = false;
 		try {
 			if (async)
 				conn.enqueue(rb.build());
@@ -127,36 +127,16 @@ public class MessageClient {
 				added = conn.write(rb.build());
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 		return added;
 
 	}
 
-	public boolean sendMessage(String fromUserId, String toUserId, String message, boolean internal, boolean async) {
+	public boolean sendMessage(String fromUserId, String toUserId, String message, String type, boolean async) {
 		// construct the message to send
 		boolean added = false;
 
-		Route.Builder rb = Route.newBuilder();
-		rb.setId(nextId());
-		rb.setPath(Route.Path.MESSAGE);
-		Pipe.Message.Builder msg = Pipe.Message.newBuilder();
-		msg.setPayload(message);
-		msg.setSenderId(fromUserId);
-		msg.setReceiverId(toUserId);
-
-		msg.setAction(routing.Pipe.Message.ActionType.POST);
-
-		rb.setMessage(msg);
-		Pipe.Header.Builder header = Pipe.Header.newBuilder();
-
-		if (internal) {
-			header.setType(header.getType().INTERNAL);
-
-		} else {
-			header.setType(header.getType().CLIENT);
-
-		}
-		rb.setHeader(header);
+		Route.Builder rb = ProtoUtil.addMessageRequest(nextId(), fromUserId, toUserId, message, type);
 		CommConnection conn = CommConnection.getInstance();
 		try {
 			if (async)
@@ -201,7 +181,7 @@ public class MessageClient {
 	public List<Message> fetchMessages(String username, boolean user) {
 		List<Message> messages = new ArrayList<Message>();
 
-		Route.Builder msg = ProtoUtil.createMessageRequest(nextId(), username,user);
+		Route.Builder msg = ProtoUtil.createMessageRequest(nextId(), username, user);
 
 		Route r = sendSyncronousMessage(msg);
 

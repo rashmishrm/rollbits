@@ -31,7 +31,7 @@ public class SendMessageToGroupMenu implements Menu, CommListener {
 		String msg = sc.next();
 		System.out.println("Sending Message...");
 		MessageClient mc = ClusterDirectory.getMessageClient(this);
-		mc.sendMessage(fromUnm, toGnm, msg, false, false);//Need to change for group when message client is updated
+		mc.sendMessage(fromUnm, toGnm, msg, "CLIENT", false);//Need to change for group when message client is updated
 	}
 
 	@Override
