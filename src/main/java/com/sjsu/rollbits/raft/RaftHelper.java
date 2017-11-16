@@ -4,17 +4,20 @@
 package com.sjsu.rollbits.raft;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Map;
 
 import com.sjsu.rollbits.datasync.client.MessageClient;
 import com.sjsu.rollbits.discovery.ClusterDirectory;
-import com.sjsu.rollbits.discovery.MyConstants;
 import com.sjsu.rollbits.discovery.Node;
+import com.sjsu.rollbits.yml.Loadyaml;
 
 import routing.Pipe.FailoverMessage;
 import routing.Pipe.Route;
 import routing.Pipe.Route.Path;
+
+
 
 /**
  * @author nishantrathi
@@ -32,9 +35,6 @@ public class RaftHelper {
 	public static void broadcast(Route.Builder routeBuilder){
 		Map<String,Node> nodeMap = ClusterDirectory.getNodeMap();
 		List<Node> failedList = new ArrayList<>();
-		if(nodeMap==null) {
-			return;
-		}
 		for (Map.Entry<String, Node> entry : nodeMap.entrySet())
 		{
 			Node node = entry.getValue();
@@ -56,7 +56,7 @@ public class RaftHelper {
 	}
 	
 	public static String getMyNodeId(){
-		return MyConstants.NODE_NAME;
+		return Loadyaml.getProperty("NodeName");
 	}
 
 
