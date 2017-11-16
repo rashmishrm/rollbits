@@ -1,9 +1,0 @@
-url: "jdbc:mysql://localhost/rollbits"
-username:"root"
-password:"root"
-CLusterName="Group1"
-NodeName="client"
-NodePort="4567"
-Secret="secret"
-UDP_IP_BROADCAST="255.255.255.255"
-UDP_PORT=8888
