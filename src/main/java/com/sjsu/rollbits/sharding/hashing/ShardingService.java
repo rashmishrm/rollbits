@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.sjsu.rollbits.discovery.ClusterDirectory;
-import com.sjsu.rollbits.discovery.MyConstants;
 import com.sjsu.rollbits.discovery.Node;
+import com.sjsu.rollbits.yml.Loadyaml;
 
 public class ShardingService {
 	private ConsistentHash hash = null;
@@ -21,8 +21,8 @@ public class ShardingService {
 			list.add(new RNode(entry.getKey(), RNode.Type.PRIMARY, entry.getValue().getNodeIp(),
 					entry.getValue().getPort()));
 		}
-		list.add(new RNode(MyConstants.NODE_NAME, RNode.Type.PRIMARY, MyConstants.NODE_IP,
-				Integer.parseInt(MyConstants.NODE_PORT)));
+		list.add(new RNode(Loadyaml.getProperty("NodeName"), RNode.Type.PRIMARY, Loadyaml.getProperty("NodeIP"),
+				Integer.parseInt(Loadyaml.getProperty("NodePort"))));
 
 		MurmurHash128 m = new MurmurHash128();
 		hash = new ConsistentHash(m, numberOfReplicas, list);
