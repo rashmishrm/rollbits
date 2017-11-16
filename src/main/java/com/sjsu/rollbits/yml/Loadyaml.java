@@ -18,7 +18,7 @@ public class Loadyaml {
 	
 	public static String getProperty(String property)
 	{
-		  final String fileName = "/home/dhrumil/rollbits/src/main/resources/config.yml";
+		  final String fileName = "./src/main/resources/config.yml";
 		  
 		    Yaml yaml = new Yaml();
 
