@@ -27,9 +27,9 @@ public class RollbitsClient {
 	}
 
 	public void play() {
-		while(true){
+		//while(true){
 			menu.playMenu();
-		}
+		//}
 	}
 
 	/**

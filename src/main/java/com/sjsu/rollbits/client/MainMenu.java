@@ -31,35 +31,35 @@ public class MainMenu implements Menu {
 		case 1 : 
 			System.out.println("Loading menu for Registering a user..");
 			RollbitsClient.getInstance().setMenu(new RegisterUserMenu());
+			RollbitsClient.getInstance().play();
 			break;
 		case 2 : 
 			System.out.println("Loading menu Registering a group..");
 			RollbitsClient.getInstance().setMenu(new RegisterGroupMenu());
+			RollbitsClient.getInstance().play();
 			break;
 		case 3 : 
 			System.out.println("Loading menu for Sending a message to a user..");
 			RollbitsClient.getInstance().setMenu(new SendMessageToUserMenu());
+			RollbitsClient.getInstance().play();
 			break;
 		case 4 : 
 			System.out.println("Loading menu for sending a message to a group..");
 			RollbitsClient.getInstance().setMenu(new SendMessageToGroupMenu());
+			RollbitsClient.getInstance().play();
 			break;
 		case 5 : 
 			System.out.println("Loading menu for checking my messages..");
 			RollbitsClient.getInstance().setMenu(new CheckMyMessagesMenu());
+			RollbitsClient.getInstance().play();
 			break;
 		case 6 : 
 			System.out.println("Loading menu to change cluster selection..");
 			RollbitsClient.getInstance().setMenu(new SelectClusterMenu());
+			RollbitsClient.getInstance().play();
 			break;
 		default : 
 			System.out.println("Invalid choice. Please choose again");
-			try {
-				Thread.sleep(5 * 1000L);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			RollbitsClient.getInstance().play();
 			break;
 		
