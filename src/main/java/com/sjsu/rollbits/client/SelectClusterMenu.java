@@ -29,7 +29,7 @@ public class SelectClusterMenu implements Menu {
 		
 		try {
 			UdpClient.broadcast();
-			Thread.sleep(30 * 1000L);
+			Thread.sleep(10 * 1000L);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -53,6 +53,7 @@ public class SelectClusterMenu implements Menu {
 		
 		System.out.println("Your selection has been saved");
 		RollbitsClient.getInstance().setMenu(new MainMenu());
+		RollbitsClient.getInstance().play();
 
 	}
 

@@ -13,18 +13,18 @@ import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.util.AttributeKey;
 import routing.Pipe.NetworkDiscoveryPacket;
+import routing.Pipe.Route;
 
 import java.util.List;
 
+import com.sjsu.rollbits.yml.Loadyaml;
+
 public final class UdpServer implements Runnable {
 
-    private static final int PORT = Integer.parseInt(System.getProperty("port", "8080"));
-    static AttributeKey<String> attkey = AttributeKey.valueOf("clientid");
-    
     
    @Override
     public void run() {
-    	System.out.println("Server running at port 8181");
+    	System.out.println("Server running at port "+Integer.parseInt(Loadyaml.getProperty("UDP_Port")));
     	EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
@@ -35,13 +35,13 @@ public final class UdpServer implements Runnable {
                         @Override
                         public void initChannel(DatagramChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
-                             pipeline.addLast("protobufDecoder", new MyDatagramPacketDecoder(new ProtobufDecoder(NetworkDiscoveryPacket.getDefaultInstance())));
+                             pipeline.addLast("protobufDecoder", new DatagramPacketDecoder(new ProtobufDecoder(Route.getDefaultInstance())));
                              pipeline.addLast("protobufEncoder", new ProtobufEncoder());
                              pipeline.addLast("handler", new UdpServerHandler());
 
                         }});
 
-            b.bind(PORT).sync().channel().closeFuture().await();
+            b.bind(Integer.parseInt(Loadyaml.getProperty("UDP_Port"))).sync().channel().closeFuture().await();
         } catch(Exception e){
         	e.printStackTrace();
         }
@@ -49,4 +49,9 @@ public final class UdpServer implements Runnable {
             group.shutdownGracefully();
         }
     }
+   
+   public static void main(String[]args){
+	   Thread t = new Thread(new UdpServer());
+		t.start();
+   }
 }

@@ -19,7 +19,7 @@ public class MyDatagramPacketDecoder extends DatagramPacketDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, DatagramPacket msg, List<Object> out) throws Exception {
 
-        ctx.channel().attr(UdpServer.attkey).set(msg.sender().toString());
+        //ctx.channel().attr(UdpServer.attkey).set(msg.sender().toString());
 
         super.decode(ctx, msg, out);
     }

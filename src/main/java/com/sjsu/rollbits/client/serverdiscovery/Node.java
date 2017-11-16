@@ -1,28 +1,26 @@
 package com.sjsu.rollbits.client.serverdiscovery;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 import routing.Pipe;
 
 public class Node {
 
-    private String nodeId;
-    private String nodeIp;
-    private int port;
-    private String group;
-    private Pipe.NetworkDiscoveryPacket.Sender typeNode;
-   
-	public Node(String id, String ip, String port, String group, Pipe.NetworkDiscoveryPacket.Sender Sender){
-	  	this.nodeId = id;
-	  	this.nodeIp = ip;
-	  	this.group = group;
-	  	this.typeNode = Sender;
-	  	this.port = Integer.parseInt(port);
-	} 
-	
-	public String getNodeIp(){
+	private String nodeId;
+	private String nodeIp;
+	private int port;
+	private String group;
+	private Pipe.NetworkDiscoveryPacket.Sender typeNode;
+
+	public Node(String id, String ip, String port, String group, Pipe.NetworkDiscoveryPacket.Sender Sender) {
+		this.nodeId = id;
+		this.nodeIp = ip;
+		this.group = group;
+		this.typeNode = Sender;
+		this.port = Integer.parseInt(port);
+	}
+
+	public String getNodeIp() {
 		return nodeIp;
-		
+
 	}
 
 	public String getNodeId() {
@@ -66,8 +64,5 @@ public class Node {
 		return "Node [nodeId=" + nodeId + ", nodeIp=" + nodeIp + ", port=" + port + ", group=" + group + ", typeNode="
 				+ typeNode + "]";
 	}
-	
-	
-	
-	
+
 }

@@ -1,5 +1,7 @@
 package com.sjsu.rollbits.client.serverdiscovery;
 
+import com.sjsu.rollbits.yml.Loadyaml;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -13,7 +15,9 @@ import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.internal.SocketUtils;
+import routing.Pipe;
 import routing.Pipe.NetworkDiscoveryPacket;
+import routing.Pipe.Route;
 
 public final class UdpClient {
 
@@ -23,31 +27,36 @@ public final class UdpClient {
 	 */
 
 	public static void broadcast() throws Exception {
-
+		Route.Builder rb = Route.newBuilder();
+		rb.setPath(Route.Path.NETWORK_DISCOVERY);
+	
+	
+		
 		NetworkDiscoveryPacket.Builder builder = NetworkDiscoveryPacket.newBuilder();
-
-		builder.setGroupTag(ClientConstants.GROUP_NAME);
+		
+		builder.setGroupTag(Loadyaml.getProperty("ClusterName"));
 		// builder.setSender(NetworkDiscoveryPacket.Sender.END_USER_CLIENT);
 		builder.setSender(NetworkDiscoveryPacket.Sender.END_USER_CLIENT);
 		builder.setMode(NetworkDiscoveryPacket.Mode.REQUEST);
-		builder.setNodeId(ClientConstants.NODE_NAME);
-		builder.setNodeAddress(ClientConstants.NODE_IP);
-		builder.setNodePort(Integer.parseInt(ClientConstants.NODE_PORT));
-		builder.setSecret(ClientConstants.SECRET);
+		builder.setNodeId(Loadyaml.getProperty("NodeName"));
+		builder.setNodeAddress(Loadyaml.getProperty("NodeIP"));
+		builder.setNodePort(Integer.parseInt(Loadyaml.getProperty("NodePort")));
+		builder.setSecret(Loadyaml.getProperty("Secret"));
 
 		// builder.setIp(InetAddress.getLocalHost().getHostAddress());
 		// System.out.println("******"+InetAddress.getLocalHost().getHostAddress());
-
-		NetworkDiscoveryPacket request = builder.build();// build() builds the
+		rb.setNetworkDiscoveryPacket(builder);
+		rb.setId(1);
+		Route request = rb.build();// build() builds the
 															// stream,
 															// transitioning
 															// this builder to
 															// the built state.
 
-		sendUDPMessage(request, ClientConstants.UDP_IP_BROADCAST, ClientConstants.UDP_PORT);
+		sendUDPMessage(request, Loadyaml.getProperty("UDP_IP_Broadcast"), Integer.parseInt(Loadyaml.getProperty("UDP_Port")));
 	}
 
-	public static void sendUDPMessage(NetworkDiscoveryPacket request, String IP, int port) throws InterruptedException {
+	public static void sendUDPMessage(Route request, String IP, int port) throws InterruptedException {
 		EventLoopGroup group = new NioEventLoopGroup();
 		try {
 			Bootstrap b = new Bootstrap();
@@ -65,6 +74,9 @@ public final class UdpClient {
 			ByteBuf buf = Unpooled.copiedBuffer(request.toByteArray());
 
 			ch.writeAndFlush(new DatagramPacket(buf, SocketUtils.socketAddress(IP, port))).sync();
+			
+			
+			
 
 			// UdpClientHandler will close the DatagramChannel when a
 			// response is received. If the channel is not closed within 5
@@ -76,5 +88,10 @@ public final class UdpClient {
 		} finally {
 			group.shutdownGracefully();
 		}
+		
+	}
+	
+	public static void main(String []args) throws Exception{
+		UdpClient.broadcast();
 	}
 }
