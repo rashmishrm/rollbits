@@ -63,14 +63,16 @@ public class UserMessageResource implements RouteResource {
 		Route.Builder rb = null;
 		if (!primaryNode.getIpAddress().equals(Loadyaml.getProperty("NodeIP"))) {
 			MessageClient msgClient = new MessageClient(primaryNode.getIpAddress(), (int) primaryNode.getPort());
-			Route r = msgClient.sendSyncronousMessage(msg.toBuilder());
-			rb = r.toBuilder();
+			if (msgClient.isConnected()) {
+				Route r = msgClient.sendSyncronousMessage(msg.toBuilder());
+				rb = r.toBuilder();
+			}
 
 		} else {
 
 			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = dbService.findAllforuname(message.getId());
 
-			rb = ProtoUtil.createMessageResponseRoute(msg.getId(), messages, message.getId(),true);
+			rb = ProtoUtil.createMessageResponseRoute(msg.getId(), messages, message.getId(), true);
 
 		}
 

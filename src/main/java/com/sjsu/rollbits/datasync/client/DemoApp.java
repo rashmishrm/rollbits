@@ -32,8 +32,6 @@ public class DemoApp implements CommListener {
 		this.mc.addListener(this);
 	}
 
-	
-
 	@Override
 	public String getListenerID() {
 		return "demo";
@@ -50,30 +48,32 @@ public class DemoApp implements CommListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String host = "10.0.0.11";
+		String host = "10.0.0.18";
 		int port = 4567;
 		System.out.println(Pipe.Route.Path.USER);
 		long stime = System.currentTimeMillis();
 
 		try {
 			MessageClient mc = new MessageClient(host, port);
+			if (mc.isConnected()) {
 
-			//mc.addUser("Rashmi", "Rashmi", RollbitsConstants.CLIENT, false);
-			
-			mc.sendMessage("rashmishrm", "nishantrathi", "tsdhvsdkcsdkvnvnksnvksndvskvs", "CLIENT", false);
-			
-			
-			//Route.Builder msg = ProtoUtil.createMessageRequest(1, "nishant",true);
+				// mc.addUser("Rashmi", "Rashmi", RollbitsConstants.CLIENT, false);
+				System.out.println("Sleeping before connecting");
+				Thread.sleep(10000);
+				mc.sendMessage("rashmishrm", "nishantrathi", "tsdhvsdkcsdkvnvnksnvksndvskvs", "CLIENT", false);
+			}
 
-			//Route r = mc.sendSyncronousMessage(msg);
-			
-			//mc.addGroup("group", 1, RollbitsConstants.CLIENT, false);
+			// Route.Builder msg = ProtoUtil.createMessageRequest(1, "nishant",true);
+
+			// Route r = mc.sendSyncronousMessage(msg);
+
+			// mc.addGroup("group", 1, RollbitsConstants.CLIENT, false);
 
 			long etime = System.currentTimeMillis();
 
 			System.out.println(etime - stime);
 
-			Thread.sleep(100000);
+			Thread.sleep(10000);
 
 		} catch (Exception e) {
 			e.printStackTrace();

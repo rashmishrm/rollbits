@@ -76,17 +76,20 @@ public class MessageResource implements RouteResource {
 			for (RNode node : set) {
 				MessageClient mc = new MessageClient(node.getIpAddress(), (int) node.getPort());
 				if (node.getType().equals(RNode.Type.REPLICA)) {
+					if(mc.isConnected())
 					mc.sendMessage(message.getSenderId(), message.getReceiverId(), message.getPayload(),
 							RollbitsConstants.INTERNAL, true);
 				} else {
+					if(mc.isConnected())
 					isSuccess = mc.sendMessage(message.getSenderId(), message.getReceiverId(), message.getPayload(),
 							RollbitsConstants.INTERNAL, false);
+					
 				}
 
 			}
 
 		} else {
-			System.out.println("Adding to database!!!!!");
+			logger.info("Adding to Database");
 			// User dbuser = new User(user.getUname(), user.getEmail());
 			com.sjsu.rollbits.dao.interfaces.model.Message messageModel = new com.sjsu.rollbits.dao.interfaces.model.Message(
 					1, new Date(), message.getSenderId(), message.getReceiverId(), message.getSenderId(),

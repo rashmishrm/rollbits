@@ -56,9 +56,13 @@ public class UserResource implements RouteResource {
 				for (RNode node : nodes) {
 					MessageClient mc = new MessageClient(node.getIpAddress(), (int) node.getPort());
 					if (node.getType().equals(RNode.Type.REPLICA)) {
-						mc.addUser(user.getUname(), user.getEmail(), RollbitsConstants.INTERNAL, true);
+						if (mc.isConnected())
+
+							mc.addUser(user.getUname(), user.getEmail(), RollbitsConstants.INTERNAL, true);
 					} else {
-						success = mc.addUser(user.getUname(), user.getEmail(), RollbitsConstants.INTERNAL, false);
+						if (mc.isConnected())
+
+							success = mc.addUser(user.getUname(), user.getEmail(), RollbitsConstants.INTERNAL, false);
 
 					}
 
@@ -66,7 +70,7 @@ public class UserResource implements RouteResource {
 
 			} else {
 
-				System.out.println("Adding to database!!!!!");
+				logger.info("Adding to database");
 				User dbuser = new User(user.getUname(), user.getEmail());
 
 				dbService.persist(dbuser);

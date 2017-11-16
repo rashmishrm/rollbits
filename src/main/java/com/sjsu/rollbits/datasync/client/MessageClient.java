@@ -21,7 +21,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.sjsu.rollbits.datasync.server.resources.ProtoUtil;
 
-import routing.Pipe;
 import routing.Pipe.Message;
 import routing.Pipe.Route;
 
@@ -34,6 +33,7 @@ import routing.Pipe.Route;
 public class MessageClient {
 	// track requests
 	private long curID = 0;
+	private boolean isConnected = true;
 
 	ConcurrentHashMap<Long, Route> requestResponseMap = new ConcurrentHashMap<>();
 
@@ -42,7 +42,15 @@ public class MessageClient {
 	}
 
 	private void init(String host, int port) {
-		CommConnection.initConnection(host, port);
+		CommConnection con = CommConnection.initConnection(host, port);
+		if (con == null) {
+			isConnected = false;
+		}
+
+	}
+
+	public boolean isConnected() {
+		return isConnected;
 	}
 
 	public void addListener(CommListener listener) {

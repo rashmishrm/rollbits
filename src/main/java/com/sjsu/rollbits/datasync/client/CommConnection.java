@@ -18,8 +18,11 @@ package com.sjsu.rollbits.datasync.client;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sjsu.rollbits.exception.ConnectionNotFormedException;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -45,7 +48,7 @@ public class CommConnection {
 	private String host;
 	private int port;
 	private ChannelFuture channel; // do not use directly call
-									// connect()!
+	// connect()!
 
 	private EventLoopGroup group;
 
@@ -62,7 +65,7 @@ public class CommConnection {
 	 * @param host
 	 * @param port
 	 */
-	protected CommConnection(String host, int port) {
+	protected CommConnection(String host, int port) throws ConnectionNotFormedException {
 		this.host = host;
 		this.port = port;
 
@@ -77,14 +80,29 @@ public class CommConnection {
 	}
 
 	public static CommConnection initConnection(String host, int port) {
-		instance.compareAndSet(null, new CommConnection(host, port));
 
-		if (!instance.equals(new CommConnection(host, port, true))) {
-			instance.set(new CommConnection(host, port));
+		int retries = 1;
+		while (retries <= 3) {
+			try {
+
+				instance.compareAndSet(null, new CommConnection(host, port));
+
+				if (!instance.get().equals(new CommConnection(host, port, true))) {
+					instance.set(new CommConnection(host, port));
+				}
+				System.out.println(instance.get());
+				break;
+
+			} catch (ConnectionNotFormedException e) {
+				logger.error("Trying to connect again: Retrying  " + retries + " time");
+
+			}
+
+			retries++;
 		}
 
-		System.out.println(instance.get());
-		return instance.get();
+		return retries == -1 ? null : instance.get();
+
 	}
 
 	public static CommConnection getInstance() {
@@ -96,9 +114,11 @@ public class CommConnection {
 	 * release all resources
 	 */
 	public void release() {
+		if(channel!=null) {
 		channel.cancel(true);
 		if (channel.channel() != null)
 			channel.channel().close();
+		}
 		group.shutdownGracefully();
 	}
 
@@ -125,30 +145,26 @@ public class CommConnection {
 
 		// TODO a queue is needed to prevent overloading of the socket
 		// connection. For the demonstration, we don't need it
-		
-		
-		
-	
+
 		ChannelFuture cf = connect().writeAndFlush(msg);
-//		cf.addListener(new ChannelFutureListener() {
-//			
-//			@Override
-//			public void operationComplete(ChannelFuture future) throws Exception {
-//				System.out.println("Ia ma here in channel operation completed.........!!@@@@ ");
-//				future.channel().read();
-//				
-//			}
-//		});
-//	
+		// cf.addListener(new ChannelFutureListener() {
+		//
+		// @Override
+		// public void operationComplete(ChannelFuture future) throws Exception {
+		// System.out.println("Ia ma here in channel operation completed.........!!@@@@
+		// ");
+		// future.channel().read();
+		//
+		// }
+		// });
+		//
 		if (cf.isDone() && !cf.isSuccess()) {
-			logger.error("failed to send message to server - " +msg.getId());
+			logger.error("failed to send message to server - " + msg.getId());
 			return false;
 		}
 
 		return true;
 	}
-
-	
 
 	/**
 	 * abstraction of notification in the communication
@@ -161,9 +177,9 @@ public class CommConnection {
 			handler.addListener(listener);
 	}
 
-	private void init() {
+	private boolean init() throws ConnectionNotFormedException {
 		System.out.println("--> initializing connection to " + host + ":" + port);
-
+		boolean created = true;
 		// the queue to support client-side surging
 		outbound = new LinkedBlockingDeque<Route>();
 
@@ -188,16 +204,22 @@ public class CommConnection {
 			System.out.println(channel.channel().localAddress() + " -> open: " + channel.channel().isOpen()
 					+ ", write: " + channel.channel().isWritable() + ", reg: " + channel.channel().isRegistered());
 
-			
 			// start outbound message processor
 			worker = new CommWorker(this);
 			worker.setDaemon(true);
 			worker.start();
-			
+
 		} catch (Throwable ex) {
-			logger.error("failed to initialize the client connection", ex);
+			created = false;
+			logger.error("failed to initialize the client connection", ExceptionUtils.getMessage(ex));
 			
+			//release resources 
+			release();
+			throw new ConnectionNotFormedException("failed to initialize the client connection");
 		}
+		
+
+		return created;
 
 	}
 
@@ -209,13 +231,20 @@ public class CommConnection {
 	protected Channel connect() {
 		// Start the connection attempt.
 		if (channel == null) {
-			init();
+			try {
+				logger.info("Re-Attempting Connection!");
+				init();
+
+			} catch (ConnectionNotFormedException c) {
+				throw new RuntimeException("Not able to establish connection to server");
+			}
 		}
 
 		if (channel != null && channel.isSuccess() && channel.channel().isWritable())
 			return channel.channel();
 		else
-			throw new RuntimeException("Not able to establish connection to server");
+			throw new RuntimeException("Not able to establish connection to server: Channel not writable");
+
 	}
 
 	/**
@@ -242,6 +271,9 @@ public class CommConnection {
 			System.out.flush();
 
 			// @TODO if lost, try to re-establish the connection
+			logger.info("Reattempting creating connection with listener");
+			this.cc = CommConnection.initConnection(cc.host, cc.port);
+
 		}
 	}
 
@@ -250,7 +282,7 @@ public class CommConnection {
 		// TODO Auto-generated method stub
 		CommConnection c = (CommConnection) obj;
 
-		return c.equals(this);
+		return this.host.equals(c.host);
 	}
 
 	@Override
