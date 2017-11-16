@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sjsu.rollbits.discovery.ClusterDirectory;
-import com.sjsu.rollbits.discovery.MyConstants;
 import com.sjsu.rollbits.discovery.UdpClient;
+import com.sjsu.rollbits.yml.Loadyaml;
 
 import routing.Pipe;
 import routing.Pipe.NetworkDiscoveryPacket;
@@ -29,7 +29,7 @@ public class NetworkDiscoveryResource implements RouteResource {
 		NetworkDiscoveryPacket request = route.getNetworkDiscoveryPacket();
 		System.out.println("Recieved a packet from" + request.getNodeAddress());
 		// Dont do anything when youare yourself sending the broadcast
-		if (MyConstants.NODE_IP.equals(request.getNodeAddress())) {
+		if (Loadyaml.getProperty("NodeIP").equals(request.getNodeAddress())) {
 			return null;
 		}
 
@@ -37,14 +37,14 @@ public class NetworkDiscoveryResource implements RouteResource {
 		rb.setPath(Route.Path.NETWORK_DISCOVERY);
 
 		NetworkDiscoveryPacket.Builder toSend = NetworkDiscoveryPacket.newBuilder();
-		toSend.setGroupTag(MyConstants.GROUP_NAME);
+		toSend.setGroupTag(Loadyaml.getProperty("ClusterName"));
 
-		toSend.setNodeId(MyConstants.NODE_NAME);
-		toSend.setNodeAddress(MyConstants.NODE_IP);
+		toSend.setNodeId(Loadyaml.getProperty("NodeName"));
+		toSend.setNodeAddress(Loadyaml.getProperty("NodeIP"));
 		toSend.setMode(Mode.RESPONSE);
-		toSend.setNodePort(Integer.parseInt(MyConstants.NODE_PORT));
+		toSend.setNodePort(Integer.parseInt(Loadyaml.getProperty("NodePort")));
 		toSend.setSender(Sender.EXTERNAL_SERVER_NODE);
-		toSend.setSecret(MyConstants.SECRET);
+		toSend.setSecret(Loadyaml.getProperty("Secret"));
 
 		rb.setNetworkDiscoveryPacket(toSend);
 		rb.setId(1);
