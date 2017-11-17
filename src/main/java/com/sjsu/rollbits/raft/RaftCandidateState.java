@@ -88,17 +88,23 @@ public class RaftCandidateState implements RaftState {
 	}
 
 	@Override
-	public void handleLeaderElectionResult(String senderNodeId) {
+	public void handleLeaderElectionResult(String senderNodeId, Long leaderElectionTime) {
 		RaftContext raftContext = RaftContext.getInstance();
 		RaftState raftState = new RaftFollowerState();
 		raftContext.setRaftState(raftState);
 		raftContext.setLAST_RECIEVED(System.currentTimeMillis());
 		raftContext.setLeaderNodeId(senderNodeId);
+		raftContext.setLeaderElectionTime(leaderElectionTime);
 	}
 
 	@Override
-	public void handleLeaderHeartBeat(String senderNodeId) {
-		//This scenario ideally not possible. Hence, do nothing.
+	public void handleLeaderHeartBeat(String senderNodeId, Long leaderElectionTime) {
+		RaftContext raftContext = RaftContext.getInstance();
+		RaftState raftState = new RaftFollowerState();
+		raftContext.setRaftState(raftState);
+		raftContext.setLAST_RECIEVED(System.currentTimeMillis());
+		raftContext.setLeaderNodeId(senderNodeId);
+		raftContext.setLeaderElectionTime(leaderElectionTime);
 		
 	}
 

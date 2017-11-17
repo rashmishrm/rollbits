@@ -19,6 +19,7 @@ public class RaftContext {
 	private static Thread raftEngineThread;
 	private static RaftHeartBeatEngine raftHeartBeatEngine;
 	private static Thread raftHeartBeatEngineThread;
+	private Long leaderElectionTime;
 	
 	static {
 		if (raftContext == null) {
@@ -83,6 +84,20 @@ public class RaftContext {
 	public String getLeaderNodeId() {
 		return this.leaderNodeId;
 		
+	}
+
+	/**
+	 * @return the leaderElectionTime
+	 */
+	public Long getLeaderElectionTime() {
+		return this.leaderElectionTime;
+	}
+
+	/**
+	 * @param leaderElectionTime the leaderElectionTime to set
+	 */
+	public void setLeaderElectionTime(Long leaderElectionTime) {
+		this.leaderElectionTime = leaderElectionTime;
 	}
 
 }

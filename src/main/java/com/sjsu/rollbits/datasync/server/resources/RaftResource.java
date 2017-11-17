@@ -30,6 +30,7 @@ public class RaftResource implements RouteResource {
 		RaftState raftState = raftContext.getRaftState();
 
 		String senderNodeId = raftMessage.getSenderNodeid();
+		Long leaderSelectionTime = raftMessage.getLeaderSelectionTime();
 
 		if (RaftMsgType.RequestVote.equals(raftMsgType)) {
 			// Received voting request from a candidate
@@ -41,11 +42,11 @@ public class RaftResource implements RouteResource {
 
 		} else if (RaftMsgType.LeaderHeartBeat.equals(raftMsgType)) {
 			// Received Heart beat from leader
-			raftState.handleLeaderHeartBeat(senderNodeId);
+			raftState.handleLeaderHeartBeat(senderNodeId, leaderSelectionTime);
 
 		} else if (RaftMsgType.LeaderElectionResult.equals(raftMsgType)) {
 			// Received Confirmation from a newly elected Leader
-			raftState.handleLeaderElectionResult(senderNodeId);
+			raftState.handleLeaderElectionResult(senderNodeId, leaderSelectionTime);
 
 		}
 		Route.Builder rb = ProtoUtil.createResponseRoute(msg.getId(), true, null, RollbitsConstants.SUCCESS);

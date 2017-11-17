@@ -16,7 +16,7 @@ public interface RaftState {
 	
 	public void handleVoteResponse(String senderNodeId);
 	
-	public void handleLeaderElectionResult(String senderNodeId);
+	public void handleLeaderElectionResult(String senderNodeId, Long l);
 	
-	public void handleLeaderHeartBeat(String senderNodeId);
+	public void handleLeaderHeartBeat(String senderNodeId, Long leaderSelectionTime);
 }

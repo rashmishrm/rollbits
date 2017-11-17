@@ -192,5 +192,6 @@ message RaftMessage{
     }
 	required RaftMsgType type=1;
 	required string senderNodeid=2;
+	optional int64 leaderSelectionTime=3;
 	
 }

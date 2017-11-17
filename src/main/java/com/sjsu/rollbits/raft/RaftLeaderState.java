@@ -42,15 +42,38 @@ public class RaftLeaderState implements RaftState {
 	}
 
 	@Override
-	public void handleLeaderElectionResult(String senderNodeId) {
-		//Do Nothing
+	public void handleLeaderElectionResult(String senderNodeId, Long leaderElectionTime) {
+		RaftContext raftContext = RaftContext.getInstance();
+		if(raftContext.getLeaderNodeId() == null || raftContext.getLeaderElectionTime() == null){
+			raftContext.setLeaderNodeId(senderNodeId);
+			raftContext.setLeaderElectionTime(leaderElectionTime);
+			raftContext.setLAST_RECIEVED(System.currentTimeMillis());
+			raftContext.setRaftState(new RaftFollowerState());
+		}
+		if (raftContext.getLeaderElectionTime()!=null && leaderElectionTime > raftContext.getLeaderElectionTime()) {
+			raftContext.setLeaderNodeId(senderNodeId);
+			raftContext.setLeaderElectionTime(leaderElectionTime);
+			raftContext.setLAST_RECIEVED(System.currentTimeMillis());
+			raftContext.setRaftState(new RaftFollowerState());
+		}
 		
 	}
 
 	@Override
-	public void handleLeaderHeartBeat(String senderNodeId) {
-		//Do Nothing
-		
+	public void handleLeaderHeartBeat(String senderNodeId, Long leaderElectionTime) {
+		RaftContext raftContext = RaftContext.getInstance();
+		if(raftContext.getLeaderNodeId() == null || raftContext.getLeaderElectionTime() == null){
+			raftContext.setLeaderNodeId(senderNodeId);
+			raftContext.setLeaderElectionTime(leaderElectionTime);
+			raftContext.setLAST_RECIEVED(System.currentTimeMillis());
+			raftContext.setRaftState(new RaftFollowerState());
+		}
+		if (raftContext.getLeaderElectionTime()!=null && leaderElectionTime > raftContext.getLeaderElectionTime()) {
+			raftContext.setLeaderNodeId(senderNodeId);
+			raftContext.setLeaderElectionTime(leaderElectionTime);
+			raftContext.setLAST_RECIEVED(System.currentTimeMillis());
+			raftContext.setRaftState(new RaftFollowerState());
+		}
 	}
 
 }

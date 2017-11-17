@@ -13357,6 +13357,15 @@ public final class Pipe {
      */
     com.google.protobuf.ByteString
         getSenderNodeidBytes();
+
+    /**
+     * <code>optional int64 leaderSelectionTime = 3;</code>
+     */
+    boolean hasLeaderSelectionTime();
+    /**
+     * <code>optional int64 leaderSelectionTime = 3;</code>
+     */
+    long getLeaderSelectionTime();
   }
   /**
    * Protobuf type {@code RaftMessage}
@@ -13372,6 +13381,7 @@ public final class Pipe {
     private RaftMessage() {
       type_ = 0;
       senderNodeid_ = "";
+      leaderSelectionTime_ = 0L;
     }
 
     @java.lang.Override
@@ -13417,6 +13427,11 @@ public final class Pipe {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
               senderNodeid_ = bs;
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              leaderSelectionTime_ = input.readInt64();
               break;
             }
           }
@@ -13610,6 +13625,21 @@ public final class Pipe {
       }
     }
 
+    public static final int LEADERSELECTIONTIME_FIELD_NUMBER = 3;
+    private long leaderSelectionTime_;
+    /**
+     * <code>optional int64 leaderSelectionTime = 3;</code>
+     */
+    public boolean hasLeaderSelectionTime() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional int64 leaderSelectionTime = 3;</code>
+     */
+    public long getLeaderSelectionTime() {
+      return leaderSelectionTime_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -13636,6 +13666,9 @@ public final class Pipe {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, senderNodeid_);
       }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt64(3, leaderSelectionTime_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -13650,6 +13683,10 @@ public final class Pipe {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, senderNodeid_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(3, leaderSelectionTime_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -13677,6 +13714,11 @@ public final class Pipe {
         result = result && getSenderNodeid()
             .equals(other.getSenderNodeid());
       }
+      result = result && (hasLeaderSelectionTime() == other.hasLeaderSelectionTime());
+      if (hasLeaderSelectionTime()) {
+        result = result && (getLeaderSelectionTime()
+            == other.getLeaderSelectionTime());
+      }
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -13695,6 +13737,11 @@ public final class Pipe {
       if (hasSenderNodeid()) {
         hash = (37 * hash) + SENDERNODEID_FIELD_NUMBER;
         hash = (53 * hash) + getSenderNodeid().hashCode();
+      }
+      if (hasLeaderSelectionTime()) {
+        hash = (37 * hash) + LEADERSELECTIONTIME_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getLeaderSelectionTime());
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -13818,6 +13865,8 @@ public final class Pipe {
         bitField0_ = (bitField0_ & ~0x00000001);
         senderNodeid_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
+        leaderSelectionTime_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -13850,6 +13899,10 @@ public final class Pipe {
           to_bitField0_ |= 0x00000002;
         }
         result.senderNodeid_ = senderNodeid_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.leaderSelectionTime_ = leaderSelectionTime_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -13899,6 +13952,9 @@ public final class Pipe {
           bitField0_ |= 0x00000002;
           senderNodeid_ = other.senderNodeid_;
           onChanged();
+        }
+        if (other.hasLeaderSelectionTime()) {
+          setLeaderSelectionTime(other.getLeaderSelectionTime());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -14042,6 +14098,38 @@ public final class Pipe {
   }
   bitField0_ |= 0x00000002;
         senderNodeid_ = value;
+        onChanged();
+        return this;
+      }
+
+      private long leaderSelectionTime_ ;
+      /**
+       * <code>optional int64 leaderSelectionTime = 3;</code>
+       */
+      public boolean hasLeaderSelectionTime() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional int64 leaderSelectionTime = 3;</code>
+       */
+      public long getLeaderSelectionTime() {
+        return leaderSelectionTime_;
+      }
+      /**
+       * <code>optional int64 leaderSelectionTime = 3;</code>
+       */
+      public Builder setLeaderSelectionTime(long value) {
+        bitField0_ |= 0x00000004;
+        leaderSelectionTime_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int64 leaderSelectionTime = 3;</code>
+       */
+      public Builder clearLeaderSelectionTime() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        leaderSelectionTime_ = 0L;
         onChanged();
         return this;
       }
@@ -14214,12 +14302,13 @@ public final class Pipe {
       "e\022\016\n\006nodeid\030\001 \002(\t\022&\n\traftState\030\002 \002(\0162\023.R" +
       "aftNode.RaftState\"4\n\tRaftState\022\r\n\tCandid",
       "ate\020\000\022\n\n\006Leader\020\001\022\014\n\010Follower\020\002\"#\n\017Failo" +
-      "verMessage\022\020\n\010nodeName\030\001 \002(\t\"\254\001\n\013RaftMes" +
+      "verMessage\022\020\n\010nodeName\030\001 \002(\t\"\311\001\n\013RaftMes" +
       "sage\022&\n\004type\030\001 \002(\0162\030.RaftMessage.RaftMsg" +
-      "Type\022\024\n\014senderNodeid\030\002 \002(\t\"_\n\013RaftMsgTyp" +
-      "e\022\023\n\017LeaderHeartBeat\020\000\022\017\n\013RequestVote\020\001\022" +
-      "\020\n\014VoteResponse\020\002\022\030\n\024LeaderElectionResul" +
-      "t\020\003B\013\n\007routingH\001"
+      "Type\022\024\n\014senderNodeid\030\002 \002(\t\022\033\n\023leaderSele" +
+      "ctionTime\030\003 \001(\003\"_\n\013RaftMsgType\022\023\n\017Leader" +
+      "HeartBeat\020\000\022\017\n\013RequestVote\020\001\022\020\n\014VoteResp" +
+      "onse\020\002\022\030\n\024LeaderElectionResult\020\003B\013\n\007rout" +
+      "ingH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -14304,7 +14393,7 @@ public final class Pipe {
     internal_static_RaftMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_RaftMessage_descriptor,
-        new java.lang.String[] { "Type", "SenderNodeid", });
+        new java.lang.String[] { "Type", "SenderNodeid", "LeaderSelectionTime", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

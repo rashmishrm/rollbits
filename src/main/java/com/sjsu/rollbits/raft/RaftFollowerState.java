@@ -77,18 +77,26 @@ public class RaftFollowerState implements RaftState {
 	}
 
 	@Override
-	public void handleLeaderElectionResult(String senderNodeId) {
+	public void handleLeaderElectionResult(String senderNodeId, Long leaderElectionTime) {
 		RaftContext raftContext = RaftContext.getInstance();
 		raftContext.setLAST_RECIEVED(System.currentTimeMillis());
 		raftContext.setLeaderNodeId(senderNodeId);
-		
+		raftContext.setLeaderElectionTime(leaderElectionTime);
 	}
 
 	@Override
-	public void handleLeaderHeartBeat(String senderNodeId) {
+	public void handleLeaderHeartBeat(String senderNodeId, Long leaderSelectionTime) {
 		RaftContext raftContext = RaftContext.getInstance();
-		raftContext.setLAST_RECIEVED(System.currentTimeMillis());
-		
+		if(raftContext.getLeaderNodeId() == null || raftContext.getLeaderElectionTime() == null){
+			raftContext.setLeaderNodeId(senderNodeId);
+			raftContext.setLeaderElectionTime(leaderSelectionTime);
+			raftContext.setLAST_RECIEVED(System.currentTimeMillis());
+		}
+		if (raftContext.getLeaderElectionTime()!=null && leaderSelectionTime > raftContext.getLeaderElectionTime()) {
+			raftContext.setLeaderNodeId(senderNodeId);
+			raftContext.setLeaderElectionTime(leaderSelectionTime);
+			raftContext.setLAST_RECIEVED(System.currentTimeMillis());
+		}
 	}
 
 }
