@@ -154,6 +154,7 @@ public class MessageClient {
 			e.printStackTrace();
 		}
 		return added;
+	}
 
 	public boolean sendMessage(String fromUserId, String toUserId, String message, String type, boolean async) {
 		// construct the message to send
