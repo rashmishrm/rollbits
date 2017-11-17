@@ -56,7 +56,7 @@ public final class UdpClient {
 		sendUDPMessage(request, Loadyaml.getProperty(RollbitsConstants.UDP_BROADCAST_IP), Integer.parseInt(Loadyaml.getProperty(RollbitsConstants.UDP_PORT)));
 	}
 	
-	public static void broadcastFailover() throws Exception {
+	public static void broadcastFailover(String nodeName, String nodeIP) throws Exception {
 		Route.Builder rb = Route.newBuilder();
 		rb.setPath(Route.Path.NETWORK_DISCOVERY);
 	
@@ -68,8 +68,8 @@ public final class UdpClient {
 		// builder.setSender(NetworkDiscoveryPacket.Sender.END_USER_CLIENT);
 		builder.setSender(NetworkDiscoveryPacket.Sender.EXTERNAL_SERVER_NODE);
 		builder.setMode(NetworkDiscoveryPacket.Mode.REMOVE_NODE);
-		builder.setNodeId(Loadyaml.getProperty(RollbitsConstants.NODE_NAME));
-		builder.setNodeAddress(Loadyaml.getProperty(RollbitsConstants.NODE_IP));
+		builder.setNodeId(Loadyaml.getProperty(nodeName));
+		builder.setNodeAddress(Loadyaml.getProperty(nodeIP));
 		builder.setNodePort(Integer.parseInt(Loadyaml.getProperty(RollbitsConstants.NODE_PORT)));
 		builder.setSecret(Loadyaml.getProperty(RollbitsConstants.SECRET));
 

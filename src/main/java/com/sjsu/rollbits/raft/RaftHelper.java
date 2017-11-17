@@ -12,6 +12,7 @@ import com.sjsu.rollbits.datasync.client.MessageClient;
 import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 import com.sjsu.rollbits.discovery.ClusterDirectory;
 import com.sjsu.rollbits.discovery.Node;
+import com.sjsu.rollbits.discovery.UdpClient;
 import com.sjsu.rollbits.yml.Loadyaml;
 
 import routing.Pipe.FailoverMessage;
@@ -84,7 +85,13 @@ public class RaftHelper {
 			FailoverMessage.Builder failoverMessageBuilder = FailoverMessage.newBuilder();
 			failoverMessageBuilder.setNodeName(node.getNodeId());
 			routeBuilder.setFailoverMessage(failoverMessageBuilder);
-			broadcast(routeBuilder);
+			broadcast(routeBuilder); //broadcast to internal nodes TCP for consistent hashing failover
+			try {
+				UdpClient.broadcastFailover(node.getNodeId(), node.getNodeIp());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
