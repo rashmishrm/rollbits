@@ -13,26 +13,26 @@ public class GroupUser {
     @GeneratedValue(strategy=GenerationType.AUTO)
 
     @Column(name = "groupid")
-    private int groupid;
+    private String groupid;
     @Column(name = "userid")
-    private int userid;
+    private String userid;
 
 
     public GroupUser() {
 		// TODO Auto-generated constructor stub
 	}
     
-    public GroupUser(int groupid, int userid) {
-        this.groupid = groupid;
-        this.userid=userid;
+    public GroupUser(String string, String string2) {
+        this.groupid = string;
+        this.userid=string2;
     }
 
-    public int getGroupid() {
+    public String getGroupid() {
         return groupid;
     }
 
 
-    public int getUserid() {
+    public String getUserid() {
         return userid;
     }
 

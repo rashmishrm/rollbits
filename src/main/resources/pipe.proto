@@ -76,11 +76,14 @@ message Group {
     enum ActionType {
         CREATE = 0;
         DELETE = 1;
+        ADDUSER = 2;
     }
     required string gname = 1;
     required int64 gid = 2;
     required ActionType action = 3;
+    optional string username = 4;
 }
+
 
 message Message {
 

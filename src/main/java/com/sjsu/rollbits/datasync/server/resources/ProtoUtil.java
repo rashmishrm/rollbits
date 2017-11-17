@@ -217,5 +217,33 @@ public class ProtoUtil {
 		rb.setHeader(header);
 		return rb;
 	}
+	
+	public static Route.Builder createAddUsertoGroupRequest(long id, String gname, String uname,String type) {
+
+		Route.Builder rb = Route.newBuilder();
+		rb.setId(id);
+		rb.setPath(Route.Path.GROUP);
+		Pipe.Group.Builder gb = Pipe.Group.newBuilder();
+		gb.setGname(gname);
+		gb.setGid(id);
+		gb.setAction(routing.Pipe.Group.ActionType.ADDUSER);
+		gb.setUsername(uname);
+		rb.setGroup(gb);
+		
+		Pipe.Header.Builder header = Pipe.Header.newBuilder();
+
+		if (type.equals(Pipe.Header.Type.INTERNAL.toString())) {
+			header.setType(Pipe.Header.Type.INTERNAL);
+
+		} else if (type.equals(Pipe.Header.Type.INTER_CLUSTER.toString())) {
+			header.setType(Pipe.Header.Type.INTER_CLUSTER);
+
+		} else if (type.equals(Pipe.Header.Type.CLIENT.toString())) {
+			header.setType(Pipe.Header.Type.CLIENT);
+
+		}
+		rb.setHeader(header);
+		return rb;
+	}
 
 }

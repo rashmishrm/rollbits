@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.sjsu.rollbits.datasync.server.resources.ProtoUtil;
 
+import routing.Pipe;
 import routing.Pipe.Message;
 import routing.Pipe.Route;
 
@@ -139,6 +140,20 @@ public class MessageClient {
 		return added;
 
 	}
+	
+	public boolean addUsertoGroup(int guid, String gname, String uname, String type, boolean async) {
+		Route.Builder rb = ProtoUtil.createAddUsertoGroupRequest(guid, gname, uname, type);
+		CommConnection conn = CommConnection.getInstance();
+		boolean added = false;
+		try {
+			if (async)
+				conn.enqueue(rb.build());
+			else
+				added = conn.write(rb.build());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return added;
 
 	public boolean sendMessage(String fromUserId, String toUserId, String message, String type, boolean async) {
 		// construct the message to send
@@ -166,8 +181,8 @@ public class MessageClient {
 	}
 
 	/**
-	 * Since the service/server is asychronous we need a unique ID to associate
-	 * our requests with the server's reply
+	 * Since the service/server is asychronous we need a unique ID to associate our
+	 * requests with the server's reply
 	 * 
 	 * @return
 	 */
