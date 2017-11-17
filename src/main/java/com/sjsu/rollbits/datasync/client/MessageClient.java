@@ -166,8 +166,8 @@ public class MessageClient {
 	}
 
 	/**
-	 * Since the service/server is asychronous we need a unique ID to associate our
-	 * requests with the server's reply
+	 * Since the service/server is asychronous we need a unique ID to associate
+	 * our requests with the server's reply
 	 * 
 	 * @return
 	 */
@@ -187,7 +187,9 @@ public class MessageClient {
 	}
 
 	public void fetchMessages(String username) {
-	
+		Route.Builder msg = ProtoUtil.createMessageRequest(nextId(), username, true);
+		CommConnection.getInstance().write(msg.build());
+
 	}
-		
+
 }
