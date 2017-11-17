@@ -14,4 +14,7 @@ public interface RollbitsConstants {
 
 	String CONNECTION_FAILED = "CONNECTION_FAILED";
 
+	String REPLICATION_FACTOR = "replicationfactor";
+	String VIRTUAL_NODES = "virtualnodes";
+
 }

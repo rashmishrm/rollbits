@@ -100,7 +100,9 @@ public class RNode implements Comparable<RNode> {
 		// TODO Auto-generated method stub
 		RNode node = (RNode) obj;
 
-		return this.equals(node);
+		return this.nodeId.equals(node.nodeId);
 	}
+	
+
 
 }

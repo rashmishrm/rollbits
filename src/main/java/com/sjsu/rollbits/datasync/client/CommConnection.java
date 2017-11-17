@@ -114,10 +114,10 @@ public class CommConnection {
 	 * release all resources
 	 */
 	public void release() {
-		if(channel!=null) {
-		channel.cancel(true);
-		if (channel.channel() != null)
-			channel.channel().close();
+		if (channel != null) {
+			channel.cancel(true);
+			if (channel.channel() != null)
+				channel.channel().close();
 		}
 		group.shutdownGracefully();
 	}
@@ -147,17 +147,7 @@ public class CommConnection {
 		// connection. For the demonstration, we don't need it
 
 		ChannelFuture cf = connect().writeAndFlush(msg);
-		// cf.addListener(new ChannelFutureListener() {
-		//
-		// @Override
-		// public void operationComplete(ChannelFuture future) throws Exception {
-		// System.out.println("Ia ma here in channel operation completed.........!!@@@@
-		// ");
-		// future.channel().read();
-		//
-		// }
-		// });
-		//
+
 		if (cf.isDone() && !cf.isSuccess()) {
 			logger.error("failed to send message to server - " + msg.getId());
 			return false;
@@ -212,12 +202,11 @@ public class CommConnection {
 		} catch (Throwable ex) {
 			created = false;
 			logger.error("failed to initialize the client connection", ExceptionUtils.getMessage(ex));
-			
-			//release resources 
+
+			// release resources
 			release();
 			throw new ConnectionNotFormedException("failed to initialize the client connection");
 		}
-		
 
 		return created;
 
@@ -279,15 +268,12 @@ public class CommConnection {
 
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
 		CommConnection c = (CommConnection) obj;
-
 		return this.host.equals(c.host);
 	}
 
 	@Override
 	public int hashCode() {
-		// TODO Auto-generated method stub
 		return host.hashCode();
 	}
 }

@@ -8,6 +8,9 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sjsu.rollbits.sharding.hashing.RNode.Type;
 
 public class ConsistentHash {
@@ -15,31 +18,27 @@ public class ConsistentHash {
 	private final HashAlgo hashFunction;
 	private final int numberOfReplicas;
 	private final SortedMap<Long, RNode> circle = new TreeMap<Long, RNode>();
+	protected static Logger logger = LoggerFactory.getLogger("ConsistentHash");
 
-	public ConsistentHash(HashAlgo hashFunction, int numberOfReplicas, Collection<RNode> nodes) {
+	public ConsistentHash(HashAlgo hashFunction, int numberOfReplicas, Collection<RNode> nodes, int virtualNodes) {
 
 		this.hashFunction = hashFunction;
 		this.numberOfReplicas = numberOfReplicas;
+		for (RNode node : nodes) {
+			for (int i = 1; i <= virtualNodes; i++) {
 
-		int virtualNodes = 5;
-
-		for (int i = 1; i <= virtualNodes; i++) {
-			for (RNode node : nodes) {
 				addNode(node, i);
 			}
 
 		}
 
-	}
-
-	public void add(RNode node) {
-		for (int i = 0; i < numberOfReplicas; i++) {
-			circle.put(hashFunction.hash(node.toString() + i), node);
-		}
+		logger.info("Formed consistent hashing ring : " + circle);
 	}
 
 	public void addNode(RNode node, int id) {
-		circle.put(hashFunction.hash(node.toString() + id), node);
+
+		Long hash = hashFunction.hash(node.toString() + id);
+		circle.put(hash, node);
 
 	}
 
@@ -50,7 +49,9 @@ public class ConsistentHash {
 	}
 
 	public List<RNode> get(Object key) {
-		List<RNode> list = new ArrayList<>();
+		//SortedSet<RNode> list = new TreeSet<>();
+		
+		List<RNode> list= new ArrayList<>();
 		System.out.println(circle.size());
 		if (circle.isEmpty()) {
 			return null;
@@ -71,7 +72,7 @@ public class ConsistentHash {
 		}
 
 		int k = numberOfReplicas;
-
+		
 		for (Long h : tailMap.keySet()) {
 			RNode rnode = null;
 			rnode = tailMap.get(h);
@@ -84,11 +85,13 @@ public class ConsistentHash {
 
 			list.add(tailMap.get(h));
 			k--;
-			if (k == 0) {
+			if (0==k) {
 				break;
 			}
+			
 		}
 
+		//return new ArrayList<>(list);
 		return list;
 	}
 

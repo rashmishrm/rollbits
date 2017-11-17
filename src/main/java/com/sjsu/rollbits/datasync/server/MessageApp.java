@@ -20,6 +20,7 @@ import java.io.File;
 import com.sjsu.rollbits.discovery.UdpClient;
 import com.sjsu.rollbits.discovery.UdpServer;
 import com.sjsu.rollbits.raft.RaftContext;
+import com.sjsu.rollbits.yml.Loadyaml;
 
 /**
  * @author gash1
@@ -29,20 +30,21 @@ public class MessageApp {
 
 	/**
 	 * @param args
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-//		if (args.length == 0) {  
-//			System.out.println("usage: server <config file>");
-//			System.exit(1);
-//		}
+		// if (args.length == 0) {
+		// System.out.println("usage: server <config file>");
+		// System.exit(1);
+		// }
+		Loadyaml.loadYaml();
 		Thread t = new Thread(new UdpServer());
 		t.start();
 		Thread.sleep(4 * 1000L);
 		UdpClient.broadcast();
-		//Thread.sleep(15 * 1000L);
-		RaftContext.getInstance();//To Start Raft Engine
-		
+		// Thread.sleep(15 * 1000L);
+		RaftContext.getInstance();// To Start Raft Engine
+
 		File cf = new File("./src/main/resources/routing.conf");
 		try {
 			MessageServer svr = new MessageServer(cf);
@@ -50,7 +52,7 @@ public class MessageApp {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			//System.out.println("server closing");
+			// System.out.println("server closing");
 		}
 	}
 }
