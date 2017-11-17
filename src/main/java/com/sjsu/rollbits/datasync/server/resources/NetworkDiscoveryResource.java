@@ -7,6 +7,7 @@ import com.sjsu.rollbits.discovery.ClusterDirectory;
 import com.sjsu.rollbits.discovery.UdpClient;
 import com.sjsu.rollbits.yml.Loadyaml;
 
+import io.netty.channel.Channel;
 import routing.Pipe;
 import routing.Pipe.NetworkDiscoveryPacket;
 import routing.Pipe.Route;
@@ -23,7 +24,7 @@ public class NetworkDiscoveryResource implements RouteResource {
 	}
 
 	@Override
-	public Object process(Pipe.Route route) {
+	public Object process(Pipe.Route route, Channel returnChannel) {
 
 		System.out.println("Recieved a packet" + route);
 		NetworkDiscoveryPacket request = route.getNetworkDiscoveryPacket();

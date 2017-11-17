@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.sjsu.rollbits.discovery.ClusterDirectory;
 import com.sjsu.rollbits.sharding.hashing.ShardingService;
 
+import io.netty.channel.Channel;
 import routing.Pipe;
 import routing.Pipe.FailoverMessage;
 import routing.Pipe.Route;
@@ -19,7 +20,7 @@ public class FailoverResource implements RouteResource {
 	}
 
 	@Override
-	public Object process(Pipe.Route msg) {
+	public Object process(Pipe.Route msg, Channel returnChannel) {
 		FailoverMessage failoverMessage = msg.getFailoverMessage();
 		ClusterDirectory.handleFailover(failoverMessage.getNodeName());
 		ShardingService.getInstance().reset();

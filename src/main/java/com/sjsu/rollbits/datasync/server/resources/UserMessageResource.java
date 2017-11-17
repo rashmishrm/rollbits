@@ -21,14 +21,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sjsu.rollbits.dao.interfaces.service.MessageService;
-import com.sjsu.rollbits.datasync.client.MessageClient;
+import com.sjsu.rollbits.intercluster.sync.InterClusterServices2;
 import com.sjsu.rollbits.sharding.hashing.Message;
 import com.sjsu.rollbits.sharding.hashing.RNode;
 import com.sjsu.rollbits.sharding.hashing.ShardingService;
-import com.sjsu.rollbits.yml.Loadyaml;
 
+import io.netty.channel.Channel;
 import routing.Pipe;
-import routing.Pipe.Route;
 
 /**
  * processes requests of message passing - demonstration
@@ -52,31 +51,33 @@ public class UserMessageResource implements RouteResource {
 	}
 
 	@Override
-	public Object process(Pipe.Route msg) {
-		boolean isSuccess = false;
-
+	public Object process(Pipe.Route msg, Channel returnChannel) {
+//		boolean isSuccess = false;
+//
 		routing.Pipe.MessagesRequest message = msg.getMessagesRequest();
-
+//
 		List<RNode> nodes = shardingService.getNodes(new Message(message.getId()));
-
+//
 		RNode primaryNode = nodes.get(0);
-		Route.Builder rb = null;
-		if (!primaryNode.getIpAddress().equals(Loadyaml.getProperty("NodeIP"))) {
-			MessageClient msgClient = new MessageClient(primaryNode.getIpAddress(), (int) primaryNode.getPort());
-			if (msgClient.isConnected()) {
-				Route r = msgClient.sendSyncronousMessage(msg.toBuilder());
-				rb = r.toBuilder();
-			}
-
-		} else {
-
-			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = dbService.findAllforuname(message.getId());
-
-			rb = ProtoUtil.createMessageResponseRoute(msg.getId(), messages, message.getId(), true);
-
-		}
-
-		return rb;
+//		Route.Builder rb = null;
+//		if (!primaryNode.getIpAddress().equals(Loadyaml.getProperty("NodeIP"))) {
+//			MessageClient msgClient = new MessageClient(primaryNode.getIpAddress(), (int) primaryNode.getPort());
+//			if (msgClient.isConnected()) {
+//				Route r = msgClient.sendSyncronousMessage(msg.toBuilder());
+//				rb = r.toBuilder();
+//			}
+//
+//		} else {
+//
+//			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = dbService.findAllforuname(message.getId());
+//
+//			rb = ProtoUtil.createMessageResponseRoute(msg.getId(), messages, message.getId(), true);
+//
+//		}
+//
+//		return rb;
+		InterClusterServices2 ics = new InterClusterServices2(primaryNode.getNodeId(), msg.getId(), returnChannel, message.getId());
+		return null;
 	}
 
 }

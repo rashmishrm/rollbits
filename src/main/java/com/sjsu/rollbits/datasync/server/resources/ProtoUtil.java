@@ -82,6 +82,34 @@ public class ProtoUtil {
 		return rb;
 
 	}
+	
+	public static Route.Builder createMessageResponseRoute2(long id,
+			List<Message> messages, String uname, boolean user) {
+
+		Route.Builder rb = Route.newBuilder();
+		rb.setId(id);
+		rb.setPath(Route.Path.MESSAGES_RESPONSE);
+
+		Pipe.MessagesResponse.Builder messageBuilder = Pipe.MessagesResponse.newBuilder();
+
+		List<Pipe.Message> list = new ArrayList<>();
+
+		
+
+		messageBuilder.addAllMessages(messages);
+
+		messageBuilder.setId(uname);
+		messageBuilder.setType(user ? MessagesResponse.Type.USER : MessagesResponse.Type.GROUP);
+
+		rb.setMessagesResponse(messageBuilder);
+
+		Response.Builder resp = createResponseBuilder(true, "", RollbitsConstants.SUCCESS);
+
+		rb.setResponse(resp);
+
+		return rb;
+
+	}
 
 	public static Route.Builder createMessageRequest(long id, String uname, boolean user) {
 

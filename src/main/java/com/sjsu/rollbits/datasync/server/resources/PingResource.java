@@ -17,6 +17,8 @@ package com.sjsu.rollbits.datasync.server.resources;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.netty.channel.Channel;
 import routing.Pipe;
 import routing.Pipe.Route;
 import routing.Pipe.Route.Path;
@@ -36,7 +38,7 @@ public class PingResource implements RouteResource {
 	}
 
 	@Override
-	public Object process(Pipe.Route body) {
+	public Object process(Pipe.Route body, Channel returnChannel) {
 
 		return null;
 	}

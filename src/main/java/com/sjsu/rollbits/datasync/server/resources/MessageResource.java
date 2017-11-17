@@ -29,6 +29,7 @@ import com.sjsu.rollbits.sharding.hashing.Message;
 import com.sjsu.rollbits.sharding.hashing.RNode;
 import com.sjsu.rollbits.sharding.hashing.ShardingService;
 
+import io.netty.channel.Channel;
 import routing.Pipe;
 import routing.Pipe.Header;
 import routing.Pipe.Route;
@@ -56,7 +57,7 @@ public class MessageResource implements RouteResource {
 	}
 
 	@Override
-	public Object process(Pipe.Route msg) {
+	public Object process(Pipe.Route msg, Channel returnChannel) {
 		boolean isSuccess = false;
 		routing.Pipe.Message message = msg.getMessage();
 

@@ -15,6 +15,7 @@
  */
 package com.sjsu.rollbits.datasync.server.resources;
 
+import io.netty.channel.Channel;
 import routing.Pipe;
 
 /**
@@ -35,10 +36,11 @@ public interface RouteResource {
 	/**
 	 * processing of a request. Requests are delegated to this method by the
 	 * server. Responses are collected as a String and returned to the caller
-	 * 
+	 * @param returnChannel TODO
 	 * @param body
 	 *            the string representation of the request
+	 * 
 	 * @return The string representation of the response
 	 */
-	Object process(Pipe.Route msg);
+	Object process(Pipe.Route msg, Channel returnChannel);
 }

@@ -12,12 +12,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import com.sjsu.rollbits.dao.interfaces.service.MessageService;
 import com.sjsu.rollbits.datasync.client.CommListener;
 import com.sjsu.rollbits.datasync.client.MessageClient;
+import com.sjsu.rollbits.datasync.server.resources.ProtoUtil;
 import com.sjsu.rollbits.discovery.ClusterDirectory;
 import com.sjsu.rollbits.discovery.Node;
 import com.sjsu.rollbits.yml.Loadyaml;
 
+import io.netty.channel.Channel;
 import routing.Pipe.Message;
 import routing.Pipe.Route;
 
@@ -30,6 +33,19 @@ public class InterClusterServices2 implements ResultCollectable<List<Message>> {
 	Random rand = new Random();
 	int noOfResultExpected = 0;
 	List<Message> resultList = new ArrayList<>();
+	private String primaryHostname;
+	private boolean needToSendPacketToPrimary;
+	private long routeId;
+	private MessageService dbService = null;
+	private Channel replyChannel;
+	private String userName;
+
+	/**
+	 * @return the resultList
+	 */
+	public List<Message> getResultList() {
+		return resultList;
+	}
 
 	class FetchMessageTask implements  CommListener {
 
@@ -65,15 +81,26 @@ public class InterClusterServices2 implements ResultCollectable<List<Message>> {
 
 	}
 
-	public InterClusterServices2(int i) {
-		noOfResultExpected = i;
+	public InterClusterServices2(String primaryHostname, long routeId, Channel replyChannel, String userName) {
+		noOfResultExpected = ClusterDirectory.getGroupMap().size() -1;
+		this.primaryHostname = primaryHostname;
+		this.routeId = routeId;
+		this.dbService = new MessageService();
+		this.replyChannel = replyChannel;
+		this.userName = userName;
+		if(Loadyaml.getProperty("ClusterName").equals(primaryHostname)){
+			needToSendPacketToPrimary = false;
+		} else {
+			needToSendPacketToPrimary = true;
+			noOfResultExpected++;
+		}
 	}
 	
 	public void recievedAResult() {
 		--noOfResultExpected;
 	}
 
-	public void fetchAllMessages(String userName) {
+	public void fetchAllMessages() {
 		Map<String, Map<String, Node>> groupMap = ClusterDirectory.getGroupMap();
 		for (Map.Entry<String, Map<String, Node>> entry : groupMap.entrySet()) {
 			if(Loadyaml.getProperty("ClusterName").equals(entry.getKey())){
@@ -87,30 +114,33 @@ public class InterClusterServices2 implements ResultCollectable<List<Message>> {
 					userName, this);
 			task.doTask();
 		}
+		if(needToSendPacketToPrimary){
+			FetchMessageTask task = new FetchMessageTask(ClusterDirectory.getNodeMap().get(primaryHostname).getNodeIp(), ClusterDirectory.getNodeMap().get(primaryHostname).getPort(),
+					userName, this);
+			task.doTask();
+		} else {
+			
+			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = dbService.findAllforuname(userName);
+
+			Route.Builder rb = ProtoUtil.createMessageResponseRoute(routeId, messages, userName, true);
+			collectResult(rb.getMessagesResponse().getMessagesList());
+		}
 	}
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		InterClusterServices2 icservice = new InterClusterServices2(ClusterDirectory.getGroupMap().size() -1);
-		icservice.fetchAllMessages("nishant");
-	}
 
 	@Override
-	public void collectResult(List<Message> t) {
+	public synchronized void collectResult(List<Message> t) {
 		resultList.addAll(t);
 		noOfResultExpected--;
 		if(noOfResultExpected==0){
-			fetchResult();
+			publishResult();
 		}
 	}
 
 	@Override
-	public List<Message> fetchResult() {
+	public void publishResult() {
 		System.out.println(resultList);
-		return resultList;
+		replyChannel.writeAndFlush(ProtoUtil.createMessageResponseRoute2(routeId, resultList, userName, true));
 	}
 
 

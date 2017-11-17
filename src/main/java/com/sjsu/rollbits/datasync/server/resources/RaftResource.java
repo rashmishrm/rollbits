@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.sjsu.rollbits.raft.RaftContext;
 import com.sjsu.rollbits.raft.RaftState;
 
+import io.netty.channel.Channel;
 import routing.Pipe;
 import routing.Pipe.RaftMessage;
 import routing.Pipe.Route;
@@ -20,7 +21,7 @@ public class RaftResource implements RouteResource {
 	}
 
 	@Override
-	public Object process(Pipe.Route msg) {
+	public Object process(Pipe.Route msg, Channel returnChannel) {
 
 		RaftMessage raftMessage = msg.getRaftMessage();
 		RaftMsgType raftMsgType = raftMessage.getType();

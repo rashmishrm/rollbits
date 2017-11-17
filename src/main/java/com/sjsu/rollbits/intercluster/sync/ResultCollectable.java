@@ -11,6 +11,6 @@ public interface ResultCollectable<T> {
 	
 	public void collectResult(T t);
 	
-	public T fetchResult();
+	public void publishResult();
 
 }
