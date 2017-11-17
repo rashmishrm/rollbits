@@ -2,7 +2,7 @@ package com.sjsu.rollbits.client.serverdiscovery;
 
 import routing.Pipe;
 
-public class Node {
+public class ExternalClientNode {
 
 	private String nodeId;
 	private String nodeIp;
@@ -10,7 +10,7 @@ public class Node {
 	private String group;
 	private Pipe.NetworkDiscoveryPacket.Sender typeNode;
 
-	public Node(String id, String ip, String port, String group, Pipe.NetworkDiscoveryPacket.Sender Sender) {
+	public ExternalClientNode(String id, String ip, String port, String group, Pipe.NetworkDiscoveryPacket.Sender Sender) {
 		this.nodeId = id;
 		this.nodeIp = ip;
 		this.group = group;

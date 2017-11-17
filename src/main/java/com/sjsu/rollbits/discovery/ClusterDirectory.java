@@ -9,9 +9,6 @@ import routing.Pipe.NetworkDiscoveryPacket;
 
 public class ClusterDirectory {
 
-
-	
-	
 	public static Map<String, Map<String, Node>> clusterMap = new HashMap<String, Map<String, Node>>();
 
 	public static synchronized void addToDirectory(NetworkDiscoveryPacket request) {
@@ -27,7 +24,6 @@ public class ClusterDirectory {
 			clusterMap.put(request.getGroupTag(), nMap);
 		}
 		
-		//conf.loadyaml();
 		printDirectory();
 	}
 
@@ -55,5 +51,14 @@ public class ClusterDirectory {
 	public static void handleFailover(String nodeName) {
 		ClusterDirectory.getNodeMap().remove(nodeName);
 		
+	}
+
+	public static void removeNode(NetworkDiscoveryPacket networkDiscoveryPacket) {
+		synchronized (clusterMap) {
+			clusterMap.get(networkDiscoveryPacket.getGroupTag()).remove(networkDiscoveryPacket.getNodeId());
+			if (clusterMap.get(networkDiscoveryPacket.getGroupTag()).size() == 0) {
+				clusterMap.remove(networkDiscoveryPacket.getGroupTag());
+			}
+		}
 	}
 }

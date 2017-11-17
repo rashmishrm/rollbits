@@ -10150,6 +10150,10 @@ public final class Pipe {
        * <code>RESPONSE = 1;</code>
        */
       RESPONSE(1),
+      /**
+       * <code>REMOVE_NODE = 2;</code>
+       */
+      REMOVE_NODE(2),
       ;
 
       /**
@@ -10160,6 +10164,10 @@ public final class Pipe {
        * <code>RESPONSE = 1;</code>
        */
       public static final int RESPONSE_VALUE = 1;
+      /**
+       * <code>REMOVE_NODE = 2;</code>
+       */
+      public static final int REMOVE_NODE_VALUE = 2;
 
 
       public final int getNumber() {
@@ -10178,6 +10186,7 @@ public final class Pipe {
         switch (value) {
           case 0: return REQUEST;
           case 1: return RESPONSE;
+          case 2: return REMOVE_NODE;
           default: return null;
         }
       }
@@ -14287,7 +14296,7 @@ public final class Pipe {
       "pe\022\010\n\004USER\020\000\022\t\n\005GROUP\020\001\"}\n\020MessagesRespo" +
       "nse\022$\n\004type\030\001 \002(\0162\026.MessagesResponse.Typ" +
       "e\022\n\n\002id\030\002 \002(\t\022\032\n\010messages\030\003 \003(\0132\010.Messag" +
-      "e\"\033\n\004Type\022\010\n\004USER\020\000\022\t\n\005GROUP\020\001\"\331\002\n\026Netwo" +
+      "e\"\033\n\004Type\022\010\n\004USER\020\000\022\t\n\005GROUP\020\001\"\352\002\n\026Netwo" +
       "rkDiscoveryPacket\022*\n\004mode\030\001 \002(\0162\034.Networ" +
       "kDiscoveryPacket.Mode\022D\n\006sender\030\002 \002(\0162\036." +
       "NetworkDiscoveryPacket.Sender:\024INTERNAL_",
@@ -14295,20 +14304,20 @@ public final class Pipe {
       "\004 \001(\t\022\023\n\013nodeAddress\030\005 \002(\t\022\020\n\010nodePort\030\006" +
       " \002(\003\022\016\n\006secret\030\007 \002(\t\"Q\n\006Sender\022\030\n\024EXTERN" +
       "AL_SERVER_NODE\020\000\022\030\n\024INTERNAL_SERVER_NODE" +
-      "\020\001\022\023\n\017END_USER_CLIENT\020\002\"!\n\004Mode\022\013\n\007REQUE" +
-      "ST\020\000\022\014\n\010RESPONSE\020\001\"Y\n\006Header\022\032\n\004type\030\001 \002" +
-      "(\0162\014.Header.Type\"3\n\004Type\022\014\n\010INTERNAL\020\000\022\021" +
-      "\n\rINTER_CLUSTER\020\001\022\n\n\006CLIENT\020\002\"x\n\010RaftNod" +
-      "e\022\016\n\006nodeid\030\001 \002(\t\022&\n\traftState\030\002 \002(\0162\023.R" +
-      "aftNode.RaftState\"4\n\tRaftState\022\r\n\tCandid",
-      "ate\020\000\022\n\n\006Leader\020\001\022\014\n\010Follower\020\002\"#\n\017Failo" +
-      "verMessage\022\020\n\010nodeName\030\001 \002(\t\"\311\001\n\013RaftMes" +
-      "sage\022&\n\004type\030\001 \002(\0162\030.RaftMessage.RaftMsg" +
-      "Type\022\024\n\014senderNodeid\030\002 \002(\t\022\033\n\023leaderSele" +
-      "ctionTime\030\003 \001(\003\"_\n\013RaftMsgType\022\023\n\017Leader" +
-      "HeartBeat\020\000\022\017\n\013RequestVote\020\001\022\020\n\014VoteResp" +
-      "onse\020\002\022\030\n\024LeaderElectionResult\020\003B\013\n\007rout" +
-      "ingH\001"
+      "\020\001\022\023\n\017END_USER_CLIENT\020\002\"2\n\004Mode\022\013\n\007REQUE" +
+      "ST\020\000\022\014\n\010RESPONSE\020\001\022\017\n\013REMOVE_NODE\020\002\"Y\n\006H" +
+      "eader\022\032\n\004type\030\001 \002(\0162\014.Header.Type\"3\n\004Typ" +
+      "e\022\014\n\010INTERNAL\020\000\022\021\n\rINTER_CLUSTER\020\001\022\n\n\006CL" +
+      "IENT\020\002\"x\n\010RaftNode\022\016\n\006nodeid\030\001 \002(\t\022&\n\tra" +
+      "ftState\030\002 \002(\0162\023.RaftNode.RaftState\"4\n\tRa",
+      "ftState\022\r\n\tCandidate\020\000\022\n\n\006Leader\020\001\022\014\n\010Fo" +
+      "llower\020\002\"#\n\017FailoverMessage\022\020\n\010nodeName\030" +
+      "\001 \002(\t\"\311\001\n\013RaftMessage\022&\n\004type\030\001 \002(\0162\030.Ra" +
+      "ftMessage.RaftMsgType\022\024\n\014senderNodeid\030\002 " +
+      "\002(\t\022\033\n\023leaderSelectionTime\030\003 \001(\003\"_\n\013Raft" +
+      "MsgType\022\023\n\017LeaderHeartBeat\020\000\022\017\n\013RequestV" +
+      "ote\020\001\022\020\n\014VoteResponse\020\002\022\030\n\024LeaderElectio" +
+      "nResult\020\003B\013\n\007routingH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

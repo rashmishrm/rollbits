@@ -9,7 +9,7 @@ import java.util.Scanner;
 import routing.Pipe.Message;
 import routing.Pipe.Route;
 
-import com.sjsu.rollbits.client.serverdiscovery.ClusterDirectory;
+import com.sjsu.rollbits.client.serverdiscovery.ExternalClientClusterDirectory;
 import com.sjsu.rollbits.datasync.client.CommListener;
 import com.sjsu.rollbits.datasync.client.MessageClient;
 
@@ -35,7 +35,7 @@ public class CheckMyMessagesMenu implements Menu, CommListener {
 
 		try {
 			//Thread.sleep(5 * 1000L);
-			MessageClient mc = ClusterDirectory.getMessageClient(this);
+			MessageClient mc = ExternalClientClusterDirectory.getMessageClient(this);
 
 			 mc.fetchMessages(name);
 

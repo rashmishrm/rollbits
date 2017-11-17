@@ -10,21 +10,21 @@ import com.sjsu.rollbits.datasync.client.MessageClient;
 
 import routing.Pipe.NetworkDiscoveryPacket;
 
-public class ClusterDirectory {
+public class ExternalClientClusterDirectory {
 
-	public static Map<String, Map<String, Node>> clusterMap = new HashMap<String, Map<String, Node>>();
+	public static Map<String, Map<String, ExternalClientNode>> clusterMap = new HashMap<String, Map<String, ExternalClientNode>>();
 
 	public static String selectedClusterGroup = null;
 
 	public static synchronized void addToDirectory(NetworkDiscoveryPacket request) {
-		Node node = new Node(request.getNodeId(), request.getNodeAddress(), request.getNodePort() + "",
+		ExternalClientNode node = new ExternalClientNode(request.getNodeId(), request.getNodeAddress(), request.getNodePort() + "",
 				request.getGroupTag(), request.getSender());
 
 		if (clusterMap.containsKey(request.getGroupTag())) {
-			Map<String, Node> nMap = clusterMap.get(request.getGroupTag());
+			Map<String, ExternalClientNode> nMap = clusterMap.get(request.getGroupTag());
 			nMap.put(request.getNodeId(), node);
 		} else {
-			Map<String, Node> nMap = new HashMap<>();
+			Map<String, ExternalClientNode> nMap = new HashMap<>();
 			nMap.put(request.getNodeId(), node);
 			clusterMap.put(request.getGroupTag(), nMap);
 		}
@@ -50,7 +50,7 @@ public class ClusterDirectory {
 	// return clusterMap.get(MyConstants.GROUP_NAME);
 	// }
 
-	public static Map<String, Map<String, Node>> getGroupMap() {
+	public static Map<String, Map<String, ExternalClientNode>> getGroupMap() {
 		return clusterMap;
 	}
 
@@ -58,13 +58,13 @@ public class ClusterDirectory {
 		selectedClusterGroup = groupName;
 	}
 
-	private static Node getSelectedClusterNode() {
-		Map<String, Node> nodeMap = clusterMap.get(selectedClusterGroup);
+	private static ExternalClientNode getSelectedClusterNode() {
+		Map<String, ExternalClientNode> nodeMap = clusterMap.get(selectedClusterGroup);
 		return new ArrayList<>(nodeMap.values()).get(new Random().nextInt(nodeMap.size()));
 	}
 
 	public static MessageClient getMessageClient(CommListener listener) {
-		Node selectedNode = getSelectedClusterNode();
+		ExternalClientNode selectedNode = getSelectedClusterNode();
 		MessageClient mc = new MessageClient(selectedNode.getNodeIp(), selectedNode.getPort());
 		mc.addListener(listener);
 		return mc;

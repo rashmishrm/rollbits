@@ -1,7 +1,5 @@
 package com.sjsu.rollbits.discovery;
 
-import java.util.Random;
-
 import com.sjsu.rollbits.yml.Loadyaml;
 
 import io.netty.channel.ChannelHandlerContext;
@@ -13,7 +11,6 @@ import routing.Pipe.Route;
 
 public class UdpServerHandler extends SimpleChannelInboundHandler<Route> {
 
-	private static final Random random = new Random();
 	// private static Map<String, Node> mp = Collections.emptyMap();
 	// private static Map<String, Map<String, Node>> mpMaps =
 	// Collections.emptyMap();
@@ -30,6 +27,10 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<Route> {
 		System.out.println("Recieved a packet" + route);
 		NetworkDiscoveryPacket request = route.getNetworkDiscoveryPacket();
 		System.out.println("Recieved a packet from" + request.getNodeAddress());
+		if(request.getMode() == NetworkDiscoveryPacket.Mode.REMOVE_NODE){
+			ClusterDirectory.removeNode(route.getNetworkDiscoveryPacket());
+			return;
+		}
 		// Dont do anything when youare yourself sending the broadcast
 		if (Loadyaml.getProperty("NodeIP").equals(request.getNodeAddress())) {
 			return;

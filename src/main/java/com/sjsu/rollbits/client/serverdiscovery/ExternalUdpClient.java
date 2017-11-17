@@ -19,7 +19,7 @@ import routing.Pipe;
 import routing.Pipe.NetworkDiscoveryPacket;
 import routing.Pipe.Route;
 
-public final class UdpClient {
+public final class ExternalUdpClient {
 
 	/*
 	 * static final int PORT = Integer.parseInt(System.getProperty("port",
@@ -65,7 +65,7 @@ public final class UdpClient {
 						@Override
 						public void initChannel(DatagramChannel ch) throws Exception {
 							ChannelPipeline pipeline = ch.pipeline();
-							pipeline.addLast(new UdpClientHandler());
+							pipeline.addLast(new ExternalUdpClientHandler());
 						}
 					});
 
@@ -92,6 +92,6 @@ public final class UdpClient {
 	}
 	
 	public static void main(String []args) throws Exception{
-		UdpClient.broadcast();
+		ExternalUdpClient.broadcast();
 	}
 }

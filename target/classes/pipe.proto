@@ -143,6 +143,7 @@ message NetworkDiscoveryPacket {
     enum Mode {
         REQUEST = 0;
         RESPONSE = 1;
+        REMOVE_NODE = 2;
     }
 
     required Mode mode = 1;

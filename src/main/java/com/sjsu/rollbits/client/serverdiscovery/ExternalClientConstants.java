@@ -7,7 +7,7 @@ package com.sjsu.rollbits.client.serverdiscovery;
  * @author akansha
  *
  */
-public class ClientConstants {
+public class ExternalClientConstants {
 	
 	public static final String GROUP_NAME="ExternalClient";
 	public static final String NODE_NAME="client";

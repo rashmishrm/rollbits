@@ -9,10 +9,10 @@ import io.netty.handler.codec.protobuf.ProtobufDecoder;
 
 import java.util.List;
 
-public class MyDatagramPacketDecoder extends DatagramPacketDecoder {
+public class ExternalClientDatagramPacketDecoder extends DatagramPacketDecoder {
 
 
-    MyDatagramPacketDecoder(ProtobufDecoder m){
+    ExternalClientDatagramPacketDecoder(ProtobufDecoder m){
         super(m);
     }
 

@@ -4,7 +4,7 @@
 package com.sjsu.rollbits.client;
 
 import java.util.Scanner;
-import com.sjsu.rollbits.client.serverdiscovery.ClusterDirectory;
+import com.sjsu.rollbits.client.serverdiscovery.ExternalClientClusterDirectory;
 import com.sjsu.rollbits.datasync.client.CommListener;
 import com.sjsu.rollbits.datasync.client.MessageClient;
 
@@ -31,7 +31,7 @@ public class SendMessageToUserMenu implements Menu, CommListener {
 		System.out.println("Enter Message:");
 		String msg = sc.next();
 		System.out.println("Sending Message...");
-		MessageClient mc = ClusterDirectory.getMessageClient(this);
+		MessageClient mc = ExternalClientClusterDirectory.getMessageClient(this);
 		mc.sendMessage(fromUnm, toUnm, msg, "CLIENT", false);
 	}
 

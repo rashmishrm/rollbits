@@ -11,7 +11,7 @@ import routing.Pipe.NetworkDiscoveryPacket.Mode;
 import routing.Pipe.NetworkDiscoveryPacket.Sender;
 import routing.Pipe.Route;
 
-public class UdpServerHandler extends SimpleChannelInboundHandler<Route> {
+public class ExternalUdpServerHandler extends SimpleChannelInboundHandler<Route> {
 
 	private static final Random random = new Random();
 	// private static Map<String, Node> mp = Collections.emptyMap();
@@ -36,7 +36,7 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<Route> {
 		}
 
 		if (request.getSender().equals(Sender.EXTERNAL_SERVER_NODE)) {
-			ClusterDirectory.addToDirectory(request);
+			ExternalClientClusterDirectory.addToDirectory(request);
 		}
 
 //		if (request.getMode() == NetworkDiscoveryPacket.Mode.REQUEST) {

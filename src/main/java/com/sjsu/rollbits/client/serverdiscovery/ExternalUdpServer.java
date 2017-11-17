@@ -19,7 +19,7 @@ import java.util.List;
 
 import com.sjsu.rollbits.yml.Loadyaml;
 
-public final class UdpServer implements Runnable {
+public final class ExternalUdpServer implements Runnable {
 
     
    @Override
@@ -37,7 +37,7 @@ public final class UdpServer implements Runnable {
                             ChannelPipeline pipeline = ch.pipeline();
                              pipeline.addLast("protobufDecoder", new DatagramPacketDecoder(new ProtobufDecoder(Route.getDefaultInstance())));
                              pipeline.addLast("protobufEncoder", new ProtobufEncoder());
-                             pipeline.addLast("handler", new UdpServerHandler());
+                             pipeline.addLast("handler", new ExternalUdpServerHandler());
 
                         }});
 
@@ -51,7 +51,7 @@ public final class UdpServer implements Runnable {
     }
    
    public static void main(String[]args){
-	   Thread t = new Thread(new UdpServer());
+	   Thread t = new Thread(new ExternalUdpServer());
 		t.start();
    }
 }
