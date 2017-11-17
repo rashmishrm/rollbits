@@ -29,11 +29,12 @@ message Route {
 	    NetworkDiscoveryPacket networkDiscoveryPacket = 3;
 	    User user = 4;
 	    Message message = 5;
+	    Group group = 6;
+    		MessagesRequest messagesRequest = 7;
+   		MessagesResponse messagesResponse = 8;
+    		Header header = 9;
     }
-    optional Group group = 6;
-    optional MessagesRequest messagesRequest = 7;
-    optional MessagesResponse messagesResponse = 8;
-    optional Header header = 9;
+
  	optional Response response=10;
     
     
