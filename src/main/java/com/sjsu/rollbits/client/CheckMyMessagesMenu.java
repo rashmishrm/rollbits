@@ -37,7 +37,7 @@ public class CheckMyMessagesMenu implements Menu, CommListener {
 			//Thread.sleep(5 * 1000L);
 			MessageClient mc = ClusterDirectory.getMessageClient(this);
 
-			 mc.fetchMessages(name, true);
+			 mc.fetchMessages(name);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

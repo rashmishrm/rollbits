@@ -84,7 +84,8 @@ class FetchMessageTask implements Callable<List<Message>>, CommListener {
 
 		@Override
 		public List<Message> call() throws Exception {
-			return mc.fetchMessages(username,true);
+			//return mc.fetchMessages(username);
+			return null;
 		}
 
 
