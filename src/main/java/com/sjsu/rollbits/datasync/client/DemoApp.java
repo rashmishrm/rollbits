@@ -48,7 +48,7 @@ public class DemoApp implements CommListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String host = "10.0.0.18";
+		String host = "10.0.0.14";
 		int port = 4567;
 		System.out.println(Pipe.Route.Path.USER);
 		long stime = System.currentTimeMillis();
@@ -57,13 +57,17 @@ public class DemoApp implements CommListener {
 			MessageClient mc = new MessageClient(host, port);
 			if (mc.isConnected()) {
 
-				// mc.addUser("Rashmi", "Rashmi", RollbitsConstants.CLIENT, false);
+				// mc.addUser("Rashmi", "Rashmi", RollbitsConstants.CLIENT,
+				// false);
 				System.out.println("Sleeping before connecting");
-				Thread.sleep(10000);
+				// Thread.sleep(10000);
 				mc.sendMessage("rashmishrm", "nishantrathi", "tsdhvsdkcsdkvnvnksnvksndvskvs", "CLIENT", false);
+				//mc.fetchMessages("nishantrathi");
+
 			}
 
-			// Route.Builder msg = ProtoUtil.createMessageRequest(1, "nishant",true);
+			// Route.Builder msg = ProtoUtil.createMessageRequest(1,
+			// "nishant",true);
 
 			// Route r = mc.sendSyncronousMessage(msg);
 

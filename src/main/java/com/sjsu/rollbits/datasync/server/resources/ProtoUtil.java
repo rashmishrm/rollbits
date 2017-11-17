@@ -111,7 +111,7 @@ public class ProtoUtil {
 
 	}
 
-	public static Route.Builder createMessageRequest(long id, String uname, boolean user) {
+	public static Route.Builder createMessageRequest(long id, String uname, boolean user,String type) {
 
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(id);
@@ -123,6 +123,20 @@ public class ProtoUtil {
 		if (user) {
 			ub.setType(Type.USER);
 		}
+		
+		Pipe.Header.Builder header = Pipe.Header.newBuilder();
+
+		if (type.equals(Pipe.Header.Type.INTERNAL.toString())) {
+			header.setType(Pipe.Header.Type.INTERNAL);
+
+		} else if (type.equals(Pipe.Header.Type.INTER_CLUSTER.toString())) {
+			header.setType(Pipe.Header.Type.INTER_CLUSTER);
+
+		} else if (type.equals(Pipe.Header.Type.CLIENT.toString())) {
+			header.setType(Pipe.Header.Type.CLIENT);
+
+		}
+		rb.setHeader(header);
 
 		rb.setMessagesRequest(ub);
 

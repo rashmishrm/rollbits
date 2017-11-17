@@ -12,6 +12,7 @@ import routing.Pipe.Route;
 import com.sjsu.rollbits.client.serverdiscovery.ExternalClientClusterDirectory;
 import com.sjsu.rollbits.datasync.client.CommListener;
 import com.sjsu.rollbits.datasync.client.MessageClient;
+import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 
 /**
  * @author nishantrathi
@@ -34,10 +35,10 @@ public class CheckMyMessagesMenu implements Menu, CommListener {
 		System.out.println("Fetching your messages");
 
 		try {
-			//Thread.sleep(5 * 1000L);
+			// Thread.sleep(5 * 1000L);
 			MessageClient mc = ExternalClientClusterDirectory.getMessageClient(this);
 
-			 mc.fetchMessages(name);
+			mc.fetchMessages(name, RollbitsConstants.CLIENT);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -54,7 +55,7 @@ public class CheckMyMessagesMenu implements Menu, CommListener {
 
 	@Override
 	public void onMessage(Route msg) {
-		List<Message> messages=null;
+		List<Message> messages = null;
 		if (messages != null) {
 
 			for (Message message : messages) {

@@ -140,7 +140,7 @@ public class MessageClient {
 		return added;
 
 	}
-	
+
 	public boolean addUsertoGroup(int guid, String gname, String uname, String type, boolean async) {
 		Route.Builder rb = ProtoUtil.createAddUsertoGroupRequest(guid, gname, uname, type);
 		CommConnection conn = CommConnection.getInstance();
@@ -182,8 +182,8 @@ public class MessageClient {
 	}
 
 	/**
-	 * Since the service/server is asychronous we need a unique ID to associate our
-	 * requests with the server's reply
+	 * Since the service/server is asychronous we need a unique ID to associate
+	 * our requests with the server's reply
 	 * 
 	 * @return
 	 */
@@ -202,8 +202,8 @@ public class MessageClient {
 		return false;
 	}
 
-	public void fetchMessages(String username) {
-		Route.Builder msg = ProtoUtil.createMessageRequest(nextId(), username, true);
+	public void fetchMessages(String username, String type) {
+		Route.Builder msg = ProtoUtil.createMessageRequest(nextId(), username, true, type);
 		CommConnection.getInstance().write(msg.build());
 
 	}

@@ -28,6 +28,8 @@ import com.sjsu.rollbits.sharding.hashing.ShardingService;
 
 import io.netty.channel.Channel;
 import routing.Pipe;
+import routing.Pipe.Header;
+import routing.Pipe.Route;
 
 /**
  * processes requests of message passing - demonstration
@@ -52,31 +54,36 @@ public class UserMessageResource implements RouteResource {
 
 	@Override
 	public Object process(Pipe.Route msg, Channel returnChannel) {
-//		boolean isSuccess = false;
-//
+		// boolean isSuccess = false;
+		//
 		routing.Pipe.MessagesRequest message = msg.getMessagesRequest();
-//
+		//
 		List<RNode> nodes = shardingService.getNodes(new Message(message.getId()));
-//
+		//
+		Header header = msg.getHeader();
+
 		RNode primaryNode = nodes.get(0);
-//		Route.Builder rb = null;
-//		if (!primaryNode.getIpAddress().equals(Loadyaml.getProperty("NodeIP"))) {
-//			MessageClient msgClient = new MessageClient(primaryNode.getIpAddress(), (int) primaryNode.getPort());
-//			if (msgClient.isConnected()) {
-//				Route r = msgClient.sendSyncronousMessage(msg.toBuilder());
-//				rb = r.toBuilder();
-//			}
-//
-//		} else {
-//
-//			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = dbService.findAllforuname(message.getId());
-//
-//			rb = ProtoUtil.createMessageResponseRoute(msg.getId(), messages, message.getId(), true);
-//
-//		}
-//
-//		return rb;
-		InterClusterServices2 ics = new InterClusterServices2(primaryNode.getNodeId(), msg.getId(), returnChannel, message.getId());
+		if (header != null && header.getType() != null && header.getType().equals(Header.Type.INTERNAL)) {
+
+			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = dbService.findAllforuname(message.getId());
+
+			Route.Builder rb = ProtoUtil.createMessageResponseRoute(msg.getId(), messages, message.getId(), true);
+
+			return rb;
+		} else if (header != null && header.getType() != null && header.getType().equals(Header.Type.INTER_CLUSTER)) {
+
+			InterClusterServices2 ics = new InterClusterServices2(primaryNode.getNodeId(), msg.getId(), returnChannel,
+					message.getId(), true);
+			ics.fetchAllMessages();
+
+		} else {
+
+			InterClusterServices2 ics = new InterClusterServices2(primaryNode.getNodeId(), msg.getId(), returnChannel,
+					message.getId(), false);
+			ics.fetchAllMessages();
+
+		}
+
 		return null;
 	}
 

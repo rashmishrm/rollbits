@@ -29,11 +29,12 @@ message Route {
 	    NetworkDiscoveryPacket networkDiscoveryPacket = 3;
 	    User user = 4;
 	    Message message = 5;
+	    Group group = 6;
+    		MessagesRequest messagesRequest = 7;
+   		MessagesResponse messagesResponse = 8;
+    		Header header = 9;
     }
-    optional Group group = 6;
-    optional MessagesRequest messagesRequest = 7;
-    optional MessagesResponse messagesResponse = 8;
-    optional Header header = 9;
+
  	optional Response response=10;
     
     
@@ -75,11 +76,14 @@ message Group {
     enum ActionType {
         CREATE = 0;
         DELETE = 1;
+        ADDUSER = 2;
     }
     required string gname = 1;
     required int64 gid = 2;
     required ActionType action = 3;
+    optional string username = 4;
 }
+
 
 message Message {
 
@@ -128,7 +132,7 @@ message MessagesResponse {
     }
 
     required Type type = 1;
-    required string id = 2; //would be groupId if the type is GROUP or else userId if the type is USER
+    optional string id = 2; //would be groupId if the type is GROUP or else userId if the type is USER
     repeated Message messages = 3;
 }
 
