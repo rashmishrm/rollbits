@@ -129,7 +129,7 @@ message MessagesResponse {
     }
 
     required Type type = 1;
-    required string id = 2; //would be groupId if the type is GROUP or else userId if the type is USER
+    optional string id = 2; //would be groupId if the type is GROUP or else userId if the type is USER
     repeated Message messages = 3;
 }
 
