@@ -3,6 +3,7 @@ package com.sjsu.rollbits.discovery;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 import com.sjsu.rollbits.yml.Loadyaml;
 
 import routing.Pipe.NetworkDiscoveryPacket;
@@ -41,7 +42,7 @@ public class ClusterDirectory {
 	
 	public static Map<String, Node> getNodeMap(){
 		
-		return clusterMap.get(Loadyaml.getProperty("ClusterName"));
+		return clusterMap.get(Loadyaml.getProperty(RollbitsConstants.CLUSTER_NAME));
 	}
 	
 	public static Map<String, Map<String, Node>> getGroupMap(){

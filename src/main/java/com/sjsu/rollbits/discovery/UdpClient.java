@@ -1,5 +1,6 @@
 package com.sjsu.rollbits.discovery;
 
+import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 import com.sjsu.rollbits.yml.Loadyaml;
 
 import io.netty.bootstrap.Bootstrap;
@@ -33,14 +34,14 @@ public final class UdpClient {
 		
 		NetworkDiscoveryPacket.Builder builder = NetworkDiscoveryPacket.newBuilder();
 		
-		builder.setGroupTag(Loadyaml.getProperty("ClusterName"));
+		builder.setGroupTag(Loadyaml.getProperty(RollbitsConstants.CLUSTER_NAME));
 		// builder.setSender(NetworkDiscoveryPacket.Sender.END_USER_CLIENT);
 		builder.setSender(NetworkDiscoveryPacket.Sender.EXTERNAL_SERVER_NODE);
 		builder.setMode(NetworkDiscoveryPacket.Mode.REQUEST);
-		builder.setNodeId(Loadyaml.getProperty("NodeName"));
-		builder.setNodeAddress(Loadyaml.getProperty("NodeIP"));
-		builder.setNodePort(Integer.parseInt(Loadyaml.getProperty("NodePort")));
-		builder.setSecret(Loadyaml.getProperty("Secret"));
+		builder.setNodeId(Loadyaml.getProperty(RollbitsConstants.NODE_NAME));
+		builder.setNodeAddress(Loadyaml.getProperty(RollbitsConstants.NODE_IP));
+		builder.setNodePort(Integer.parseInt(Loadyaml.getProperty(RollbitsConstants.NODE_PORT)));
+		builder.setSecret(Loadyaml.getProperty(RollbitsConstants.SECRET));
 
 		// builder.setIp(InetAddress.getLocalHost().getHostAddress());
 		// System.out.println("******"+InetAddress.getLocalHost().getHostAddress());
@@ -52,7 +53,7 @@ public final class UdpClient {
 															// this builder to
 															// the built state.
 
-		sendUDPMessage(request, Loadyaml.getProperty("UDP_IP_Broadcast"), Integer.parseInt(Loadyaml.getProperty("UDP_Port")));
+		sendUDPMessage(request, Loadyaml.getProperty(RollbitsConstants.UDP_BROADCAST_IP), Integer.parseInt(Loadyaml.getProperty(RollbitsConstants.UDP_PORT)));
 	}
 	
 	public static void broadcastFailover() throws Exception {
@@ -63,14 +64,14 @@ public final class UdpClient {
 		
 		NetworkDiscoveryPacket.Builder builder = NetworkDiscoveryPacket.newBuilder();
 		
-		builder.setGroupTag(Loadyaml.getProperty("ClusterName"));
+		builder.setGroupTag(Loadyaml.getProperty(RollbitsConstants.CLUSTER_NAME));
 		// builder.setSender(NetworkDiscoveryPacket.Sender.END_USER_CLIENT);
 		builder.setSender(NetworkDiscoveryPacket.Sender.EXTERNAL_SERVER_NODE);
 		builder.setMode(NetworkDiscoveryPacket.Mode.REMOVE_NODE);
-		builder.setNodeId(Loadyaml.getProperty("NodeName"));
-		builder.setNodeAddress(Loadyaml.getProperty("NodeIP"));
-		builder.setNodePort(Integer.parseInt(Loadyaml.getProperty("NodePort")));
-		builder.setSecret(Loadyaml.getProperty("Secret"));
+		builder.setNodeId(Loadyaml.getProperty(RollbitsConstants.NODE_NAME));
+		builder.setNodeAddress(Loadyaml.getProperty(RollbitsConstants.NODE_IP));
+		builder.setNodePort(Integer.parseInt(Loadyaml.getProperty(RollbitsConstants.NODE_PORT)));
+		builder.setSecret(Loadyaml.getProperty(RollbitsConstants.SECRET));
 
 		// builder.setIp(InetAddress.getLocalHost().getHostAddress());
 		// System.out.println("******"+InetAddress.getLocalHost().getHostAddress());
@@ -82,7 +83,7 @@ public final class UdpClient {
 															// this builder to
 															// the built state.
 
-		sendUDPMessage(request, Loadyaml.getProperty("UDP_IP_Broadcast"), Integer.parseInt(Loadyaml.getProperty("UDP_Port")));
+		sendUDPMessage(request, Loadyaml.getProperty(RollbitsConstants.UDP_BROADCAST_IP), Integer.parseInt(Loadyaml.getProperty(RollbitsConstants.UDP_PORT)));
 	}
 
 	public static void sendUDPMessage(Route request, String IP, int port) throws InterruptedException {

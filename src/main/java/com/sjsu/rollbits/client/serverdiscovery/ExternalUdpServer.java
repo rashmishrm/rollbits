@@ -17,6 +17,7 @@ import routing.Pipe.Route;
 
 import java.util.List;
 
+import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 import com.sjsu.rollbits.yml.Loadyaml;
 
 public final class ExternalUdpServer implements Runnable {
@@ -24,7 +25,7 @@ public final class ExternalUdpServer implements Runnable {
     
    @Override
     public void run() {
-    	System.out.println("Server running at port "+Integer.parseInt(Loadyaml.getProperty("UDP_Port")));
+    	System.out.println("Server running at port "+Integer.parseInt(Loadyaml.getProperty(RollbitsConstants.UDP_PORT)));
     	EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
@@ -41,7 +42,7 @@ public final class ExternalUdpServer implements Runnable {
 
                         }});
 
-            b.bind(Integer.parseInt(Loadyaml.getProperty("UDP_Port"))).sync().channel().closeFuture().await();
+            b.bind(Integer.parseInt(Loadyaml.getProperty(RollbitsConstants.UDP_PORT))).sync().channel().closeFuture().await();
         } catch(Exception e){
         	e.printStackTrace();
         }

@@ -30,7 +30,7 @@ public class NetworkDiscoveryResource implements RouteResource {
 		NetworkDiscoveryPacket request = route.getNetworkDiscoveryPacket();
 		System.out.println("Recieved a packet from" + request.getNodeAddress());
 		// Dont do anything when youare yourself sending the broadcast
-		if (Loadyaml.getProperty("NodeIP").equals(request.getNodeAddress())) {
+		if (Loadyaml.getProperty(RollbitsConstants.NODE_IP).equals(request.getNodeAddress())) {
 			return null;
 		}
 
@@ -38,14 +38,14 @@ public class NetworkDiscoveryResource implements RouteResource {
 		rb.setPath(Route.Path.NETWORK_DISCOVERY);
 
 		NetworkDiscoveryPacket.Builder toSend = NetworkDiscoveryPacket.newBuilder();
-		toSend.setGroupTag(Loadyaml.getProperty("ClusterName"));
+		toSend.setGroupTag(Loadyaml.getProperty(RollbitsConstants.CLUSTER_NAME));
 
-		toSend.setNodeId(Loadyaml.getProperty("NodeName"));
-		toSend.setNodeAddress(Loadyaml.getProperty("NodeIP"));
+		toSend.setNodeId(Loadyaml.getProperty(RollbitsConstants.NODE_NAME));
+		toSend.setNodeAddress(Loadyaml.getProperty(RollbitsConstants.NODE_IP));
 		toSend.setMode(Mode.RESPONSE);
-		toSend.setNodePort(Integer.parseInt(Loadyaml.getProperty("NodePort")));
+		toSend.setNodePort(Integer.parseInt(Loadyaml.getProperty(RollbitsConstants.NODE_PORT)));
 		toSend.setSender(Sender.EXTERNAL_SERVER_NODE);
-		toSend.setSecret(Loadyaml.getProperty("Secret"));
+		toSend.setSecret(Loadyaml.getProperty(RollbitsConstants.SECRET));
 
 		rb.setNetworkDiscoveryPacket(toSend);
 		rb.setId(1);

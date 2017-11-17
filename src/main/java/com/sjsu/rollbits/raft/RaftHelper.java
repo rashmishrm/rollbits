@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sjsu.rollbits.datasync.client.MessageClient;
+import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 import com.sjsu.rollbits.discovery.ClusterDirectory;
 import com.sjsu.rollbits.discovery.Node;
 import com.sjsu.rollbits.yml.Loadyaml;
@@ -56,7 +57,7 @@ public class RaftHelper {
 	}
 	
 	public static String getMyNodeId(){
-		return Loadyaml.getProperty("NodeName");
+		return Loadyaml.getProperty(RollbitsConstants.NODE_NAME);
 	}
 
 

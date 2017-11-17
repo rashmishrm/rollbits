@@ -32,8 +32,8 @@ public class ShardingService {
 				list.add(new RNode(entry.getKey(), RNode.Type.PRIMARY, entry.getValue().getNodeIp(),
 						entry.getValue().getPort()));
 			}
-			list.add(new RNode(Loadyaml.getProperty("NodeName"), RNode.Type.PRIMARY, Loadyaml.getProperty("NodeIP"),
-					Integer.parseInt(Loadyaml.getProperty("NodePort"))));
+			list.add(new RNode(Loadyaml.getProperty(RollbitsConstants.NODE_NAME), RNode.Type.PRIMARY, Loadyaml.getProperty(RollbitsConstants.NODE_IP),
+					Integer.parseInt(Loadyaml.getProperty(RollbitsConstants.NODE_PORT))));
 		} else {
 			logger.error("FATAL: Cluster not formed yet, cannot create ring");
 			return;

@@ -16,6 +16,7 @@ import com.sjsu.rollbits.dao.interfaces.service.MessageService;
 import com.sjsu.rollbits.datasync.client.CommListener;
 import com.sjsu.rollbits.datasync.client.MessageClient;
 import com.sjsu.rollbits.datasync.server.resources.ProtoUtil;
+import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 import com.sjsu.rollbits.discovery.ClusterDirectory;
 import com.sjsu.rollbits.discovery.Node;
 import com.sjsu.rollbits.yml.Loadyaml;
@@ -88,7 +89,7 @@ public class InterClusterServices2 implements ResultCollectable<List<Message>> {
 		this.dbService = new MessageService();
 		this.replyChannel = replyChannel;
 		this.userName = userName;
-		if(Loadyaml.getProperty("ClusterName").equals(primaryHostname)){
+		if(Loadyaml.getProperty(RollbitsConstants.CLUSTER_NAME).equals(primaryHostname)){
 			needToSendPacketToPrimary = false;
 		} else {
 			needToSendPacketToPrimary = true;
@@ -103,7 +104,7 @@ public class InterClusterServices2 implements ResultCollectable<List<Message>> {
 	public void fetchAllMessages() {
 		Map<String, Map<String, Node>> groupMap = ClusterDirectory.getGroupMap();
 		for (Map.Entry<String, Map<String, Node>> entry : groupMap.entrySet()) {
-			if(Loadyaml.getProperty("ClusterName").equals(entry.getKey())){
+			if(Loadyaml.getProperty(RollbitsConstants.CLUSTER_NAME).equals(entry.getKey())){
 				continue;
 			}
 			Map<String, Node> nodeMap = entry.getValue();

@@ -2,6 +2,7 @@ package com.sjsu.rollbits.client.serverdiscovery;
 
 import java.util.Random;
 
+import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 import com.sjsu.rollbits.yml.Loadyaml;
 
 import io.netty.channel.ChannelHandlerContext;
@@ -31,7 +32,7 @@ public class ExternalUdpServerHandler extends SimpleChannelInboundHandler<Route>
 		NetworkDiscoveryPacket request = route.getNetworkDiscoveryPacket();
 		System.out.println("Recieved a packet from" + request.getNodeAddress());
 		// Dont do anything when youare yourself sending the broadcast
-		if (Loadyaml.getProperty("NodeIP").equals(request.getNodeAddress())) {
+		if (Loadyaml.getProperty(RollbitsConstants.NODE_IP).equals(request.getNodeAddress())) {
 			return;
 		}
 
