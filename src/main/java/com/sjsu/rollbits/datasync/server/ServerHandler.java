@@ -68,7 +68,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Route> {
 			if (clazz != null) {
 				RouteResource rsc = (RouteResource) Beans.instantiate(RouteResource.class.getClassLoader(), clazz);
 				try {
-					Route.Builder reply = (Route.Builder) rsc.process(msg, null);
+					Route.Builder reply = (Route.Builder) rsc.process(msg, channel);
 					System.out.println("---> reply: " + reply);
 					if (reply != null) {
 						// Route.Builder rb = Route.newBuilder(msg);
