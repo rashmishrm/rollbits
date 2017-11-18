@@ -261,6 +261,7 @@ public class ProtoUtil {
 
 	public static Route.Builder createAddUsertoGroupRequest(long id, String gname, String uname, String type) {
 
+		
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(id);
 		rb.setPath(Route.Path.GROUP);
@@ -269,6 +270,7 @@ public class ProtoUtil {
 		gb.setGid(id);
 		gb.setAction(routing.Pipe.Group.ActionType.ADDUSER);
 		gb.setUsername(uname);
+		//System.out.println(uname);
 		rb.setGroup(gb);
 
 		Pipe.Header.Builder header = Pipe.Header.newBuilder();
