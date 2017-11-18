@@ -18,9 +18,9 @@ package com.sjsu.rollbits.datasync.client;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-
 import com.sjsu.rollbits.datasync.server.resources.ProtoUtil;
-
+import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
+import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 import routing.Pipe;
 import routing.Pipe.Message;
 import routing.Pipe.Route;
@@ -156,11 +156,11 @@ public class MessageClient {
 		return added;
 	}
 
-	public boolean sendMessage(String fromUserId, String toUserId, String message, String type, boolean async) {
+	public boolean sendMessage(String fromUserId, String toUserId, String message, String type, boolean async,String messageType) {
 		// construct the message to send
 		boolean added = false;
 
-		Route.Builder rb = ProtoUtil.addMessageRequest(nextId(), fromUserId, toUserId, message, type);
+		Route.Builder rb = ProtoUtil.addMessageRequest(nextId(), fromUserId, toUserId, message, type,RollbitsConstants.GROUP);
 		CommConnection conn = CommConnection.getInstance();
 		try {
 			if (async)

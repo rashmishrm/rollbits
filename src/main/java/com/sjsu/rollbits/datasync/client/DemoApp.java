@@ -48,20 +48,23 @@ public class DemoApp implements CommListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String host = "10.0.0.14";
+		String host = "10.0.0.175";
 		int port = 4567;
 		System.out.println(Pipe.Route.Path.USER);
+		System.out.println(Pipe.Route.Path.GROUP);
 		long stime = System.currentTimeMillis();
 
 		try {
 			MessageClient mc = new MessageClient(host, port);
 			if (mc.isConnected()) {
-
 				// mc.addUser("Rashmi", "Rashmi", RollbitsConstants.CLIENT,
 				// false);
-				System.out.println("Sleeping before connecting");
 				// Thread.sleep(10000);
-				mc.sendMessage("rashmishrm", "nishantrathi", "tsdhvsdkcsdkvnvnksnvksndvskvs", "CLIENT", false);
+			mc.sendMessage("dhrumil", "nishant", "tsdhvsdkcsdkvnvnksnvksndvskvs", "CLIENT", false);
+				mc.addGroup("Group5", 8, "CLIENT", false);
+				
+				mc.addUsertoGroup(3, "Group4", "dhrumil", "CLIENT", false);
+				
 				//mc.fetchMessages("nishantrathi");
 
 			}
@@ -72,7 +75,7 @@ public class DemoApp implements CommListener {
 			// Route r = mc.sendSyncronousMessage(msg);
 
 			// mc.addGroup("group", 1, RollbitsConstants.CLIENT, false);
-
+			//System.out.println("Failed");
 			long etime = System.currentTimeMillis();
 
 			System.out.println(etime - stime);
