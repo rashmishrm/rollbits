@@ -1,3 +1,4 @@
+
 /**
  * Copyright 2016 Gash.
  *
@@ -48,9 +49,8 @@ public class DemoApp implements CommListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String host = "10.0.0.18";
+		String host = "10.0.0.175";
 		int port = 4567;
-		System.out.println(Pipe.Route.Path.USER);
 		long stime = System.currentTimeMillis();
 
 		try {
@@ -62,6 +62,8 @@ public class DemoApp implements CommListener {
 				System.out.println("Sleeping before connecting");
 				// Thread.sleep(10000);
 				mc.sendMessage("rashmishrm", "nishantrathi", "tsdhvsdkcsdkvnvnksnvksndvskvs", "CLIENT", false,RollbitsConstants.GROUP);
+				mc.addGroup("Group6",4, "CLIENT", false);
+				mc.addUsertoGroup(4, "Group6", "dhrumil", "CLIENT", false);
 				//mc.fetchMessages("nishantrathi",RollbitsConstants.CLIENT);
 
 			}
