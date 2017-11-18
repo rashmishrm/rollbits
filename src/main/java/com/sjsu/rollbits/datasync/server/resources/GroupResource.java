@@ -39,12 +39,14 @@ public class GroupResource implements RouteResource {
 	public Object process(Pipe.Route msg, Channel returnChannel) {
 		boolean success = false;
 		Pipe.Group.ActionType option = msg.getGroup().getAction();
+		
 
 		switch (option) {
 		case CREATE:
 			Pipe.Group group = msg.getGroup();
 			Pipe.Header header = msg.getHeader();
-
+			//System.out.println(header);
+			
 			if (header != null && header.getType() != null && !header.getType().equals(Pipe.Header.Type.INTERNAL)) {
 
 				System.out.println(group.getGname());
@@ -77,13 +79,12 @@ public class GroupResource implements RouteResource {
 		
 		case ADDUSER:
 			Pipe.Group groups = msg.getGroup();
-			Pipe.User user = msg.getUser();
+			
 			Pipe.Header headers = msg.getHeader();
 
 			if (headers != null && headers.getType() != null && !headers.getType().equals(Pipe.Header.Type.INTERNAL)) {
 
-				System.out.println(groups.getGname());
-
+				
 				List<RNode> nodes = shardingService.getNodes(new Message(groups.getGname()));
 
 				// save to database
@@ -91,10 +92,9 @@ public class GroupResource implements RouteResource {
 				for (RNode node : nodes) {
 					MessageClient mc = new MessageClient(node.getIpAddress(), (int) node.getPort());
 					if (node.getType().equals(RNode.Type.REPLICA)) {
-						mc.addUsertoGroup((int) groups.getGid(),groups.getGname(),user.getUname(),RollbitsConstants.INTERNAL, true);
+						mc.addUsertoGroup((int) groups.getGid(),groups.getGname(),groups.getUsername(),RollbitsConstants.INTERNAL, true);
 					} else {
-						success = mc.addUsertoGroup((int) groups.getGid(),groups.getGname(),user.getUname(),RollbitsConstants.INTERNAL, false);
-
+						success = mc.addUsertoGroup((int) groups.getGid(),groups.getGname(),groups.getUsername(),RollbitsConstants.INTERNAL, false);
 					}
 
 				}
@@ -102,10 +102,10 @@ public class GroupResource implements RouteResource {
 
 			else {
 
-				GroupUser dbgrpuser = new GroupUser(groups.getGname(),user.getUname());
+				GroupUser dbgrpuser = new GroupUser(groups.getGname(),groups.getUsername());
 				dbgroupuserService.persist(dbgrpuser);
 				success = true;
-
+				
 			}
 			break;
 		
