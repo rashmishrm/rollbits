@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sjsu.rollbits.dao.interfaces.service.MessageService;
-import com.sjsu.rollbits.intercluster.sync.InterClusterServices2;
+import com.sjsu.rollbits.intercluster.sync.InterClusterUserMessageService;
 import com.sjsu.rollbits.sharding.hashing.Message;
 import com.sjsu.rollbits.sharding.hashing.RNode;
 import com.sjsu.rollbits.sharding.hashing.ShardingService;
@@ -60,7 +60,10 @@ public class UserMessageResource implements RouteResource {
 		//
 		List<RNode> nodes = shardingService.getNodes(new Message(message.getId()));
 		//
-		Header header = msg.getHeader();
+		Header header = null;
+		if(msg.hasHeader()){
+			header = msg.getHeader();
+		}
 
 		RNode primaryNode = nodes.get(0);
 		if (header != null && header.getType() != null && header.getType().equals(Header.Type.INTERNAL)) {
@@ -72,13 +75,13 @@ public class UserMessageResource implements RouteResource {
 			return rb;
 		} else if (header != null && header.getType() != null && header.getType().equals(Header.Type.INTER_CLUSTER)) {
 
-			InterClusterServices2 ics = new InterClusterServices2(primaryNode.getNodeId(), msg.getId(), returnChannel,
+			InterClusterUserMessageService ics = new InterClusterUserMessageService(primaryNode.getNodeId(), msg.getId(), returnChannel,
 					message.getId(), true);
 			ics.fetchAllMessages();
 
 		} else {
 
-			InterClusterServices2 ics = new InterClusterServices2(primaryNode.getNodeId(), msg.getId(), returnChannel,
+			InterClusterUserMessageService ics = new InterClusterUserMessageService(primaryNode.getNodeId(), msg.getId(), returnChannel,
 					message.getId(), false);
 			ics.fetchAllMessages();
 

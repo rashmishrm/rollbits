@@ -32,7 +32,6 @@ message Route {
 	    Group group = 6;
     		MessagesRequest messagesRequest = 7;
    		MessagesResponse messagesResponse = 8;
-
     }
 
 	optional Header header = 9;
