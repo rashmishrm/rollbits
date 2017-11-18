@@ -32,11 +32,10 @@ message Route {
 	    Group group = 6;
     		MessagesRequest messagesRequest = 7;
    		MessagesResponse messagesResponse = 8;
-    		Header header = 9;
+    	
     }
-
+	optional Header header = 9;
  	optional Response response=10;
-    
     
     //Things meant for Raft:
     optional FailoverMessage failoverMessage = 11;

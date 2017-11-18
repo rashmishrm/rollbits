@@ -29,7 +29,7 @@ import routing.Pipe.Route;
  * @author nishantrathi
  *
  */
-public class InterClusterServices2 implements ResultCollectable<List<Message>> {
+public class InterClusterUserMessageService implements ResultCollectable<List<Message>> {
 
 	Random rand = new Random();
 	int noOfResultExpected = 0;
@@ -86,7 +86,7 @@ public class InterClusterServices2 implements ResultCollectable<List<Message>> {
 
 	}
 
-	public InterClusterServices2(String primaryHostname, long routeId, Channel replyChannel, String userName,
+	public InterClusterUserMessageService(String primaryHostname, long routeId, Channel replyChannel, String userName,
 			boolean intercluster) {
 		noOfResultExpected = ClusterDirectory.getGroupMap().size() - 1;
 		this.primaryHostname = primaryHostname;

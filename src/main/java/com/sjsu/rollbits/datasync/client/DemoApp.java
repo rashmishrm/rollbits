@@ -1,3 +1,4 @@
+
 /**
  * Copyright 2016 Gash.
  *
@@ -50,22 +51,20 @@ public class DemoApp implements CommListener {
 	public static void main(String[] args) {
 		String host = "10.0.0.175";
 		int port = 4567;
-		System.out.println(Pipe.Route.Path.USER);
-		System.out.println(Pipe.Route.Path.GROUP);
 		long stime = System.currentTimeMillis();
 
 		try {
 			MessageClient mc = new MessageClient(host, port);
 			if (mc.isConnected()) {
+
 				// mc.addUser("Rashmi", "Rashmi", RollbitsConstants.CLIENT,
 				// false);
+				System.out.println("Sleeping before connecting");
 				// Thread.sleep(10000);
-			mc.sendMessage("dhrumil", "nishant", "tsdhvsdkcsdkvnvnksnvksndvskvs", "CLIENT", false);
-				mc.addGroup("Group5", 8, "CLIENT", false);
-				
-				mc.addUsertoGroup(3, "Group4", "dhrumil", "CLIENT", false);
-				
-				//mc.fetchMessages("nishantrathi");
+				mc.sendMessage("rashmishrm", "nishantrathi", "tsdhvsdkcsdkvnvnksnvksndvskvs", "CLIENT", false,RollbitsConstants.GROUP);
+				mc.addGroup("Group6",4, "CLIENT", false);
+				mc.addUsertoGroup(4, "Group6", "dhrumil", "CLIENT", false);
+				//mc.fetchMessages("nishantrathi",RollbitsConstants.CLIENT);
 
 			}
 
@@ -75,7 +74,7 @@ public class DemoApp implements CommListener {
 			// Route r = mc.sendSyncronousMessage(msg);
 
 			// mc.addGroup("group", 1, RollbitsConstants.CLIENT, false);
-			//System.out.println("Failed");
+
 			long etime = System.currentTimeMillis();
 
 			System.out.println(etime - stime);

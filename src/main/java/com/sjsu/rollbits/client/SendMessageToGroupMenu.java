@@ -8,6 +8,7 @@ import java.util.Scanner;
 import com.sjsu.rollbits.client.serverdiscovery.ExternalClientClusterDirectory;
 import com.sjsu.rollbits.datasync.client.CommListener;
 import com.sjsu.rollbits.datasync.client.MessageClient;
+import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 
 import routing.Pipe.Route;
 
@@ -31,7 +32,7 @@ public class SendMessageToGroupMenu implements Menu, CommListener {
 		String msg = sc.next();
 		System.out.println("Sending Message...");
 		MessageClient mc = ExternalClientClusterDirectory.getMessageClient(this);
-		mc.sendMessage(fromUnm, toGnm, msg, "CLIENT", false);//Need to change for group when message client is updated
+		mc.sendMessage(fromUnm, toGnm, msg, "CLIENT", false,RollbitsConstants.GROUP);//Need to change for group when message client is updated
 	}
 
 	@Override

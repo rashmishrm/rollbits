@@ -7,12 +7,15 @@ public interface RollbitsConstants {
 	String INTER_CLUSTER = "INTER_CLUSTER";
 	String CLIENT = "CLIENT";
 
+	String SINGLE = "SINGLE";
+	String GROUP = "GROUP";
+
 	// error codes
 	String CONNECTION_FAILED = "CONNECTION_FAILED";
 	String REPLICATION_FACTOR = "replicationfactor";
 	String VIRTUAL_NODES = "virtualnodes";
 
-	//property names from property files
+	// property names from property files
 	String DB_URL = "url";
 	String DB_USERNAME = "username";
 	String DB_PASSWORD = "password";
@@ -23,6 +26,5 @@ public interface RollbitsConstants {
 	String SECRET = "Secret";
 	String UDP_BROADCAST_IP = "UDP_IP_Broadcast";
 	String UDP_PORT = "UDP_Port";
-	
-	
+
 }
