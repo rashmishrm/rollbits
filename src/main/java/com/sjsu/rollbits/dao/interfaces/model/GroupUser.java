@@ -25,12 +25,20 @@ public class GroupUser {
 		// TODO Auto-generated constructor stub
 	}
     
-    public GroupUser(String string, String string2) {
-        this.groupid = string;
-        this.userid=string2;
+    public GroupUser(String gname, String uname) {
+        this.groupid = gname;
+        this.userid= uname;
     }
 
-    public String getGroupid() {
+	public void setGroupid(String groupid) {
+		this.groupid = groupid;
+	}
+
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+
+	public String getGroupid() {
         return groupid;
     }
 
