@@ -1,2 +1,0 @@
-# rollbits
-Distributed Chat Server
