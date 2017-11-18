@@ -7,11 +7,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Group")
+@Table(name = "GroupUser")
 public class GroupUser {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
+    
 
+    @Column(name = "id")
+    private int id;
     @Column(name = "groupid")
     private String groupid;
     @Column(name = "userid")
