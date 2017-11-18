@@ -48,7 +48,7 @@ public class DemoApp implements CommListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String host = "10.0.0.14";
+		String host = "10.0.0.18";
 		int port = 4567;
 		System.out.println(Pipe.Route.Path.USER);
 		long stime = System.currentTimeMillis();
@@ -61,8 +61,8 @@ public class DemoApp implements CommListener {
 				// false);
 				System.out.println("Sleeping before connecting");
 				// Thread.sleep(10000);
-				mc.sendMessage("rashmishrm", "nishantrathi", "tsdhvsdkcsdkvnvnksnvksndvskvs", "CLIENT", false);
-				//mc.fetchMessages("nishantrathi");
+				mc.sendMessage("rashmishrm", "nishantrathi", "tsdhvsdkcsdkvnvnksnvksndvskvs", "CLIENT", false,RollbitsConstants.GROUP);
+				//mc.fetchMessages("nishantrathi",RollbitsConstants.CLIENT);
 
 			}
 

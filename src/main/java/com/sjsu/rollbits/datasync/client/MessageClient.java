@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.sjsu.rollbits.datasync.server.resources.ProtoUtil;
+import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 
 import routing.Pipe;
 import routing.Pipe.Message;
@@ -156,11 +157,11 @@ public class MessageClient {
 		return added;
 	}
 
-	public boolean sendMessage(String fromUserId, String toUserId, String message, String type, boolean async) {
+	public boolean sendMessage(String fromUserId, String toUserId, String message, String type, boolean async,String messageType) {
 		// construct the message to send
 		boolean added = false;
 
-		Route.Builder rb = ProtoUtil.addMessageRequest(nextId(), fromUserId, toUserId, message, type);
+		Route.Builder rb = ProtoUtil.addMessageRequest(nextId(), fromUserId, toUserId, message, type,RollbitsConstants.GROUP);
 		CommConnection conn = CommConnection.getInstance();
 		try {
 			if (async)

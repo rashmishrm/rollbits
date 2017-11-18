@@ -28,6 +28,7 @@ import com.sjsu.rollbits.datasync.client.MessageClient;
 import com.sjsu.rollbits.sharding.hashing.Message;
 import com.sjsu.rollbits.sharding.hashing.RNode;
 import com.sjsu.rollbits.sharding.hashing.ShardingService;
+import com.sjsu.rollbits.yml.Loadyaml;
 
 import io.netty.channel.Channel;
 import routing.Pipe;
@@ -61,6 +62,22 @@ public class MessageResource implements RouteResource {
 		boolean isSuccess = false;
 		routing.Pipe.Message message = msg.getMessage();
 
+		if (message.getType().equals(routing.Pipe.Message.Type.GROUP)) {
+
+			// check whether node is primary and has to fetch from db.
+			List<RNode> groupShards = shardingService.getNodes(new Message(message.getReceiverId()));
+
+			if (groupShards != null
+					&& Loadyaml.getProperty(RollbitsConstants.NODE_NAME).equals(groupShards.get(0).getNodeId())) {
+
+			} else {
+
+				Route.Builder rb = ProtoUtil.createGetGroupRequest(msg.getId(), message.getReceiverId(),
+						RollbitsConstants.CLIENT);
+			}
+
+		}
+
 		if (msg.getHeader() != null && msg.getHeader().getType() != null
 				&& Header.Type.CLIENT.equals(msg.getHeader().getType())) {
 
@@ -77,14 +94,14 @@ public class MessageResource implements RouteResource {
 			for (RNode node : set) {
 				MessageClient mc = new MessageClient(node.getIpAddress(), (int) node.getPort());
 				if (node.getType().equals(RNode.Type.REPLICA)) {
-					if(mc.isConnected())
-					mc.sendMessage(message.getSenderId(), message.getReceiverId(), message.getPayload(),
-							RollbitsConstants.INTERNAL, true);
+					if (mc.isConnected())
+						mc.sendMessage(message.getSenderId(), message.getReceiverId(), message.getPayload(),
+								RollbitsConstants.INTERNAL, true, message.getType().toString());
 				} else {
-					if(mc.isConnected())
-					isSuccess = mc.sendMessage(message.getSenderId(), message.getReceiverId(), message.getPayload(),
-							RollbitsConstants.INTERNAL, false);
-					
+					if (mc.isConnected())
+						isSuccess = mc.sendMessage(message.getSenderId(), message.getReceiverId(), message.getPayload(),
+								RollbitsConstants.INTERNAL, false, message.getType().toString());
+
 				}
 
 			}

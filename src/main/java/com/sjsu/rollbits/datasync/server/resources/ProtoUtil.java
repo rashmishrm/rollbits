@@ -82,9 +82,9 @@ public class ProtoUtil {
 		return rb;
 
 	}
-	
-	public static Route.Builder createMessageResponseRoute2(long id,
-			List<Message> messages, String uname, boolean user) {
+
+	public static Route.Builder createMessageResponseRoute2(long id, List<Message> messages, String uname,
+			boolean user) {
 
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(id);
@@ -93,8 +93,6 @@ public class ProtoUtil {
 		Pipe.MessagesResponse.Builder messageBuilder = Pipe.MessagesResponse.newBuilder();
 
 		List<Pipe.Message> list = new ArrayList<>();
-
-		
 
 		messageBuilder.addAllMessages(messages);
 
@@ -111,7 +109,7 @@ public class ProtoUtil {
 
 	}
 
-	public static Route.Builder createMessageRequest(long id, String uname, boolean user,String type) {
+	public static Route.Builder createMessageRequest(long id, String uname, boolean user, String type) {
 
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(id);
@@ -123,7 +121,7 @@ public class ProtoUtil {
 		if (user) {
 			ub.setType(Type.USER);
 		}
-		
+
 		Pipe.Header.Builder header = Pipe.Header.newBuilder();
 
 		if (type.equals(Pipe.Header.Type.INTERNAL.toString())) {
@@ -136,7 +134,7 @@ public class ProtoUtil {
 			header.setType(Pipe.Header.Type.CLIENT);
 
 		}
-		rb.setHeader(header);
+		rb.setHeader(header.build());
 
 		rb.setMessagesRequest(ub);
 
@@ -144,7 +142,7 @@ public class ProtoUtil {
 	}
 
 	public static Route.Builder addMessageRequest(long id, String senderId, String recieverId, String message,
-			String type) {
+			String type, String messageType) {
 
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(id);
@@ -155,8 +153,7 @@ public class ProtoUtil {
 		msg.setReceiverId(recieverId);
 
 		msg.setAction(routing.Pipe.Message.ActionType.POST);
-		
-		
+
 		Pipe.Header.Builder header = Pipe.Header.newBuilder();
 
 		if (type.equals(RollbitsConstants.INTERNAL)) {
@@ -170,7 +167,10 @@ public class ProtoUtil {
 			header.setType(header.getType().INTER_CLUSTER);
 
 		}
-		msg.setType(Message.Type.SINGLE);
+		if (messageType.equals(RollbitsConstants.SINGLE))
+			msg.setType(Message.Type.SINGLE);
+		else
+			msg.setType(Message.Type.GROUP);
 
 		msg.setTimestamp(new Date().toString());
 		rb.setMessage(msg);
@@ -231,8 +231,35 @@ public class ProtoUtil {
 		rb.setHeader(header);
 		return rb;
 	}
-	
-	public static Route.Builder createAddUsertoGroupRequest(long id, String gname, String uname,String type) {
+
+	public static Route.Builder createGetGroupRequest(long requestId, String name, String type) {
+
+		Route.Builder rb = Route.newBuilder();
+		rb.setId(requestId);
+		rb.setPath(Route.Path.GROUP);
+		Pipe.Group.Builder gb = Pipe.Group.newBuilder();
+		gb.setGname(name);
+		gb.setGid(requestId);
+		gb.setAction(routing.Pipe.Group.ActionType.GET);
+		rb.setGroup(gb);
+
+		Pipe.Header.Builder header = Pipe.Header.newBuilder();
+
+		if (type.equals(Pipe.Header.Type.INTERNAL.toString())) {
+			header.setType(Pipe.Header.Type.INTERNAL);
+
+		} else if (type.equals(Pipe.Header.Type.INTER_CLUSTER.toString())) {
+			header.setType(Pipe.Header.Type.INTER_CLUSTER);
+
+		} else if (type.equals(Pipe.Header.Type.CLIENT.toString())) {
+			header.setType(Pipe.Header.Type.CLIENT);
+
+		}
+		rb.setHeader(header);
+		return rb;
+	}
+
+	public static Route.Builder createAddUsertoGroupRequest(long id, String gname, String uname, String type) {
 
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(id);
@@ -243,7 +270,7 @@ public class ProtoUtil {
 		gb.setAction(routing.Pipe.Group.ActionType.ADDUSER);
 		gb.setUsername(uname);
 		rb.setGroup(gb);
-		
+
 		Pipe.Header.Builder header = Pipe.Header.newBuilder();
 
 		if (type.equals(Pipe.Header.Type.INTERNAL.toString())) {
