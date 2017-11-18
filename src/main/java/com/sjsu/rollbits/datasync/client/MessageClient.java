@@ -126,7 +126,7 @@ public class MessageClient {
 	}
 
 	public boolean addGroup(String name, int gid, String type, boolean async) {
-		Route.Builder rb = ProtoUtil.createAddGroupRequest(gid, name, type);
+		Route.Builder rb = ProtoUtil.createAddGroupRequest(nextId(), name, type);
 		CommConnection conn = CommConnection.getInstance();
 		boolean added = false;
 		try {
@@ -142,7 +142,7 @@ public class MessageClient {
 	}
 
 	public boolean addUsertoGroup(int guid, String gname, String uname, String type, boolean async) {
-		Route.Builder rb = ProtoUtil.createAddUsertoGroupRequest(guid, gname, uname, type);
+		Route.Builder rb = ProtoUtil.createAddUsertoGroupRequest(nextId(), gname, uname, type);
 		CommConnection conn = CommConnection.getInstance();
 		boolean added = false;
 		try {
