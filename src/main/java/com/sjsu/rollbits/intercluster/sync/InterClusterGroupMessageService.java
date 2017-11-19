@@ -22,6 +22,7 @@ import com.sjsu.rollbits.datasync.server.resources.ProtoUtil;
 import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 import com.sjsu.rollbits.discovery.ClusterDirectory;
 import com.sjsu.rollbits.discovery.Node;
+import com.sjsu.rollbits.sharding.hashing.RNode;
 import com.sjsu.rollbits.yml.Loadyaml;
 
 import io.netty.channel.Channel;
@@ -41,34 +42,45 @@ public class InterClusterGroupMessageService implements ResultCollectable<Respon
 	private long routeId;
 	private Channel replyChannel;
 	private String userName;
-	private boolean finalResult=false;
+	private boolean finalResult = false;
 	private String sender;
 	private String reciever;
 	private String message;
 
+	private String internalPrimaryNode;
+
+	private boolean localClusterChecked;
+
+	private boolean sentToAllClusters;
+
 	class SendGroupMessageTask implements CommListener {
-		protected  Logger gmlogger = LoggerFactory.getLogger("SendGroupMessageTask");
+		protected Logger gmlogger = LoggerFactory.getLogger("SendGroupMessageTask");
 
 		MessageClient mc;
 		String username;
 		ResultCollectable<Response> resultCollectable;
 		private String requestType;
+		private String sender;
+		private String reciever;
+		private String message;
 
 		/**
 		 * @param username
 		 */
-		public SendGroupMessageTask(String host, int port, String username,
-				ResultCollectable<Response> resultCollectable, String requestType) {
+		public SendGroupMessageTask(String host, int port, ResultCollectable<Response> resultCollectable,
+				String requestType, String sender, String reciever, String message) {
 			this.mc = new MessageClient(host, port);
 			mc.addListener(this);
-			this.username = username;
 			this.resultCollectable = resultCollectable;
 			this.requestType = requestType;
+			this.sender = sender;
+			this.reciever = reciever;
+			this.message = message;
 		}
 
 		// @Override
 		public void doTask() {
-			mc.fetchMessages(username, requestType);
+			mc.sendMessage(sender, reciever, message, requestType, true, RollbitsConstants.GROUP);
 		}
 
 		@Override
@@ -85,48 +97,75 @@ public class InterClusterGroupMessageService implements ResultCollectable<Respon
 
 	}
 
-	public InterClusterGroupMessageService(long routeId, Channel replyChannel, String sender, String reciever, String message) {
-		noOfResultExpected = ClusterDirectory.getGroupMap().size() - 1;
+	public InterClusterGroupMessageService(long routeId, Channel replyChannel, String sender, String reciever,
+			String message, String internalPrimaryNode) {
+		noOfResultExpected = ClusterDirectory.getGroupMap().size();
 		this.routeId = routeId;
 		this.replyChannel = replyChannel;
 		this.sender = sender;
 		this.reciever = reciever;
 		this.message = message;
-		
+		this.internalPrimaryNode = internalPrimaryNode;
 	}
 
 	public void sendGroupMessage() {
+
+		SendGroupMessageTask task = new SendGroupMessageTask(
+				ClusterDirectory.getNodeMap().get(internalPrimaryNode).getNodeIp(),
+				ClusterDirectory.getNodeMap().get(internalPrimaryNode).getPort(), this, RollbitsConstants.INTERNAL,
+				sender, reciever, message);
+		task.doTask();
+
+		this.localClusterChecked = false;
+		this.sentToAllClusters = false;
+
+	}
+
+	public void sendMessageToAllClusters() {
 		Map<String, Map<String, Node>> groupMap = ClusterDirectory.getGroupMap();
-			for (Map.Entry<String, Map<String, Node>> entry : groupMap.entrySet()) {
-				if (Loadyaml.getProperty(RollbitsConstants.CLUSTER_NAME).equals(entry.getKey())) {
-					continue;
-				}
-				Map<String, Node> nodeMap = entry.getValue();
-				Node nodeOfEachGroup = null;
-				List<Node> nodeList = new ArrayList<>(nodeMap.values());
-				nodeOfEachGroup = nodeList.get(rand.nextInt(nodeList.size()));
-				SendGroupMessageTask task = new SendGroupMessageTask(nodeOfEachGroup.getNodeIp(), nodeOfEachGroup.getPort(),
-						userName, this, RollbitsConstants.INTER_CLUSTER);
-				task.doTask();
+		for (Map.Entry<String, Map<String, Node>> entry : groupMap.entrySet()) {
+			if (Loadyaml.getProperty(RollbitsConstants.CLUSTER_NAME).equals(entry.getKey())) {
+				continue;
 			}
-			if(noOfResultExpected == 0){
-				publishResult();
-			}
+			Map<String, Node> nodeMap = entry.getValue();
+			Node nodeOfEachGroup = null;
+			List<Node> nodeList = new ArrayList<>(nodeMap.values());
+			nodeOfEachGroup = nodeList.get(rand.nextInt(nodeList.size()));
+			SendGroupMessageTask task = new SendGroupMessageTask(nodeOfEachGroup.getNodeIp(), nodeOfEachGroup.getPort(),
+					this, RollbitsConstants.INTER_CLUSTER, sender, reciever, message);
+			task.doTask();
+		}
+
 	}
 
 	@Override
 	public synchronized void collectResult(Response t) {
-		
-		if(t!=null && t.getSuccess()){
-			finalResult=true;
-			noOfResultExpected =0;
+
+		if (t != null && t.getSuccess() && !localClusterChecked) {
+			localClusterChecked = true;
 			publishResult();
-		} else{
-			noOfResultExpected--;
+
+		} else if (t != null && !t.getSuccess() && !sentToAllClusters) {
+
+			sendMessageToAllClusters();
+			sentToAllClusters = true;
+
+		} else {
+
+			if (t != null && t.getSuccess()) {
+				finalResult = true;
+				noOfResultExpected = 0;
+
+				publishResult();
+			} else {
+				noOfResultExpected--;
+				if (noOfResultExpected == 0) {
+					publishResult();
+				}
+			}
+
 		}
-		if(noOfResultExpected==0){
-			publishResult();
-		}
+
 	}
 
 	@Override
