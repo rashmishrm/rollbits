@@ -37,9 +37,11 @@ public class RaftFollowerState implements RaftState {
 		hasVoted = false;
 		if (raftContext.getLAST_RECIEVED() == -1
 				|| System.currentTimeMillis() - raftContext.getLAST_RECIEVED() > RaftContext.RAFT_TIMER) {
-			List<Node> failedNode = new ArrayList<>();
-			failedNode.add(ClusterDirectory.getNodeMap().get(raftContext.getLeaderNodeId()));
-			RaftHelper.broadcastFailover(failedNode);
+			if (null != raftContext.getLeaderNodeId()) {
+				List<Node> failedNode = new ArrayList<>();
+				failedNode.add(ClusterDirectory.getNodeMap().get(raftContext.getLeaderNodeId()));
+				RaftHelper.broadcastFailover(failedNode);
+			}
 			RaftState raftState = new RaftCandidateState();
 			raftContext.setRaftState(raftState);
 			Route.Builder routeBuilder = Route.newBuilder();
