@@ -40,6 +40,16 @@ public class GroupService {
         groupDao.closeCurrentSession();
         return groups;
     }
+    
+    
+    public static Boolean findIfAGroupExists(String groupName) {
+    	groupDao.openCurrentSession();
+        Boolean ifExists = groupDao.checkIfAGroupExists(groupName);
+        groupDao.closeCurrentSession();
+        return ifExists;
+    }
+    
+    
     public static void deleteAll() {
     	groupDao.openCurrentSessionwithTransaction();
     	groupDao.deleteAll();

@@ -19,7 +19,6 @@
 package com.sjsu.rollbits.datasync.server.resources;
 
 import java.util.Date;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,8 +26,10 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sjsu.rollbits.dao.interfaces.service.GroupService;
 import com.sjsu.rollbits.dao.interfaces.service.MessageService;
 import com.sjsu.rollbits.datasync.client.MessageClient;
+import com.sjsu.rollbits.intercluster.sync.InterClusterGroupMessageService;
 import com.sjsu.rollbits.sharding.hashing.Message;
 import com.sjsu.rollbits.sharding.hashing.RNode;
 import com.sjsu.rollbits.sharding.hashing.ShardingService;
@@ -38,7 +39,6 @@ import io.netty.channel.Channel;
 import routing.Pipe;
 import routing.Pipe.Header;
 import routing.Pipe.Route;
-import routing.Pipe.Route.Path;
 
 /**
  * processes requests of message passing - demonstration
@@ -50,10 +50,12 @@ public class MessageResource implements RouteResource {
 	protected static Logger logger = LoggerFactory.getLogger("message");
 	private ShardingService shardingService;
 	private MessageService dbService = null;
+	private GroupService groupDBService= null;
 
 	public MessageResource() {
 		shardingService = ShardingService.getInstance();
 		dbService = new MessageService();
+		groupDBService = new GroupService();
 	}
 
 	@Override
@@ -72,12 +74,20 @@ public class MessageResource implements RouteResource {
 			List<RNode> groupShards = shardingService.getNodes(new Message(message.getReceiverId()));
 
 			if (groupShards != null
-					&& Loadyaml.getProperty(RollbitsConstants.NODE_NAME).equals(groupShards.get(0).getNodeId())) {
+					&& Loadyaml.getProperty(RollbitsConstants.NODE_NAME).equals(groupShards.get(0).getNodeId()) && groupDBService.findIfAGroupExists(message.getReceiverId())) {
+				com.sjsu.rollbits.dao.interfaces.model.Message messageModel = new com.sjsu.rollbits.dao.interfaces.model.Message(
+						1, new Date(), message.getSenderId(), message.getReceiverId(), message.getSenderId(),
+						message.getPayload());
+				dbService.persist(messageModel);
+				isSuccess = true;
+			} else if (msg.hasHeader() && !RollbitsConstants.INTERNAL.equals(msg.getHeader().getType())){
 
-			} else {
+				InterClusterGroupMessageService igs = new InterClusterGroupMessageService(msg.getId(), returnChannel, message.getSenderId(),  message.getReceiverId(),
+						message.getPayload(),groupShards.get(0).getNodeId());
 
-				Route.Builder rb = ProtoUtil.createGetGroupRequest(msg.getId(), message.getReceiverId(),
-						RollbitsConstants.CLIENT);
+				igs.sendGroupMessage();
+
+				return null;
 			}
 
 		}

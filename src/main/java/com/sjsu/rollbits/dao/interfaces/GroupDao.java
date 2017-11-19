@@ -72,6 +72,11 @@ public class GroupDao {
     public void delete(Group entity) {
         getCurrentSession().delete(entity);
     }
+    
+    public Boolean checkIfAGroupExists(String groupName){
+    	List<Group> groupList = (List<Group>) getCurrentSession().createQuery("from Group  grp where grp.name =:groupName").list();
+    	return groupList.size() == 1 ? true:false;
+    }
 
     @SuppressWarnings("unchecked")
     public List<Group> findAll() {
