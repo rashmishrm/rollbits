@@ -4,9 +4,11 @@
 package com.sjsu.rollbits.intercluster.sync;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.TimerTask;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,6 +101,7 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 
 	}
 
+	
 	public InterClusterGroupUserService(long routeId, Channel replyChannel, String group, long gid,
 			List<RNode> groupShards, String groupUserName, boolean intercluster) {
 		noOfResultExpected = ClusterDirectory.getGroupMap().size();
@@ -112,6 +115,8 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 
 	public void addUserToGroup() {
 
+		
+		
 		// first just add primary shard
 		AddUserGroupTask task = new AddUserGroupTask(
 				ClusterDirectory.getNodeMap().get(groupShards.get(0).getNodeId()).getNodeIp(),
@@ -139,6 +144,9 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 	}
 
 	public void addUserToGroupAllClusters() {
+		
+		
+		
 		if (intercluster) {
 			Map<String, Map<String, Node>> groupMap = ClusterDirectory.getGroupMap();
 			for (Map.Entry<String, Map<String, Node>> entry : groupMap.entrySet()) {
