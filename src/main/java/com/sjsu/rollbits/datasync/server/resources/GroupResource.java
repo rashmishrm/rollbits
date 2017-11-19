@@ -10,9 +10,11 @@ import com.sjsu.rollbits.dao.interfaces.model.GroupUser;
 import com.sjsu.rollbits.dao.interfaces.service.GroupService;
 import com.sjsu.rollbits.dao.interfaces.service.GroupUserService;
 import com.sjsu.rollbits.datasync.client.MessageClient;
+import com.sjsu.rollbits.intercluster.sync.InterClusterGroupUserService;
 import com.sjsu.rollbits.sharding.hashing.Message;
 import com.sjsu.rollbits.sharding.hashing.RNode;
 import com.sjsu.rollbits.sharding.hashing.ShardingService;
+import com.sjsu.rollbits.yml.Loadyaml;
 
 import io.netty.channel.Channel;
 import routing.Pipe;
@@ -27,7 +29,7 @@ public class GroupResource implements RouteResource {
 	public GroupResource() {
 		shardingService = ShardingService.getInstance();
 		dbService = new GroupService();
-		dbgroupuserService=new GroupUserService();
+		dbgroupuserService = new GroupUserService();
 	}
 
 	@Override
@@ -39,14 +41,13 @@ public class GroupResource implements RouteResource {
 	public Object process(Pipe.Route msg, Channel returnChannel) {
 		boolean success = false;
 		Pipe.Group.ActionType option = msg.getGroup().getAction();
-		
 
 		switch (option) {
 		case CREATE:
 			Pipe.Group group = msg.getGroup();
 			Pipe.Header header = msg.getHeader();
-			//System.out.println(header);
-			
+			// System.out.println(header);
+
 			if (header != null && header.getType() != null && !header.getType().equals(Pipe.Header.Type.INTERNAL)) {
 
 				System.out.println(group.getGname());
@@ -75,46 +76,62 @@ public class GroupResource implements RouteResource {
 				success = true;
 
 			}
-			break;
-		
+			Route.Builder rb = ProtoUtil.createResponseRoute(msg.getId(), success, null,
+					success ? RollbitsConstants.SUCCESS : RollbitsConstants.FAILED);
+
+			return rb;
+
 		case ADDUSER:
+
 			Pipe.Group groups = msg.getGroup();
-			
+
 			Pipe.Header headers = msg.getHeader();
 
 			if (headers != null && headers.getType() != null && !headers.getType().equals(Pipe.Header.Type.INTERNAL)) {
 
-				
-				List<RNode> nodes = shardingService.getNodes(new Message(groups.getGname()));
+				boolean intercluster = headers.getType().equals(Pipe.Header.Type.INTER_CLUSTER) ? true : false;
+				// checking if group doesn't exists with us, then send message to others.
 
-				// save to database
+				List<RNode> groupShards = shardingService.getNodes(new Message(groups.getGname()));
 
-				for (RNode node : nodes) {
-					MessageClient mc = new MessageClient(node.getIpAddress(), (int) node.getPort());
-					if (node.getType().equals(RNode.Type.REPLICA)) {
-						mc.addUsertoGroup((int) groups.getGid(),groups.getGname(),groups.getUsername(),RollbitsConstants.INTERNAL, true);
-					} else {
-						success = mc.addUsertoGroup((int) groups.getGid(),groups.getGname(),groups.getUsername(),RollbitsConstants.INTERNAL, false);
-					}
+				if (groupShards != null
+						&& Loadyaml.getProperty(RollbitsConstants.NODE_NAME).equals(groupShards.get(0).getNodeId())
+						&& dbService.findIfAGroupExists(groups.getGname())) {
 
+					GroupUser dbgrpuser = new GroupUser(groups.getGname(), groups.getUsername());
+					dbgroupuserService.persist(dbgrpuser);
+
+					rb = ProtoUtil.createResponseRoute(msg.getId(), success, null,
+							success ? RollbitsConstants.SUCCESS : RollbitsConstants.FAILED);
+
+					return rb;
+
+					// check whether node is primary and has to fetch from db and no need to get
+					// anything from other clusters.
+
+				} else {
+
+					InterClusterGroupUserService igs = new InterClusterGroupUserService(msg.getId(), returnChannel,
+							groups.getGname(), groups.getGid(), groupShards, groups.getUsername(), intercluster);
+					igs.addUserToGroup();
+
+					return null;
 				}
+
 			}
 
 			else {
 
-				GroupUser dbgrpuser = new GroupUser(groups.getGname(),groups.getUsername());
+				GroupUser dbgrpuser = new GroupUser(groups.getGname(), groups.getUsername());
 				dbgroupuserService.persist(dbgrpuser);
 				success = true;
-				
+
 			}
 			break;
-		
+
 		}
 
-		Route.Builder rb = ProtoUtil.createResponseRoute(msg.getId(), success, null,
-				success ? RollbitsConstants.SUCCESS : RollbitsConstants.FAILED);
-
-		return rb;
+		return null;
 
 	}
 }
