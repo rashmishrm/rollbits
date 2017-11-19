@@ -76,6 +76,7 @@ message Group {
         CREATE = 0;
         DELETE = 1;
         ADDUSER = 2;
+        GET=3;
     }
     required string gname = 1;
     required int64 gid = 2;
