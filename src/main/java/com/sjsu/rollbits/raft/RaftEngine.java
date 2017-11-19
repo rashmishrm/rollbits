@@ -25,7 +25,7 @@ public class RaftEngine implements Runnable {
 				RaftContext raftContext = RaftContext.getInstance();
 				RaftState raftState = raftContext.getRaftState();
 				raftState.doAction(raftContext);
-				if(!raftContext.getLeaderNodeId().equals(null))
+				if(!(raftContext.getLeaderNodeId()==null))
 				{
 				System.out.println("Raft Leader is : "+raftContext.getLeaderNodeId());
 				System.out.println("State of this node is : "+raftContext.getRaftState());
