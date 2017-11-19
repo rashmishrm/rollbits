@@ -53,6 +53,8 @@ public class InterClusterGroupMessageService implements ResultCollectable<Respon
 
 	private boolean sentToAllClusters;
 
+	private boolean isInterCLuster;
+
 	class SendGroupMessageTask implements CommListener {
 		protected Logger gmlogger = LoggerFactory.getLogger("SendGroupMessageTask");
 
@@ -98,7 +100,7 @@ public class InterClusterGroupMessageService implements ResultCollectable<Respon
 	}
 
 	public InterClusterGroupMessageService(long routeId, Channel replyChannel, String sender, String reciever,
-			String message, String internalPrimaryNode) {
+			String message, String internalPrimaryNode, boolean isInterCluster) {
 		noOfResultExpected = ClusterDirectory.getGroupMap().size();
 		this.routeId = routeId;
 		this.replyChannel = replyChannel;
@@ -106,6 +108,7 @@ public class InterClusterGroupMessageService implements ResultCollectable<Respon
 		this.reciever = reciever;
 		this.message = message;
 		this.internalPrimaryNode = internalPrimaryNode;
+		this.isInterCLuster = isInterCluster;
 	}
 
 	public void sendGroupMessage() {
@@ -122,18 +125,20 @@ public class InterClusterGroupMessageService implements ResultCollectable<Respon
 	}
 
 	public void sendMessageToAllClusters() {
-		Map<String, Map<String, Node>> groupMap = ClusterDirectory.getGroupMap();
-		for (Map.Entry<String, Map<String, Node>> entry : groupMap.entrySet()) {
-			if (Loadyaml.getProperty(RollbitsConstants.CLUSTER_NAME).equals(entry.getKey())) {
-				continue;
+		if (isInterCLuster) {
+			Map<String, Map<String, Node>> groupMap = ClusterDirectory.getGroupMap();
+			for (Map.Entry<String, Map<String, Node>> entry : groupMap.entrySet()) {
+				if (Loadyaml.getProperty(RollbitsConstants.CLUSTER_NAME).equals(entry.getKey())) {
+					continue;
+				}
+				Map<String, Node> nodeMap = entry.getValue();
+				Node nodeOfEachGroup = null;
+				List<Node> nodeList = new ArrayList<>(nodeMap.values());
+				nodeOfEachGroup = nodeList.get(rand.nextInt(nodeList.size()));
+				SendGroupMessageTask task = new SendGroupMessageTask(nodeOfEachGroup.getNodeIp(),
+						nodeOfEachGroup.getPort(), this, RollbitsConstants.INTER_CLUSTER, sender, reciever, message);
+				task.doTask();
 			}
-			Map<String, Node> nodeMap = entry.getValue();
-			Node nodeOfEachGroup = null;
-			List<Node> nodeList = new ArrayList<>(nodeMap.values());
-			nodeOfEachGroup = nodeList.get(rand.nextInt(nodeList.size()));
-			SendGroupMessageTask task = new SendGroupMessageTask(nodeOfEachGroup.getNodeIp(), nodeOfEachGroup.getPort(),
-					this, RollbitsConstants.INTER_CLUSTER, sender, reciever, message);
-			task.doTask();
 		}
 
 	}

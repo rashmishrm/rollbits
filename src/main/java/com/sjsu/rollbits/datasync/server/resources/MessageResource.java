@@ -83,7 +83,7 @@ public class MessageResource implements RouteResource {
 			} else if (msg.hasHeader() && !RollbitsConstants.INTERNAL.equals(msg.getHeader().getType())){
 
 				InterClusterGroupMessageService igs = new InterClusterGroupMessageService(msg.getId(), returnChannel, message.getSenderId(),  message.getReceiverId(),
-						message.getPayload(),groupShards.get(0).getNodeId());
+						message.getPayload(),groupShards.get(0).getNodeId(), msg.getHeader().getType().equals(RollbitsConstants.INTER_CLUSTER)||msg.getHeader().getType().equals(RollbitsConstants.INTERNAL)? false : true);
 
 				igs.sendGroupMessage();
 
