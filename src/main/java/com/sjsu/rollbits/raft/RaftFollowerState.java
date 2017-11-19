@@ -3,7 +3,9 @@
  */
 package com.sjsu.rollbits.raft;
 
-import com.sjsu.rollbits.datasync.client.MessageClient;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sjsu.rollbits.discovery.ClusterDirectory;
 import com.sjsu.rollbits.discovery.Node;
 
@@ -35,6 +37,9 @@ public class RaftFollowerState implements RaftState {
 		hasVoted = false;
 		if (raftContext.getLAST_RECIEVED() == -1
 				|| System.currentTimeMillis() - raftContext.getLAST_RECIEVED() > RaftContext.RAFT_TIMER) {
+			List<Node> failedNode = new ArrayList<>();
+			failedNode.add(ClusterDirectory.getNodeMap().get(raftContext.getLeaderNodeId()));
+			RaftHelper.broadcastFailover(failedNode);
 			RaftState raftState = new RaftCandidateState();
 			raftContext.setRaftState(raftState);
 			Route.Builder routeBuilder = Route.newBuilder();
