@@ -7,27 +7,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sjsu.rollbits.dao.interfaces.service.MessageService;
 import com.sjsu.rollbits.datasync.client.CommListener;
 import com.sjsu.rollbits.datasync.client.MessageClient;
 import com.sjsu.rollbits.datasync.server.resources.ProtoUtil;
 import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 import com.sjsu.rollbits.discovery.ClusterDirectory;
 import com.sjsu.rollbits.discovery.Node;
-import com.sjsu.rollbits.intercluster.sync.InterClusterGroupUserService.AddUserGroupTask;
 import com.sjsu.rollbits.sharding.hashing.RNode;
 import com.sjsu.rollbits.yml.Loadyaml;
 
 import io.netty.channel.Channel;
-import routing.Pipe.Message;
 import routing.Pipe.Response;
 import routing.Pipe.Route;
 
@@ -119,14 +112,19 @@ public class InterClusterGroupMessageService implements ResultCollectable<Respon
 	public void sendGroupMessage() {
 		Thread t = new Thread(new Timer(this));
 		t.start();
-		SendGroupMessageTask task = new SendGroupMessageTask(
-				ClusterDirectory.getNodeMap().get(groupShards.get(0).getNodeId()).getNodeIp(),
-				ClusterDirectory.getNodeMap().get(groupShards.get(0).getNodeId()).getPort(), this,
-				RollbitsConstants.INTERNAL, sender, reciever, message);
-		task.doTask();
-
-		this.localClusterChecked = false;
-		this.sentToAllClusters = false;
+		if (!Loadyaml.getProperty(RollbitsConstants.NODE_NAME).equals(groupShards.get(0).getNodeId())) {
+			SendGroupMessageTask task = new SendGroupMessageTask(
+					ClusterDirectory.getNodeMap().get(groupShards.get(0).getNodeId()).getNodeIp(),
+					ClusterDirectory.getNodeMap().get(groupShards.get(0).getNodeId()).getPort(), this,
+					RollbitsConstants.INTERNAL, sender, reciever, message);
+			task.doTask();
+			this.localClusterChecked = false;
+			this.sentToAllClusters = false;
+		} else {
+			sendMessageToAllClusters();
+			this.localClusterChecked = true;
+			this.sentToAllClusters = true;
+		}
 
 	}
 

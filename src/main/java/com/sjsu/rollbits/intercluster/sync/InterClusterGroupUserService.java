@@ -45,7 +45,6 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 
 	private List<RNode> groupShards;
 
-	private boolean addedToPrimaryShard;
 
 	private String groupUserName;
 
@@ -101,7 +100,6 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 
 	}
 
-	
 	public InterClusterGroupUserService(long routeId, Channel replyChannel, String group, long gid,
 			List<RNode> groupShards, String groupUserName, boolean intercluster) {
 		noOfResultExpected = ClusterDirectory.getGroupMap().size();
@@ -114,20 +112,26 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 	}
 
 	public void addUserToGroup() {
+
 		Thread t = new Thread(new Timer(this));
 		t.start();
-		
-		// first just add primary shard
-		AddUserGroupTask task = new AddUserGroupTask(
-				ClusterDirectory.getNodeMap().get(groupShards.get(0).getNodeId()).getNodeIp(),
-				ClusterDirectory.getNodeMap().get(groupShards.get(0).getNodeId()).getPort(), this,
-				RollbitsConstants.INTERNAL, this.groupName, this.gid, this.groupUserName, false);
 
-		task.doTask();
-		this.addedToPrimaryShard = false;
-		this.localClusterChecked = false;
-		this.sentToAllClusters = false;
+		if (!Loadyaml.getProperty(RollbitsConstants.NODE_NAME).equals(groupShards.get(0).getNodeId())) {
 
+			// first just add primary shard
+			AddUserGroupTask task = new AddUserGroupTask(
+					ClusterDirectory.getNodeMap().get(groupShards.get(0).getNodeId()).getNodeIp(),
+					ClusterDirectory.getNodeMap().get(groupShards.get(0).getNodeId()).getPort(), this,
+					RollbitsConstants.INTERNAL, this.groupName, this.gid, this.groupUserName, false);
+
+			task.doTask();
+			this.localClusterChecked = false;
+			this.sentToAllClusters = false;
+		} else {
+			addUserToGroupAllClusters();
+			this.localClusterChecked = true;
+			this.sentToAllClusters = true;
+		}
 	}
 
 	public void addUserToGroupOnReplicas() {
@@ -144,9 +148,7 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 	}
 
 	public void addUserToGroupAllClusters() {
-		
-		
-		
+
 		if (intercluster) {
 			Map<String, Map<String, Node>> groupMap = ClusterDirectory.getGroupMap();
 			for (Map.Entry<String, Map<String, Node>> entry : groupMap.entrySet()) {
@@ -162,7 +164,7 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 				task.doTask();
 			}
 		}
-		if(noOfResultExpected==0){
+		if (noOfResultExpected == 0) {
 			finalResult = true;
 			publishResult();
 		}
@@ -216,7 +218,7 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 		noOfResultExpected = 0;
 		finalResult = true;
 		publishResult();
-		
+
 	}
 
 }
