@@ -152,4 +152,10 @@ public class InterClusterUserMessageService implements ResultCollectable<List<Me
 		replyChannel.writeAndFlush(ProtoUtil.createMessageResponseRoute2(routeId, resultList, userName, true));
 	}
 
+	@Override
+	public void timeout() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

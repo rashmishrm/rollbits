@@ -198,4 +198,10 @@ public class InterClusterGroupMessageService implements ResultCollectable<Respon
 		replyChannel.writeAndFlush(rb.build());
 	}
 
+	@Override
+	public void timeout() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

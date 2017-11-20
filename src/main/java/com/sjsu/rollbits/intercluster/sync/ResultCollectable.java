@@ -13,4 +13,6 @@ public interface ResultCollectable<T> {
 	
 	public void publishResult();
 
+	public void timeout();
+
 }
