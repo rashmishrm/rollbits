@@ -57,8 +57,9 @@ public class ProtoUtil {
 		for (com.sjsu.rollbits.dao.interfaces.model.Message mesg : messages) {
 			if (mesg != null) {
 				Pipe.Message.Builder m = Pipe.Message.newBuilder();
-				m.setSenderId(mesg.getFromuserid() == null ? "" : mesg.getMessage());
-				m.setReceiverId(mesg.getTouserid() == null ? "" : mesg.getTouserid());
+				m.setSenderId(mesg.getFromuserid() == null ? "" : mesg.getFromuserid());
+				m.setReceiverId(mesg.getTouserid() == null ? mesg.getTogroupid()==null?"":mesg.getTogroupid() : mesg.getTouserid());
+
 				m.setAction(ActionType.POST);
 				m.setTimestamp(mesg.getTimestamp().toString());
 				m.setType(mesg.getTogroupid() == null ? Message.Type.GROUP : Message.Type.SINGLE);
@@ -159,8 +160,7 @@ public class ProtoUtil {
 		if (type.equals(RollbitsConstants.INTERNAL)) {
 			header.setType(header.getType().INTERNAL);
 
-		}
-		else if (type.equals(RollbitsConstants.CLIENT)) {
+		} else if (type.equals(RollbitsConstants.CLIENT)) {
 			header.setType(header.getType().CLIENT);
 
 		} else {
@@ -261,7 +261,6 @@ public class ProtoUtil {
 
 	public static Route.Builder createAddUsertoGroupRequest(long id, String gname, String uname, String type) {
 
-		
 		Route.Builder rb = Route.newBuilder();
 		rb.setId(id);
 		rb.setPath(Route.Path.GROUP);
@@ -270,7 +269,7 @@ public class ProtoUtil {
 		gb.setGid(id);
 		gb.setAction(routing.Pipe.Group.ActionType.ADDUSER);
 		gb.setUsername(uname);
-		//System.out.println(uname);
+		// System.out.println(uname);
 		rb.setGroup(gb);
 
 		Pipe.Header.Builder header = Pipe.Header.newBuilder();
