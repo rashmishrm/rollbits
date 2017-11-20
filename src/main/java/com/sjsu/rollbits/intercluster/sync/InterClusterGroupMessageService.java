@@ -58,6 +58,8 @@ public class InterClusterGroupMessageService implements ResultCollectable<Respon
 
 	private boolean isInterCLuster;
 
+	private boolean isResultPublished = false;
+
 	class SendGroupMessageTask implements CommListener {
 		protected Logger gmlogger = LoggerFactory.getLogger("SendGroupMessageTask");
 
@@ -115,7 +117,8 @@ public class InterClusterGroupMessageService implements ResultCollectable<Respon
 	}
 
 	public void sendGroupMessage() {
-
+		Thread t = new Thread(new Timer(this));
+		t.start();
 		SendGroupMessageTask task = new SendGroupMessageTask(
 				ClusterDirectory.getNodeMap().get(groupShards.get(0).getNodeId()).getNodeIp(),
 				ClusterDirectory.getNodeMap().get(groupShards.get(0).getNodeId()).getPort(), this,
@@ -193,15 +196,19 @@ public class InterClusterGroupMessageService implements ResultCollectable<Respon
 
 	@Override
 	public void publishResult() {
-		Route.Builder rb = ProtoUtil.createResponseRoute(routeId, finalResult, finalResult ? "" : "ERR_GRP_201",
-				finalResult ? "" : "Message could not be sent!");
-		replyChannel.writeAndFlush(rb.build());
+		if (!isResultPublished) {
+			Route.Builder rb = ProtoUtil.createResponseRoute(routeId, finalResult, finalResult ? "" : "ERR_GRP_201",
+					finalResult ? "" : "Message could not be sent!");
+			replyChannel.writeAndFlush(rb.build());
+			isResultPublished = true;
+		}
 	}
 
 	@Override
 	public void timeout() {
-		// TODO Auto-generated method stub
-		
+		noOfResultExpected = 0;
+		finalResult = true;
+		publishResult();
 	}
 
 }

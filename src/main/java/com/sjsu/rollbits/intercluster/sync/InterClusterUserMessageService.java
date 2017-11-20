@@ -41,6 +41,7 @@ public class InterClusterUserMessageService implements ResultCollectable<List<Me
 	private Channel replyChannel;
 	private String userName;
 	private boolean intercluster;
+	private boolean isResultPublished = false;
 
 	/**
 	 * @return the resultList
@@ -108,6 +109,8 @@ public class InterClusterUserMessageService implements ResultCollectable<List<Me
 	}
 
 	public void fetchAllMessages() {
+		Thread t = new Thread(new Timer(this));
+		t.start();
 		Map<String, Map<String, Node>> groupMap = ClusterDirectory.getGroupMap();
 		if (!intercluster) {
 			for (Map.Entry<String, Map<String, Node>> entry : groupMap.entrySet()) {
@@ -148,13 +151,16 @@ public class InterClusterUserMessageService implements ResultCollectable<List<Me
 
 	@Override
 	public void publishResult() {
-		System.out.println(resultList);
-		replyChannel.writeAndFlush(ProtoUtil.createMessageResponseRoute2(routeId, resultList, userName, true));
+		if (!isResultPublished ) {
+			System.out.println(resultList);
+			replyChannel.writeAndFlush(ProtoUtil.createMessageResponseRoute2(routeId, resultList, userName, true));
+		}
 	}
 
 	@Override
 	public void timeout() {
-		// TODO Auto-generated method stub
+		noOfResultExpected = 0;
+		publishResult();
 		
 	}
 

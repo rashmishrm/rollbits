@@ -51,6 +51,8 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 
 	private boolean intercluster;
 
+	private boolean isResultPublished;
+
 	class AddUserGroupTask implements CommListener {
 		protected Logger gmlogger = LoggerFactory.getLogger("AddUserGroupTask");
 
@@ -112,8 +114,8 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 	}
 
 	public void addUserToGroup() {
-
-		
+		Thread t = new Thread(new Timer(this));
+		t.start();
 		
 		// first just add primary shard
 		AddUserGroupTask task = new AddUserGroupTask(
@@ -201,14 +203,19 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 
 	@Override
 	public void publishResult() {
-		Route.Builder rb = ProtoUtil.createResponseRoute(routeId, finalResult, finalResult ? "" : "ERR_GRP_202",
-				finalResult ? "" : "Group Could not be added!!");
-		replyChannel.writeAndFlush(rb.build());
+		if (!isResultPublished) {
+			Route.Builder rb = ProtoUtil.createResponseRoute(routeId, finalResult, finalResult ? "" : "ERR_GRP_202",
+					finalResult ? "" : "Group Could not be added!!");
+			replyChannel.writeAndFlush(rb.build());
+			isResultPublished = true;
+		}
 	}
 
 	@Override
 	public void timeout() {
-		// TODO Auto-generated method stub
+		noOfResultExpected = 0;
+		finalResult = true;
+		publishResult();
 		
 	}
 
