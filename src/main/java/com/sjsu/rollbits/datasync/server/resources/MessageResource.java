@@ -80,6 +80,7 @@ public class MessageResource implements RouteResource {
 						1, new Date(), message.getSenderId(), message.getReceiverId(), message.getSenderId(),
 						message.getPayload());
 				dbService.persist(messageModel);
+				isSuccess=true;
 				Route.Builder rb = ProtoUtil.createResponseRoute(msg.getId(), isSuccess, null,
 						isSuccess ? RollbitsConstants.SUCCESS : RollbitsConstants.FAILED);
 
