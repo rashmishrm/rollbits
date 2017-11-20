@@ -179,7 +179,7 @@ public class CommConnection {
 			CommInit si = new CommInit(false);
 			Bootstrap b = new Bootstrap();
 			b.group(group).channel(NioSocketChannel.class).handler(si);
-			b.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
+			b.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 30000);
 			b.option(ChannelOption.TCP_NODELAY, true);
 			b.option(ChannelOption.SO_KEEPALIVE, true);
 
@@ -239,8 +239,6 @@ public class CommConnection {
 			} catch (ConnectionNotFormedException c) {
 				throw new RuntimeException("Not able to establish connection to server");
 			}
-		
-		
 
 	}
 
