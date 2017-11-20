@@ -3,6 +3,8 @@
  */
 package com.sjsu.rollbits.raft;
 
+import com.sjsu.rollbits.discovery.UdpClient;
+
 import routing.Pipe.RaftMessage;
 import routing.Pipe.RaftMessage.RaftMsgType;
 import routing.Pipe.RaftNode.RaftState;
@@ -28,6 +30,7 @@ public class RaftHeartBeatEngine implements Runnable {
 		while (true) {
 			try {
 				Thread.sleep(RaftContext.HEARTBEAT_TIMER);
+				UdpClient.broadcast();
 				RaftContext raftContext = RaftContext.getInstance();
 
 				if (RaftState.Leader.equals(raftContext.getRaftState().getRaftState())) {

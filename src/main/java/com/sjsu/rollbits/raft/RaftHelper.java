@@ -39,14 +39,15 @@ public class RaftHelper {
 	public static void broadcast(Route.Builder routeBuilder){
 		Map<String,Node> nodeMap = ClusterDirectory.getNodeMap();
 		List<Node> failedList = new ArrayList<>();
-		for (Map.Entry<String, Node> entry : nodeMap.entrySet())
-		{
-			Node node = entry.getValue();
-			MessageClient mc = new MessageClient(node.getNodeIp(), node.getPort());
-			RaftListener rl = new RaftListener(node, mc, routeBuilder);
-			mc.addListener(rl);
-			if (!mc.sendProto(routeBuilder)){
-				failedList.add(node);
+		if (ClusterDirectory.getGroupMap().size() != 0) {
+			for (Map.Entry<String, Node> entry : nodeMap.entrySet()) {
+				Node node = entry.getValue();
+				MessageClient mc = new MessageClient(node.getNodeIp(), node.getPort());
+				RaftListener rl = new RaftListener(node, mc, routeBuilder);
+				mc.addListener(rl);
+				if (!mc.sendProto(routeBuilder)) {
+					failedList.add(node);
+				}
 			}
 		}
 		if(failedList.size()>0 && failedList.size() == ClusterDirectory.getNodeMap().size()){
@@ -83,7 +84,9 @@ public class RaftHelper {
 
 		for(Node node:nodes)
 		{
-			ClusterDirectory.getNodeMap().remove(node.getNodeId());
+			if(null!=ClusterDirectory.getNodeMap() && ClusterDirectory.getNodeMap().containsKey(node.getNodeId())){
+				ClusterDirectory.handleFailover(node.getNodeId());
+			}
 			
 		}
 		for (Node node : nodes)

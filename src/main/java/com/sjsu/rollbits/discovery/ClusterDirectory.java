@@ -50,13 +50,22 @@ public class ClusterDirectory {
     }
 
 	public static void handleFailover(String nodeName) {
-		ClusterDirectory.getNodeMap().remove(nodeName);
-		
+		synchronized (clusterMap) {
+			if (null != ClusterDirectory.getNodeMap() && ClusterDirectory.getNodeMap().containsKey(nodeName)) {
+				ClusterDirectory.getNodeMap().remove(nodeName);
+			}
+			if (ClusterDirectory.getNodeMap().size() == 0) {
+				clusterMap.remove(Loadyaml.getProperty(RollbitsConstants.CLUSTER_NAME));
+			}
+		}
+
 	}
 
 	public static void removeNode(NetworkDiscoveryPacket networkDiscoveryPacket) {
 		synchronized (clusterMap) {
-			clusterMap.get(networkDiscoveryPacket.getGroupTag()).remove(networkDiscoveryPacket.getNodeId());
+			if (null != ClusterDirectory.getNodeMap() && ClusterDirectory.getNodeMap().containsKey(networkDiscoveryPacket.getNodeId())) {
+				clusterMap.get(networkDiscoveryPacket.getGroupTag()).remove(networkDiscoveryPacket.getNodeId());
+			}
 			if (clusterMap.get(networkDiscoveryPacket.getGroupTag()).size() == 0) {
 				clusterMap.remove(networkDiscoveryPacket.getGroupTag());
 			}
