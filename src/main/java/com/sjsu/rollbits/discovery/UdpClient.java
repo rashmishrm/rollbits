@@ -68,8 +68,8 @@ public final class UdpClient {
 		// builder.setSender(NetworkDiscoveryPacket.Sender.END_USER_CLIENT);
 		builder.setSender(NetworkDiscoveryPacket.Sender.EXTERNAL_SERVER_NODE);
 		builder.setMode(NetworkDiscoveryPacket.Mode.REMOVE_NODE);
-		builder.setNodeId(Loadyaml.getProperty(nodeName));
-		builder.setNodeAddress(Loadyaml.getProperty(nodeIP));
+		builder.setNodeId(nodeName);
+		builder.setNodeAddress(nodeIP);
 		builder.setNodePort(Integer.parseInt(Loadyaml.getProperty(RollbitsConstants.NODE_PORT)));
 		builder.setSecret(Loadyaml.getProperty(RollbitsConstants.SECRET));
 
