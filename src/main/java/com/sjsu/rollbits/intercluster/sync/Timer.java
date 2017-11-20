@@ -12,7 +12,7 @@ import java.util.concurrent.Callable;
  */
 public class Timer<T> implements Runnable {
 
-	private static long TIMEOUT = 20 * 1000L;
+	private static long TIMEOUT = 8 * 1000L;
 	ResultCollectable<T> resultCollectable;
 	/**
 	 * 
