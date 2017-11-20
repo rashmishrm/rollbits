@@ -91,8 +91,10 @@ public class InterClusterGroupMessageService implements ResultCollectable<Respon
 		@Override
 		public void onMessage(Route msg) {
 			logger.info("SendGroupMessageTask");
-
-			resultCollectable.collectResult(msg.getResponse());
+			if (msg.hasResponse())
+				resultCollectable.collectResult(msg.getResponse());
+			else
+				noOfResultExpected--;
 		}
 
 	}

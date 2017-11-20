@@ -82,7 +82,10 @@ public class InterClusterUserMessageService implements ResultCollectable<List<Me
 		@Override
 		public void onMessage(Route msg) {
 			System.out.println("FetchMessageTask\n" + msg);
-			resultCollectable.collectResult(msg.getMessagesResponse().getMessagesList());
+			if (msg.hasMessagesResponse())
+				resultCollectable.collectResult(msg.getMessagesResponse().getMessagesList());
+			else
+				noOfResultExpected--;
 		}
 
 	}
@@ -151,7 +154,7 @@ public class InterClusterUserMessageService implements ResultCollectable<List<Me
 
 	@Override
 	public void publishResult() {
-		if (!isResultPublished ) {
+		if (!isResultPublished) {
 			System.out.println(resultList);
 			replyChannel.writeAndFlush(ProtoUtil.createMessageResponseRoute2(routeId, resultList, userName, true));
 		}
@@ -161,7 +164,7 @@ public class InterClusterUserMessageService implements ResultCollectable<List<Me
 	public void timeout() {
 		noOfResultExpected = 0;
 		publishResult();
-		
+
 	}
 
 }

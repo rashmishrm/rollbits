@@ -45,7 +45,6 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 
 	private List<RNode> groupShards;
 
-
 	private String groupUserName;
 
 	private boolean intercluster;
@@ -94,8 +93,10 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 		@Override
 		public void onMessage(Route msg) {
 			logger.info("AddUserGroupTask");
-
-			resultCollectable.collectResult(msg.getResponse());
+			if (msg.hasResponse())
+				resultCollectable.collectResult(msg.getResponse());
+			else
+				noOfResultExpected--;
 		}
 
 	}
