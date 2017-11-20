@@ -70,8 +70,8 @@ public class ShardingService {
 	}
 
 	public void reset() {
-		service = null;
-		getInstance();
+		//service = null;
+		//getInstance();
 	}
 
 }

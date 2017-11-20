@@ -74,7 +74,10 @@ public class GroupDao {
     }
     
     public Boolean checkIfAGroupExists(String groupName){
-    	List<Group> groupList = (List<Group>) getCurrentSession().createQuery("from Group  grp where grp.name =:groupName").list();
+    	String q="from Group  grp where grp.name =:groupName";
+		Query query = getCurrentSession().createQuery(q);
+		query.setParameter("groupName",groupName);
+    	List<Group> groupList = query.list();
     	return groupList.size() == 1 ? true:false;
     }
 
