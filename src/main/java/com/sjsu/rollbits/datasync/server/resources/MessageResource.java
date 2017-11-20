@@ -77,7 +77,7 @@ public class MessageResource implements RouteResource {
 					&& Loadyaml.getProperty(RollbitsConstants.NODE_NAME).equals(groupShards.get(0).getNodeId())
 					&& groupDBService.findIfAGroupExists(message.getReceiverId())) {
 				com.sjsu.rollbits.dao.interfaces.model.Message messageModel = new com.sjsu.rollbits.dao.interfaces.model.Message(
-						1, new Date(), message.getSenderId(), message.getReceiverId(), message.getSenderId(),
+						1, new Date(), message.getSenderId(),null,  message.getReceiverId(),
 						message.getPayload());
 				dbService.persist(messageModel);
 				isSuccess=true;
