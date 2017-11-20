@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.RollbackException;
+
 import com.sjsu.rollbits.datasync.client.MessageClient;
 import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 import com.sjsu.rollbits.discovery.ClusterDirectory;
@@ -78,8 +80,15 @@ public class RaftHelper {
 	}
 
 	public static void broadcastFailover(List<Node> nodes){
+
+		for(Node node:nodes)
+		{
+			ClusterDirectory.getNodeMap().remove(node.getNodeId());
+			
+		}
 		for (Node node : nodes)
 		{
+
 			Route.Builder routeBuilder = Route.newBuilder();
 			routeBuilder.setPath(Path.FAILOVER_MSG);
 			FailoverMessage.Builder failoverMessageBuilder = FailoverMessage.newBuilder();
