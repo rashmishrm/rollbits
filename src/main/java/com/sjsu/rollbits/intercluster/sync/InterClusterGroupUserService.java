@@ -160,6 +160,10 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 				task.doTask();
 			}
 		}
+		if(noOfResultExpected==0){
+			finalResult = true;
+			publishResult();
+		}
 
 	}
 
@@ -168,6 +172,7 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 
 		if (t != null && t.getSuccess() && !localClusterChecked) {
 			localClusterChecked = true;
+			noOfResultExpected = 0;
 			finalResult = true;
 			publishResult();
 
