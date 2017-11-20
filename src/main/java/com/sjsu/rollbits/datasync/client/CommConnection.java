@@ -232,7 +232,15 @@ public class CommConnection {
 		if (channel != null && channel.isSuccess() && channel.channel().isWritable())
 			return channel.channel();
 		else
-			throw new RuntimeException("Not able to establish connection to server: Channel not writable");
+			try {
+				logger.info("Re-Attempting Connection!");
+				init();
+				return channel.channel();
+			} catch (ConnectionNotFormedException c) {
+				throw new RuntimeException("Not able to establish connection to server");
+			}
+		
+		
 
 	}
 

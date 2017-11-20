@@ -160,7 +160,7 @@ public class ProtoUtil {
 			header.setType(header.getType().INTERNAL);
 
 		}
-		if (type.equals(RollbitsConstants.CLIENT)) {
+		else if (type.equals(RollbitsConstants.CLIENT)) {
 			header.setType(header.getType().CLIENT);
 
 		} else {

@@ -334,16 +334,15 @@ public final class Pipe {
             }
             case 74: {
               routing.Pipe.Header.Builder subBuilder = null;
-              if (payloadCase_ == 9) {
-                subBuilder = ((routing.Pipe.Header) payload_).toBuilder();
+              if (((bitField0_ & 0x00000100) == 0x00000100)) {
+                subBuilder = header_.toBuilder();
               }
-              payload_ =
-                  input.readMessage(routing.Pipe.Header.PARSER, extensionRegistry);
+              header_ = input.readMessage(routing.Pipe.Header.PARSER, extensionRegistry);
               if (subBuilder != null) {
-                subBuilder.mergeFrom((routing.Pipe.Header) payload_);
-                payload_ = subBuilder.buildPartial();
+                subBuilder.mergeFrom(header_);
+                header_ = subBuilder.buildPartial();
               }
-              payloadCase_ = 9;
+              bitField0_ |= 0x00000100;
               break;
             }
             case 82: {
@@ -599,7 +598,6 @@ public final class Pipe {
       GROUP(6),
       MESSAGESREQUEST(7),
       MESSAGESRESPONSE(8),
-      HEADER(9),
       PAYLOAD_NOT_SET(0);
       private final int value;
       private PayloadCase(int value) {
@@ -621,7 +619,6 @@ public final class Pipe {
           case 6: return GROUP;
           case 7: return MESSAGESREQUEST;
           case 8: return MESSAGESRESPONSE;
-          case 9: return HEADER;
           case 0: return PAYLOAD_NOT_SET;
           default: return null;
         }
@@ -833,29 +830,24 @@ public final class Pipe {
     }
 
     public static final int HEADER_FIELD_NUMBER = 9;
+    private routing.Pipe.Header header_;
     /**
      * <code>optional .Header header = 9;</code>
      */
     public boolean hasHeader() {
-      return payloadCase_ == 9;
+      return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     /**
      * <code>optional .Header header = 9;</code>
      */
     public routing.Pipe.Header getHeader() {
-      if (payloadCase_ == 9) {
-         return (routing.Pipe.Header) payload_;
-      }
-      return routing.Pipe.Header.getDefaultInstance();
+      return header_ == null ? routing.Pipe.Header.getDefaultInstance() : header_;
     }
     /**
      * <code>optional .Header header = 9;</code>
      */
     public routing.Pipe.HeaderOrBuilder getHeaderOrBuilder() {
-      if (payloadCase_ == 9) {
-         return (routing.Pipe.Header) payload_;
-      }
-      return routing.Pipe.Header.getDefaultInstance();
+      return header_ == null ? routing.Pipe.Header.getDefaultInstance() : header_;
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 10;
@@ -1037,8 +1029,8 @@ public final class Pipe {
       if (payloadCase_ == 8) {
         output.writeMessage(8, (routing.Pipe.MessagesResponse) payload_);
       }
-      if (payloadCase_ == 9) {
-        output.writeMessage(9, (routing.Pipe.Header) payload_);
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeMessage(9, getHeader());
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         output.writeMessage(10, getResponse());
@@ -1089,9 +1081,9 @@ public final class Pipe {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(8, (routing.Pipe.MessagesResponse) payload_);
       }
-      if (payloadCase_ == 9) {
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(9, (routing.Pipe.Header) payload_);
+          .computeMessageSize(9, getHeader());
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
@@ -1130,6 +1122,11 @@ public final class Pipe {
       result = result && (hasPath() == other.hasPath());
       if (hasPath()) {
         result = result && path_ == other.path_;
+      }
+      result = result && (hasHeader() == other.hasHeader());
+      if (hasHeader()) {
+        result = result && getHeader()
+            .equals(other.getHeader());
       }
       result = result && (hasResponse() == other.hasResponse());
       if (hasResponse()) {
@@ -1174,10 +1171,6 @@ public final class Pipe {
           result = result && getMessagesResponse()
               .equals(other.getMessagesResponse());
           break;
-        case 9:
-          result = result && getHeader()
-              .equals(other.getHeader());
-          break;
         case 0:
         default:
       }
@@ -1200,6 +1193,10 @@ public final class Pipe {
       if (hasPath()) {
         hash = (37 * hash) + PATH_FIELD_NUMBER;
         hash = (53 * hash) + path_;
+      }
+      if (hasHeader()) {
+        hash = (37 * hash) + HEADER_FIELD_NUMBER;
+        hash = (53 * hash) + getHeader().hashCode();
       }
       if (hasResponse()) {
         hash = (37 * hash) + RESPONSE_FIELD_NUMBER;
@@ -1237,10 +1234,6 @@ public final class Pipe {
         case 8:
           hash = (37 * hash) + MESSAGESRESPONSE_FIELD_NUMBER;
           hash = (53 * hash) + getMessagesResponse().hashCode();
-          break;
-        case 9:
-          hash = (37 * hash) + HEADER_FIELD_NUMBER;
-          hash = (53 * hash) + getHeader().hashCode();
           break;
         case 0:
         default:
@@ -1359,6 +1352,7 @@ public final class Pipe {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
+          getHeaderFieldBuilder();
           getResponseFieldBuilder();
           getFailoverMessageFieldBuilder();
           getRaftMessageFieldBuilder();
@@ -1370,6 +1364,12 @@ public final class Pipe {
         bitField0_ = (bitField0_ & ~0x00000001);
         path_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
+        if (headerBuilder_ == null) {
+          header_ = null;
+        } else {
+          headerBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000100);
         if (responseBuilder_ == null) {
           response_ = null;
         } else {
@@ -1464,12 +1464,13 @@ public final class Pipe {
             result.payload_ = messagesResponseBuilder_.build();
           }
         }
-        if (payloadCase_ == 9) {
-          if (headerBuilder_ == null) {
-            result.payload_ = payload_;
-          } else {
-            result.payload_ = headerBuilder_.build();
-          }
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        if (headerBuilder_ == null) {
+          result.header_ = header_;
+        } else {
+          result.header_ = headerBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
           to_bitField0_ |= 0x00000200;
@@ -1544,6 +1545,9 @@ public final class Pipe {
         if (other.hasPath()) {
           setPath(other.getPath());
         }
+        if (other.hasHeader()) {
+          mergeHeader(other.getHeader());
+        }
         if (other.hasResponse()) {
           mergeResponse(other.getResponse());
         }
@@ -1576,10 +1580,6 @@ public final class Pipe {
           }
           case MESSAGESRESPONSE: {
             mergeMessagesResponse(other.getMessagesResponse());
-            break;
-          }
-          case HEADER: {
-            mergeHeader(other.getHeader());
             break;
           }
           case PAYLOAD_NOT_SET: {
@@ -2585,28 +2585,23 @@ public final class Pipe {
         return messagesResponseBuilder_;
       }
 
+      private routing.Pipe.Header header_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
           routing.Pipe.Header, routing.Pipe.Header.Builder, routing.Pipe.HeaderOrBuilder> headerBuilder_;
       /**
        * <code>optional .Header header = 9;</code>
        */
       public boolean hasHeader() {
-        return payloadCase_ == 9;
+        return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
        * <code>optional .Header header = 9;</code>
        */
       public routing.Pipe.Header getHeader() {
         if (headerBuilder_ == null) {
-          if (payloadCase_ == 9) {
-            return (routing.Pipe.Header) payload_;
-          }
-          return routing.Pipe.Header.getDefaultInstance();
+          return header_ == null ? routing.Pipe.Header.getDefaultInstance() : header_;
         } else {
-          if (payloadCase_ == 9) {
-            return headerBuilder_.getMessage();
-          }
-          return routing.Pipe.Header.getDefaultInstance();
+          return headerBuilder_.getMessage();
         }
       }
       /**
@@ -2617,12 +2612,12 @@ public final class Pipe {
           if (value == null) {
             throw new NullPointerException();
           }
-          payload_ = value;
+          header_ = value;
           onChanged();
         } else {
           headerBuilder_.setMessage(value);
         }
-        payloadCase_ = 9;
+        bitField0_ |= 0x00000100;
         return this;
       }
       /**
@@ -2631,12 +2626,12 @@ public final class Pipe {
       public Builder setHeader(
           routing.Pipe.Header.Builder builderForValue) {
         if (headerBuilder_ == null) {
-          payload_ = builderForValue.build();
+          header_ = builderForValue.build();
           onChanged();
         } else {
           headerBuilder_.setMessage(builderForValue.build());
         }
-        payloadCase_ = 9;
+        bitField0_ |= 0x00000100;
         return this;
       }
       /**
@@ -2644,21 +2639,19 @@ public final class Pipe {
        */
       public Builder mergeHeader(routing.Pipe.Header value) {
         if (headerBuilder_ == null) {
-          if (payloadCase_ == 9 &&
-              payload_ != routing.Pipe.Header.getDefaultInstance()) {
-            payload_ = routing.Pipe.Header.newBuilder((routing.Pipe.Header) payload_)
-                .mergeFrom(value).buildPartial();
+          if (((bitField0_ & 0x00000100) == 0x00000100) &&
+              header_ != null &&
+              header_ != routing.Pipe.Header.getDefaultInstance()) {
+            header_ =
+              routing.Pipe.Header.newBuilder(header_).mergeFrom(value).buildPartial();
           } else {
-            payload_ = value;
+            header_ = value;
           }
           onChanged();
         } else {
-          if (payloadCase_ == 9) {
-            headerBuilder_.mergeFrom(value);
-          }
-          headerBuilder_.setMessage(value);
+          headerBuilder_.mergeFrom(value);
         }
-        payloadCase_ = 9;
+        bitField0_ |= 0x00000100;
         return this;
       }
       /**
@@ -2666,37 +2659,31 @@ public final class Pipe {
        */
       public Builder clearHeader() {
         if (headerBuilder_ == null) {
-          if (payloadCase_ == 9) {
-            payloadCase_ = 0;
-            payload_ = null;
-            onChanged();
-          }
+          header_ = null;
+          onChanged();
         } else {
-          if (payloadCase_ == 9) {
-            payloadCase_ = 0;
-            payload_ = null;
-          }
           headerBuilder_.clear();
         }
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
       /**
        * <code>optional .Header header = 9;</code>
        */
       public routing.Pipe.Header.Builder getHeaderBuilder() {
+        bitField0_ |= 0x00000100;
+        onChanged();
         return getHeaderFieldBuilder().getBuilder();
       }
       /**
        * <code>optional .Header header = 9;</code>
        */
       public routing.Pipe.HeaderOrBuilder getHeaderOrBuilder() {
-        if ((payloadCase_ == 9) && (headerBuilder_ != null)) {
+        if (headerBuilder_ != null) {
           return headerBuilder_.getMessageOrBuilder();
         } else {
-          if (payloadCase_ == 9) {
-            return (routing.Pipe.Header) payload_;
-          }
-          return routing.Pipe.Header.getDefaultInstance();
+          return header_ == null ?
+              routing.Pipe.Header.getDefaultInstance() : header_;
         }
       }
       /**
@@ -2706,18 +2693,13 @@ public final class Pipe {
           routing.Pipe.Header, routing.Pipe.Header.Builder, routing.Pipe.HeaderOrBuilder> 
           getHeaderFieldBuilder() {
         if (headerBuilder_ == null) {
-          if (!(payloadCase_ == 9)) {
-            payload_ = routing.Pipe.Header.getDefaultInstance();
-          }
           headerBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
               routing.Pipe.Header, routing.Pipe.Header.Builder, routing.Pipe.HeaderOrBuilder>(
-                  (routing.Pipe.Header) payload_,
+                  getHeader(),
                   getParentForChildren(),
                   isClean());
-          payload_ = null;
+          header_ = null;
         }
-        payloadCase_ = 9;
-        onChanged();;
         return headerBuilder_;
       }
 
@@ -5505,6 +5487,10 @@ public final class Pipe {
        * <code>ADDUSER = 2;</code>
        */
       ADDUSER(2),
+      /**
+       * <code>GET = 3;</code>
+       */
+      GET(3),
       ;
 
       /**
@@ -5519,6 +5505,10 @@ public final class Pipe {
        * <code>ADDUSER = 2;</code>
        */
       public static final int ADDUSER_VALUE = 2;
+      /**
+       * <code>GET = 3;</code>
+       */
+      public static final int GET_VALUE = 3;
 
 
       public final int getNumber() {
@@ -5538,6 +5528,7 @@ public final class Pipe {
           case 0: return CREATE;
           case 1: return DELETE;
           case 2: return ADDUSER;
+          case 3: return GET;
           default: return null;
         }
       }
@@ -14499,65 +14490,65 @@ public final class Pipe {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\npipe.proto\"\326\004\n\005Route\022\n\n\002id\030\001 \002(\003\022\031\n\004pa" +
+      "\n\npipe.proto\"\324\004\n\005Route\022\n\n\002id\030\001 \002(\003\022\031\n\004pa" +
       "th\030\002 \002(\0162\013.Route.Path\0229\n\026networkDiscover" +
       "yPacket\030\003 \001(\0132\027.NetworkDiscoveryPacketH\000" +
       "\022\025\n\004user\030\004 \001(\0132\005.UserH\000\022\033\n\007message\030\005 \001(\013" +
       "2\010.MessageH\000\022\027\n\005group\030\006 \001(\0132\006.GroupH\000\022+\n" +
       "\017messagesRequest\030\007 \001(\0132\020.MessagesRequest" +
       "H\000\022-\n\020messagesResponse\030\010 \001(\0132\021.MessagesR" +
-      "esponseH\000\022\031\n\006header\030\t \001(\0132\007.HeaderH\000\022\033\n\010" +
-      "response\030\n \001(\0132\t.Response\022)\n\017failoverMes" +
-      "sage\030\013 \001(\0132\020.FailoverMessage\022!\n\013raftMess",
-      "age\030\014 \001(\0132\014.RaftMessage\"\260\001\n\004Path\022\010\n\004PING" +
-      "\020\000\022\025\n\021NETWORK_DISCOVERY\020\001\022\010\n\004USER\020\002\022\013\n\007M" +
-      "ESSAGE\020\003\022\t\n\005GROUP\020\004\022\024\n\020MESSAGES_REQUEST\020" +
-      "\005\022\025\n\021MESSAGES_RESPONSE\020\006\022\n\n\006HEADER\020\007\022\014\n\010" +
-      "RESPONSE\020\010\022\014\n\010RAFT_MSG\020\t\022\020\n\014FAILOVER_MSG" +
-      "\020\nB\t\n\007payload\"?\n\010Response\022\017\n\007success\030\001 \002" +
-      "(\010\022\017\n\007message\030\002 \001(\t\022\021\n\terrorCode\030\003 \001(\t\"\246" +
-      "\001\n\004User\022\r\n\005uname\030\001 \002(\t\022\r\n\005email\030\002 \001(\t\022\020\n" +
-      "\010password\030\003 \001(\t\022\030\n\020recentActiveTime\030\004 \001(" +
-      "\t\022 \n\006action\030\005 \002(\0162\020.User.ActionType\"2\n\nA",
-      "ctionType\022\014\n\010REGISTER\020\000\022\n\n\006ACCESS\020\001\022\n\n\006D" +
-      "ELETE\020\002\"\213\001\n\005Group\022\r\n\005gname\030\001 \002(\t\022\013\n\003gid\030" +
-      "\002 \002(\003\022!\n\006action\030\003 \002(\0162\021.Group.ActionType" +
-      "\022\020\n\010username\030\004 \001(\t\"1\n\nActionType\022\n\n\006CREA" +
-      "TE\020\000\022\n\n\006DELETE\020\001\022\013\n\007ADDUSER\020\002\"\246\002\n\007Messag" +
-      "e\022\033\n\004type\030\001 \002(\0162\r.Message.Type\022\020\n\010sender" +
-      "Id\030\002 \002(\t\022\017\n\007payload\030\003 \002(\t\022\022\n\nreceiverId\030" +
-      "\004 \002(\t\022\021\n\ttimestamp\030\005 \002(\t\022\037\n\006status\030\006 \001(\016" +
-      "2\017.Message.Status\022#\n\006action\030\007 \002(\0162\023.Mess" +
-      "age.ActionType\".\n\nActionType\022\010\n\004POST\020\000\022\n",
-      "\n\006UPDATE\020\001\022\n\n\006DELETE\020\002\"\035\n\004Type\022\n\n\006SINGLE" +
-      "\020\000\022\t\n\005GROUP\020\001\"\037\n\006Status\022\n\n\006ACTIVE\020\000\022\t\n\005S" +
-      "TALE\020\001\"_\n\017MessagesRequest\022#\n\004type\030\001 \002(\0162" +
-      "\025.MessagesRequest.Type\022\n\n\002id\030\002 \002(\t\"\033\n\004Ty" +
-      "pe\022\010\n\004USER\020\000\022\t\n\005GROUP\020\001\"}\n\020MessagesRespo" +
-      "nse\022$\n\004type\030\001 \002(\0162\026.MessagesResponse.Typ" +
-      "e\022\n\n\002id\030\002 \001(\t\022\032\n\010messages\030\003 \003(\0132\010.Messag" +
-      "e\"\033\n\004Type\022\010\n\004USER\020\000\022\t\n\005GROUP\020\001\"\352\002\n\026Netwo" +
-      "rkDiscoveryPacket\022*\n\004mode\030\001 \002(\0162\034.Networ" +
-      "kDiscoveryPacket.Mode\022D\n\006sender\030\002 \002(\0162\036.",
-      "NetworkDiscoveryPacket.Sender:\024INTERNAL_" +
-      "SERVER_NODE\022\020\n\010groupTag\030\003 \001(\t\022\016\n\006nodeId\030" +
-      "\004 \001(\t\022\023\n\013nodeAddress\030\005 \002(\t\022\020\n\010nodePort\030\006" +
-      " \002(\003\022\016\n\006secret\030\007 \002(\t\"Q\n\006Sender\022\030\n\024EXTERN" +
-      "AL_SERVER_NODE\020\000\022\030\n\024INTERNAL_SERVER_NODE" +
-      "\020\001\022\023\n\017END_USER_CLIENT\020\002\"2\n\004Mode\022\013\n\007REQUE" +
-      "ST\020\000\022\014\n\010RESPONSE\020\001\022\017\n\013REMOVE_NODE\020\002\"Y\n\006H" +
-      "eader\022\032\n\004type\030\001 \002(\0162\014.Header.Type\"3\n\004Typ" +
-      "e\022\014\n\010INTERNAL\020\000\022\021\n\rINTER_CLUSTER\020\001\022\n\n\006CL" +
-      "IENT\020\002\"x\n\010RaftNode\022\016\n\006nodeid\030\001 \002(\t\022&\n\tra",
-      "ftState\030\002 \002(\0162\023.RaftNode.RaftState\"4\n\tRa" +
-      "ftState\022\r\n\tCandidate\020\000\022\n\n\006Leader\020\001\022\014\n\010Fo" +
-      "llower\020\002\"#\n\017FailoverMessage\022\020\n\010nodeName\030" +
-      "\001 \002(\t\"\311\001\n\013RaftMessage\022&\n\004type\030\001 \002(\0162\030.Ra" +
-      "ftMessage.RaftMsgType\022\024\n\014senderNodeid\030\002 " +
-      "\002(\t\022\033\n\023leaderSelectionTime\030\003 \001(\003\"_\n\013Raft" +
-      "MsgType\022\023\n\017LeaderHeartBeat\020\000\022\017\n\013RequestV" +
-      "ote\020\001\022\020\n\014VoteResponse\020\002\022\030\n\024LeaderElectio" +
-      "nResult\020\003B\013\n\007routingH\001"
+      "esponseH\000\022\027\n\006header\030\t \001(\0132\007.Header\022\033\n\010re" +
+      "sponse\030\n \001(\0132\t.Response\022)\n\017failoverMessa" +
+      "ge\030\013 \001(\0132\020.FailoverMessage\022!\n\013raftMessag",
+      "e\030\014 \001(\0132\014.RaftMessage\"\260\001\n\004Path\022\010\n\004PING\020\000" +
+      "\022\025\n\021NETWORK_DISCOVERY\020\001\022\010\n\004USER\020\002\022\013\n\007MES" +
+      "SAGE\020\003\022\t\n\005GROUP\020\004\022\024\n\020MESSAGES_REQUEST\020\005\022" +
+      "\025\n\021MESSAGES_RESPONSE\020\006\022\n\n\006HEADER\020\007\022\014\n\010RE" +
+      "SPONSE\020\010\022\014\n\010RAFT_MSG\020\t\022\020\n\014FAILOVER_MSG\020\n" +
+      "B\t\n\007payload\"?\n\010Response\022\017\n\007success\030\001 \002(\010" +
+      "\022\017\n\007message\030\002 \001(\t\022\021\n\terrorCode\030\003 \001(\t\"\246\001\n" +
+      "\004User\022\r\n\005uname\030\001 \002(\t\022\r\n\005email\030\002 \001(\t\022\020\n\010p" +
+      "assword\030\003 \001(\t\022\030\n\020recentActiveTime\030\004 \001(\t\022" +
+      " \n\006action\030\005 \002(\0162\020.User.ActionType\"2\n\nAct",
+      "ionType\022\014\n\010REGISTER\020\000\022\n\n\006ACCESS\020\001\022\n\n\006DEL" +
+      "ETE\020\002\"\224\001\n\005Group\022\r\n\005gname\030\001 \002(\t\022\013\n\003gid\030\002 " +
+      "\002(\003\022!\n\006action\030\003 \002(\0162\021.Group.ActionType\022\020" +
+      "\n\010username\030\004 \001(\t\":\n\nActionType\022\n\n\006CREATE" +
+      "\020\000\022\n\n\006DELETE\020\001\022\013\n\007ADDUSER\020\002\022\007\n\003GET\020\003\"\246\002\n" +
+      "\007Message\022\033\n\004type\030\001 \002(\0162\r.Message.Type\022\020\n" +
+      "\010senderId\030\002 \002(\t\022\017\n\007payload\030\003 \002(\t\022\022\n\nrece" +
+      "iverId\030\004 \002(\t\022\021\n\ttimestamp\030\005 \002(\t\022\037\n\006statu" +
+      "s\030\006 \001(\0162\017.Message.Status\022#\n\006action\030\007 \002(\016" +
+      "2\023.Message.ActionType\".\n\nActionType\022\010\n\004P",
+      "OST\020\000\022\n\n\006UPDATE\020\001\022\n\n\006DELETE\020\002\"\035\n\004Type\022\n\n" +
+      "\006SINGLE\020\000\022\t\n\005GROUP\020\001\"\037\n\006Status\022\n\n\006ACTIVE" +
+      "\020\000\022\t\n\005STALE\020\001\"_\n\017MessagesRequest\022#\n\004type" +
+      "\030\001 \002(\0162\025.MessagesRequest.Type\022\n\n\002id\030\002 \002(" +
+      "\t\"\033\n\004Type\022\010\n\004USER\020\000\022\t\n\005GROUP\020\001\"}\n\020Messag" +
+      "esResponse\022$\n\004type\030\001 \002(\0162\026.MessagesRespo" +
+      "nse.Type\022\n\n\002id\030\002 \001(\t\022\032\n\010messages\030\003 \003(\0132\010" +
+      ".Message\"\033\n\004Type\022\010\n\004USER\020\000\022\t\n\005GROUP\020\001\"\352\002" +
+      "\n\026NetworkDiscoveryPacket\022*\n\004mode\030\001 \002(\0162\034" +
+      ".NetworkDiscoveryPacket.Mode\022D\n\006sender\030\002",
+      " \002(\0162\036.NetworkDiscoveryPacket.Sender:\024IN" +
+      "TERNAL_SERVER_NODE\022\020\n\010groupTag\030\003 \001(\t\022\016\n\006" +
+      "nodeId\030\004 \001(\t\022\023\n\013nodeAddress\030\005 \002(\t\022\020\n\010nod" +
+      "ePort\030\006 \002(\003\022\016\n\006secret\030\007 \002(\t\"Q\n\006Sender\022\030\n" +
+      "\024EXTERNAL_SERVER_NODE\020\000\022\030\n\024INTERNAL_SERV" +
+      "ER_NODE\020\001\022\023\n\017END_USER_CLIENT\020\002\"2\n\004Mode\022\013" +
+      "\n\007REQUEST\020\000\022\014\n\010RESPONSE\020\001\022\017\n\013REMOVE_NODE" +
+      "\020\002\"Y\n\006Header\022\032\n\004type\030\001 \002(\0162\014.Header.Type" +
+      "\"3\n\004Type\022\014\n\010INTERNAL\020\000\022\021\n\rINTER_CLUSTER\020" +
+      "\001\022\n\n\006CLIENT\020\002\"x\n\010RaftNode\022\016\n\006nodeid\030\001 \002(",
+      "\t\022&\n\traftState\030\002 \002(\0162\023.RaftNode.RaftStat" +
+      "e\"4\n\tRaftState\022\r\n\tCandidate\020\000\022\n\n\006Leader\020" +
+      "\001\022\014\n\010Follower\020\002\"#\n\017FailoverMessage\022\020\n\010no" +
+      "deName\030\001 \002(\t\"\311\001\n\013RaftMessage\022&\n\004type\030\001 \002" +
+      "(\0162\030.RaftMessage.RaftMsgType\022\024\n\014senderNo" +
+      "deid\030\002 \002(\t\022\033\n\023leaderSelectionTime\030\003 \001(\003\"" +
+      "_\n\013RaftMsgType\022\023\n\017LeaderHeartBeat\020\000\022\017\n\013R" +
+      "equestVote\020\001\022\020\n\014VoteResponse\020\002\022\030\n\024Leader" +
+      "ElectionResult\020\003B\013\n\007routingH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

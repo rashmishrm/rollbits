@@ -87,10 +87,10 @@ public class MessageResource implements RouteResource {
 			} else if (msg.hasHeader() && !RollbitsConstants.INTERNAL.equals(msg.getHeader().getType().toString())) {
 
 				InterClusterGroupMessageService igs = new InterClusterGroupMessageService(msg.getId(), returnChannel,
-						message.getSenderId(), message.getReceiverId(), message.getPayload(),
-						groupShards.get(0).getNodeId(),
+						message.getSenderId(), message.getReceiverId(), message.getPayload(), groupShards,
 						msg.getHeader().getType().toString().equals(RollbitsConstants.INTER_CLUSTER)
-								|| msg.getHeader().getType().toString().equals(RollbitsConstants.INTERNAL) ? false : true);
+								|| msg.getHeader().getType().toString().equals(RollbitsConstants.INTERNAL) ? false
+										: true);
 
 				igs.sendGroupMessage();
 
@@ -142,7 +142,7 @@ public class MessageResource implements RouteResource {
 
 			return rb;
 		}
-		
+
 		return null;
 	}
 

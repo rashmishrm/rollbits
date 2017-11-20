@@ -4,11 +4,9 @@
 package com.sjsu.rollbits.intercluster.sync;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.TimerTask;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -170,7 +168,7 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 
 		if (t != null && t.getSuccess() && !localClusterChecked) {
 			localClusterChecked = true;
-
+			finalResult = true;
 			publishResult();
 
 		} else if (t != null && !t.getSuccess() && !sentToAllClusters) {

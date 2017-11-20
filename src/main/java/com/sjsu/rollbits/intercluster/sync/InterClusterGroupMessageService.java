@@ -22,6 +22,7 @@ import com.sjsu.rollbits.datasync.server.resources.ProtoUtil;
 import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 import com.sjsu.rollbits.discovery.ClusterDirectory;
 import com.sjsu.rollbits.discovery.Node;
+import com.sjsu.rollbits.intercluster.sync.InterClusterGroupUserService.AddUserGroupTask;
 import com.sjsu.rollbits.sharding.hashing.RNode;
 import com.sjsu.rollbits.yml.Loadyaml;
 
@@ -52,6 +53,8 @@ public class InterClusterGroupMessageService implements ResultCollectable<Respon
 	private boolean localClusterChecked;
 
 	private boolean sentToAllClusters;
+
+	private List<RNode> groupShards;
 
 	private boolean isInterCLuster;
 
@@ -100,28 +103,41 @@ public class InterClusterGroupMessageService implements ResultCollectable<Respon
 	}
 
 	public InterClusterGroupMessageService(long routeId, Channel replyChannel, String sender, String reciever,
-			String message, String internalPrimaryNode, boolean isInterCluster) {
+			String message, List<RNode> groupShards, boolean isInterCluster) {
 		noOfResultExpected = ClusterDirectory.getGroupMap().size();
 		this.routeId = routeId;
 		this.replyChannel = replyChannel;
 		this.sender = sender;
 		this.reciever = reciever;
 		this.message = message;
-		this.internalPrimaryNode = internalPrimaryNode;
+		this.groupShards = groupShards;
 		this.isInterCLuster = isInterCluster;
 	}
 
 	public void sendGroupMessage() {
 
 		SendGroupMessageTask task = new SendGroupMessageTask(
-				ClusterDirectory.getNodeMap().get(internalPrimaryNode).getNodeIp(),
-				ClusterDirectory.getNodeMap().get(internalPrimaryNode).getPort(), this, RollbitsConstants.INTERNAL,
-				sender, reciever, message);
+				ClusterDirectory.getNodeMap().get(groupShards.get(0).getNodeId()).getNodeIp(),
+				ClusterDirectory.getNodeMap().get(groupShards.get(0).getNodeId()).getPort(), this,
+				RollbitsConstants.INTERNAL, sender, reciever, message);
 		task.doTask();
 
 		this.localClusterChecked = false;
 		this.sentToAllClusters = false;
 
+	}
+
+	public void addUserToGroupOnReplicas() {
+
+		for (RNode node : groupShards) {
+			if (node.getType().equals(RNode.Type.REPLICA)) {
+				SendGroupMessageTask task = new SendGroupMessageTask(
+						ClusterDirectory.getNodeMap().get(node.getNodeId()).getNodeIp(),
+						ClusterDirectory.getNodeMap().get(node.getNodeId()).getPort(), this, RollbitsConstants.INTERNAL,
+						sender, reciever, message);
+				task.doTask();
+			}
+		}
 	}
 
 	public void sendMessageToAllClusters() {
@@ -148,6 +164,8 @@ public class InterClusterGroupMessageService implements ResultCollectable<Respon
 
 		if (t != null && t.getSuccess() && !localClusterChecked) {
 			localClusterChecked = true;
+			finalResult = true;
+			addUserToGroupOnReplicas();
 			publishResult();
 
 		} else if (t != null && !t.getSuccess() && !sentToAllClusters) {
