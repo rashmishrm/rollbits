@@ -77,10 +77,9 @@ public class MessageResource implements RouteResource {
 					&& Loadyaml.getProperty(RollbitsConstants.NODE_NAME).equals(groupShards.get(0).getNodeId())
 					&& groupDBService.findIfAGroupExists(message.getReceiverId())) {
 				com.sjsu.rollbits.dao.interfaces.model.Message messageModel = new com.sjsu.rollbits.dao.interfaces.model.Message(
-						1, new Date(), message.getSenderId(),null,  message.getReceiverId(),
-						message.getPayload());
+						1, new Date(), message.getSenderId(), null, message.getReceiverId(), message.getPayload());
 				dbService.persist(messageModel);
-				isSuccess=true;
+				isSuccess = true;
 				Route.Builder rb = ProtoUtil.createResponseRoute(msg.getId(), isSuccess, null,
 						isSuccess ? RollbitsConstants.SUCCESS : RollbitsConstants.FAILED);
 
@@ -116,8 +115,9 @@ public class MessageResource implements RouteResource {
 					MessageClient mc = new MessageClient(node.getIpAddress(), (int) node.getPort());
 					if (node.getType().equals(RNode.Type.REPLICA)) {
 						if (mc.isConnected())
-							mc.sendMessage(message.getSenderId(), message.getReceiverId(), message.getPayload(),
-									RollbitsConstants.INTERNAL, true, message.getType().toString());
+							isSuccess = mc.sendMessage(message.getSenderId(), message.getReceiverId(),
+									message.getPayload(), RollbitsConstants.INTERNAL, true,
+									message.getType().toString());
 					} else {
 						if (mc.isConnected())
 							isSuccess = mc.sendMessage(message.getSenderId(), message.getReceiverId(),

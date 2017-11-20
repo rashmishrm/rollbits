@@ -59,7 +59,7 @@ public class GroupResource implements RouteResource {
 				for (RNode node : nodes) {
 					MessageClient mc = new MessageClient(node.getIpAddress(), (int) node.getPort());
 					if (node.getType().equals(RNode.Type.REPLICA)) {
-						mc.addGroup(group.getGname(), (int) group.getGid(), RollbitsConstants.INTERNAL, true);
+						success = mc.addGroup(group.getGname(), (int) group.getGid(), RollbitsConstants.INTERNAL, true);
 					} else {
 						success = mc.addGroup(group.getGname(), (int) group.getGid(), RollbitsConstants.INTERNAL,
 								false);
@@ -100,7 +100,7 @@ public class GroupResource implements RouteResource {
 
 					GroupUser dbgrpuser = new GroupUser(groups.getGname(), groups.getUsername());
 					dbgroupuserService.persist(dbgrpuser);
-					success=true;
+					success = true;
 					rb = ProtoUtil.createResponseRoute(msg.getId(), success, null,
 							success ? RollbitsConstants.SUCCESS : RollbitsConstants.FAILED);
 
