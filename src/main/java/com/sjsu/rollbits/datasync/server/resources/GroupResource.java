@@ -76,6 +76,7 @@ public class GroupResource implements RouteResource {
 				success = true;
 
 			}
+			success=true;
 			Route.Builder rb = ProtoUtil.createResponseRoute(msg.getId(), success, null,
 					success ? RollbitsConstants.SUCCESS : RollbitsConstants.FAILED);
 

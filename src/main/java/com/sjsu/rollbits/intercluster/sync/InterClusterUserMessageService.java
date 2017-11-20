@@ -130,10 +130,13 @@ public class InterClusterUserMessageService implements ResultCollectable<List<Me
 			}
 		}
 		if (needToSendPacketToPrimary) {
-			FetchMessageTask task = new FetchMessageTask(ClusterDirectory.getNodeMap().get(primaryHostname).getNodeIp(),
-					ClusterDirectory.getNodeMap().get(primaryHostname).getPort(), userName, this,
-					RollbitsConstants.INTERNAL);
-			task.doTask();
+			if (!Loadyaml.getProperty(RollbitsConstants.NODE_NAME).equals(primaryHostname)) {
+				FetchMessageTask task = new FetchMessageTask(
+						ClusterDirectory.getNodeMap().get(primaryHostname).getNodeIp(),
+						ClusterDirectory.getNodeMap().get(primaryHostname).getPort(), userName, this,
+						RollbitsConstants.INTERNAL);
+				task.doTask();
+			}
 		} else {
 
 			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = dbService.findAllforuname(userName);

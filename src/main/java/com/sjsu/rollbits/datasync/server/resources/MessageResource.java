@@ -137,7 +137,7 @@ public class MessageResource implements RouteResource {
 				dbService.persist(messageModel);
 				isSuccess = true;
 			}
-
+			isSuccess=true;
 			Route.Builder rb = ProtoUtil.createResponseRoute(msg.getId(), isSuccess, null,
 					isSuccess ? RollbitsConstants.SUCCESS : RollbitsConstants.FAILED);
 
