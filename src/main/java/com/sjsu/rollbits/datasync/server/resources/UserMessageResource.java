@@ -15,11 +15,16 @@
  */
 package com.sjsu.rollbits.datasync.server.resources;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sjsu.rollbits.dao.interfaces.model.GroupUser;
+import com.sjsu.rollbits.dao.interfaces.service.GroupUserService;
 import com.sjsu.rollbits.dao.interfaces.service.MessageService;
 import com.sjsu.rollbits.intercluster.sync.InterClusterUserMessageService;
 import com.sjsu.rollbits.sharding.hashing.Message;
@@ -41,10 +46,12 @@ public class UserMessageResource implements RouteResource {
 	protected static Logger logger = LoggerFactory.getLogger("usermessage");
 	private ShardingService shardingService;
 	private MessageService dbService = null;
+	private GroupUserService gservice = null;
 
 	public UserMessageResource() {
 		shardingService = ShardingService.getInstance();
 		dbService = new MessageService();
+		gservice = new GroupUserService();
 	}
 
 	@Override
@@ -61,28 +68,35 @@ public class UserMessageResource implements RouteResource {
 		List<RNode> nodes = shardingService.getNodes(new Message(message.getId()));
 		//
 		Header header = null;
-		if(msg.hasHeader()){
+		if (msg.hasHeader()) {
 			header = msg.getHeader();
 		}
 
 		RNode primaryNode = nodes.get(0);
 		if (header != null && header.getType() != null && header.getType().equals(Header.Type.INTERNAL)) {
+			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = null;
+			List<GroupUser> groups = gservice.findGroupsForUser(message.getId());
 
-			List<com.sjsu.rollbits.dao.interfaces.model.Message> messages = dbService.findAllforuname(message.getId());
+			List<String> list = groups.stream().map(v -> v.getGroupid()).collect(Collectors.toList());
+			
+			if (list == null || list.size() == 0)
+				messages = dbService.findAllforuname(message.getId());
 
+			else
+				messages = dbService.findAllMessages(message.getId(), list);
 			Route.Builder rb = ProtoUtil.createMessageResponseRoute(msg.getId(), messages, message.getId(), true);
 
 			return rb;
 		} else if (header != null && header.getType() != null && header.getType().equals(Header.Type.INTER_CLUSTER)) {
 
-			InterClusterUserMessageService ics = new InterClusterUserMessageService(primaryNode.getNodeId(), msg.getId(), returnChannel,
-					message.getId(), true);
+			InterClusterUserMessageService ics = new InterClusterUserMessageService(primaryNode.getNodeId(),
+					msg.getId(), returnChannel, message.getId(), true);
 			ics.fetchAllMessages();
 
 		} else {
 
-			InterClusterUserMessageService ics = new InterClusterUserMessageService(primaryNode.getNodeId(), msg.getId(), returnChannel,
-					message.getId(), false);
+			InterClusterUserMessageService ics = new InterClusterUserMessageService(primaryNode.getNodeId(),
+					msg.getId(), returnChannel, message.getId(), false);
 			ics.fetchAllMessages();
 
 		}

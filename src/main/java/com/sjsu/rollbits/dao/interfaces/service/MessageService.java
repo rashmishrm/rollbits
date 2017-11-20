@@ -1,5 +1,7 @@
 package com.sjsu.rollbits.dao.interfaces.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import com.sjsu.rollbits.dao.interfaces.MessageDao;
 import com.sjsu.rollbits.dao.interfaces.model.Message;
@@ -55,6 +57,14 @@ public class MessageService {
         return messages;
     }
     
+    public static List<Message> findAllMessages(String uname,List<String> groups) {
+        messageDao.openCurrentSession();
+        List<Message> messages = messageDao.findAllMessages(uname,groups);
+
+        messageDao.closeCurrentSession();
+        return messages;
+    }
+    
     public static List<Message> findByUserName(String uname) {
         messageDao.openCurrentSession();
         List<Message> messages = messageDao.findAllForUname(uname);
@@ -71,5 +81,24 @@ public class MessageService {
         return messageDao;
 
     }
+    
+    public static void main(String[] args) {
+    	
+		MessageService ms= new MessageService();
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] {"Rollbits-App"}));
+		
+		System.out.println("hertererrererre");
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] {"Rollbits-App"}));
+		System.out.println("hertererrererre");
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] {"Rollbits-App"}));
+		System.out.println("hertererrererre");
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] {"Rollbits-App"}));
+		System.out.println("hertererrererre");
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] {"Rollbits-App"}));
+		System.out.println("hertererrererre");
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] {"Rollbits-App"}));
+
+		
+	}
 
 }
