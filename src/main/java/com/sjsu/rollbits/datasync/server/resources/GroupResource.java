@@ -100,7 +100,7 @@ public class GroupResource implements RouteResource {
 
 					GroupUser dbgrpuser = new GroupUser(groups.getGname(), groups.getUsername());
 					dbgroupuserService.persist(dbgrpuser);
-
+					success=true;
 					rb = ProtoUtil.createResponseRoute(msg.getId(), success, null,
 							success ? RollbitsConstants.SUCCESS : RollbitsConstants.FAILED);
 
