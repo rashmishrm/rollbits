@@ -99,7 +99,7 @@ public class RaftFollowerState implements RaftState {
 			raftContext.setLeaderElectionTime(leaderSelectionTime);
 			raftContext.setLAST_RECIEVED(System.currentTimeMillis());
 		}
-		if (raftContext.getLeaderElectionTime()!=null && leaderSelectionTime > raftContext.getLeaderElectionTime()) {
+		if (raftContext.getLeaderElectionTime()!=null && leaderSelectionTime < raftContext.getLeaderElectionTime()) {
 			raftContext.setLeaderNodeId(senderNodeId);
 			raftContext.setLeaderElectionTime(leaderSelectionTime);
 			raftContext.setLAST_RECIEVED(System.currentTimeMillis());

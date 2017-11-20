@@ -50,7 +50,7 @@ public class RaftLeaderState implements RaftState {
 			raftContext.setLAST_RECIEVED(System.currentTimeMillis());
 			raftContext.setRaftState(new RaftFollowerState());
 		}
-		if (raftContext.getLeaderElectionTime()!=null && leaderElectionTime > raftContext.getLeaderElectionTime()) {
+		if (raftContext.getLeaderElectionTime()!=null && leaderElectionTime < raftContext.getLeaderElectionTime()) {
 			raftContext.setLeaderNodeId(senderNodeId);
 			raftContext.setLeaderElectionTime(leaderElectionTime);
 			raftContext.setLAST_RECIEVED(System.currentTimeMillis());
@@ -68,7 +68,7 @@ public class RaftLeaderState implements RaftState {
 			raftContext.setLAST_RECIEVED(System.currentTimeMillis());
 			raftContext.setRaftState(new RaftFollowerState());
 		}
-		if (raftContext.getLeaderElectionTime()!=null && leaderElectionTime > raftContext.getLeaderElectionTime()) {
+		if (raftContext.getLeaderElectionTime()!=null && leaderElectionTime < raftContext.getLeaderElectionTime()) {
 			raftContext.setLeaderNodeId(senderNodeId);
 			raftContext.setLeaderElectionTime(leaderElectionTime);
 			raftContext.setLAST_RECIEVED(System.currentTimeMillis());

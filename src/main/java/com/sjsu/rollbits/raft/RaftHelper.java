@@ -67,7 +67,7 @@ public class RaftHelper {
 	public static Integer requiredMajorityCount() {
 		// TODO Auto-generated method stub
 		int requiredMajority = ClusterDirectory.getNodeMap().size()/2 -1;
-		return requiredMajority<=0?0:requiredMajority;
+		return requiredMajority<=0?1:requiredMajority;
 	}
 
 
