@@ -50,7 +50,7 @@ public class MessageResource implements RouteResource {
 	protected static Logger logger = LoggerFactory.getLogger("message");
 	private ShardingService shardingService;
 	private MessageService dbService = null;
-	private GroupService groupDBService= null;
+	private GroupService groupDBService = null;
 
 	public MessageResource() {
 		shardingService = ShardingService.getInstance();
@@ -74,66 +74,76 @@ public class MessageResource implements RouteResource {
 			List<RNode> groupShards = shardingService.getNodes(new Message(message.getReceiverId()));
 
 			if (groupShards != null
-					&& Loadyaml.getProperty(RollbitsConstants.NODE_NAME).equals(groupShards.get(0).getNodeId()) && groupDBService.findIfAGroupExists(message.getReceiverId())) {
+					&& Loadyaml.getProperty(RollbitsConstants.NODE_NAME).equals(groupShards.get(0).getNodeId())
+					&& groupDBService.findIfAGroupExists(message.getReceiverId())) {
 				com.sjsu.rollbits.dao.interfaces.model.Message messageModel = new com.sjsu.rollbits.dao.interfaces.model.Message(
 						1, new Date(), message.getSenderId(), message.getReceiverId(), message.getSenderId(),
 						message.getPayload());
 				dbService.persist(messageModel);
-				isSuccess = true;
-			} else if (msg.hasHeader() && !RollbitsConstants.INTERNAL.equals(msg.getHeader().getType())){
+				Route.Builder rb = ProtoUtil.createResponseRoute(msg.getId(), isSuccess, null,
+						isSuccess ? RollbitsConstants.SUCCESS : RollbitsConstants.FAILED);
 
-				InterClusterGroupMessageService igs = new InterClusterGroupMessageService(msg.getId(), returnChannel, message.getSenderId(),  message.getReceiverId(),
-						message.getPayload(),groupShards.get(0).getNodeId(), msg.getHeader().getType().equals(RollbitsConstants.INTER_CLUSTER)||msg.getHeader().getType().equals(RollbitsConstants.INTERNAL)? false : true);
+				return rb;
+			} else if (msg.hasHeader() && !RollbitsConstants.INTERNAL.equals(msg.getHeader().getType().toString())) {
+
+				InterClusterGroupMessageService igs = new InterClusterGroupMessageService(msg.getId(), returnChannel,
+						message.getSenderId(), message.getReceiverId(), message.getPayload(),
+						groupShards.get(0).getNodeId(),
+						msg.getHeader().getType().toString().equals(RollbitsConstants.INTER_CLUSTER)
+								|| msg.getHeader().getType().toString().equals(RollbitsConstants.INTERNAL) ? false : true);
 
 				igs.sendGroupMessage();
 
 				return null;
 			}
 
-		}
+		} else {
+			if (msg.getHeader() != null && msg.getHeader().getType() != null
+					&& Header.Type.CLIENT.equals(msg.getHeader().getType())) {
 
-		if (msg.getHeader() != null && msg.getHeader().getType() != null
-				&& Header.Type.CLIENT.equals(msg.getHeader().getType())) {
+				System.out.println("Message recieved from :" + message.getReceiverId());
 
-			System.out.println("Message recieved from :" + message.getReceiverId());
+				List<RNode> fromNames = shardingService.getNodes(new Message(message.getSenderId()));
+				List<RNode> toNames = shardingService.getNodes(new Message(message.getReceiverId()));
+				Set<RNode> set = new HashSet<RNode>();
+				set.addAll(fromNames);
+				set.addAll(toNames);
 
-			List<RNode> fromNames = shardingService.getNodes(new Message(message.getSenderId()));
-			List<RNode> toNames = shardingService.getNodes(new Message(message.getReceiverId()));
-			Set<RNode> set = new HashSet<RNode>();
-			set.addAll(fromNames);
-			set.addAll(toNames);
+				// save to database
 
-			// save to database
+				for (RNode node : set) {
+					MessageClient mc = new MessageClient(node.getIpAddress(), (int) node.getPort());
+					if (node.getType().equals(RNode.Type.REPLICA)) {
+						if (mc.isConnected())
+							mc.sendMessage(message.getSenderId(), message.getReceiverId(), message.getPayload(),
+									RollbitsConstants.INTERNAL, true, message.getType().toString());
+					} else {
+						if (mc.isConnected())
+							isSuccess = mc.sendMessage(message.getSenderId(), message.getReceiverId(),
+									message.getPayload(), RollbitsConstants.INTERNAL, false,
+									message.getType().toString());
 
-			for (RNode node : set) {
-				MessageClient mc = new MessageClient(node.getIpAddress(), (int) node.getPort());
-				if (node.getType().equals(RNode.Type.REPLICA)) {
-					if (mc.isConnected())
-						mc.sendMessage(message.getSenderId(), message.getReceiverId(), message.getPayload(),
-								RollbitsConstants.INTERNAL, true, message.getType().toString());
-				} else {
-					if (mc.isConnected())
-						isSuccess = mc.sendMessage(message.getSenderId(), message.getReceiverId(), message.getPayload(),
-								RollbitsConstants.INTERNAL, false, message.getType().toString());
+					}
 
 				}
 
+			} else {
+				logger.info("Adding to Database");
+				// User dbuser = new User(user.getUname(), user.getEmail());
+				com.sjsu.rollbits.dao.interfaces.model.Message messageModel = new com.sjsu.rollbits.dao.interfaces.model.Message(
+						1, new Date(), message.getSenderId(), message.getReceiverId(), message.getSenderId(),
+						message.getPayload());
+				dbService.persist(messageModel);
+				isSuccess = true;
 			}
 
-		} else {
-			logger.info("Adding to Database");
-			// User dbuser = new User(user.getUname(), user.getEmail());
-			com.sjsu.rollbits.dao.interfaces.model.Message messageModel = new com.sjsu.rollbits.dao.interfaces.model.Message(
-					1, new Date(), message.getSenderId(), message.getReceiverId(), message.getSenderId(),
-					message.getPayload());
-			dbService.persist(messageModel);
-			isSuccess = true;
+			Route.Builder rb = ProtoUtil.createResponseRoute(msg.getId(), isSuccess, null,
+					isSuccess ? RollbitsConstants.SUCCESS : RollbitsConstants.FAILED);
+
+			return rb;
 		}
-
-		Route.Builder rb = ProtoUtil.createResponseRoute(msg.getId(), isSuccess, null,
-				isSuccess ? RollbitsConstants.SUCCESS : RollbitsConstants.FAILED);
-
-		return rb;
+		
+		return null;
 	}
 
 }

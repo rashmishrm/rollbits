@@ -89,7 +89,7 @@ public class GroupResource implements RouteResource {
 
 			if (headers != null && headers.getType() != null && !headers.getType().equals(Pipe.Header.Type.INTERNAL)) {
 
-				boolean intercluster = headers.getType().equals(Pipe.Header.Type.INTER_CLUSTER) ? true : false;
+				boolean sendTointercluster = headers.getType().equals(Pipe.Header.Type.INTER_CLUSTER) ? false : true;
 				// checking if group doesn't exists with us, then send message to others.
 
 				List<RNode> groupShards = shardingService.getNodes(new Message(groups.getGname()));
@@ -112,7 +112,7 @@ public class GroupResource implements RouteResource {
 				} else {
 
 					InterClusterGroupUserService igs = new InterClusterGroupUserService(msg.getId(), returnChannel,
-							groups.getGname(), groups.getGid(), groupShards, groups.getUsername(), intercluster);
+							groups.getGname(), groups.getGid(), groupShards, groups.getUsername(), sendTointercluster);
 					igs.addUserToGroup();
 
 					return null;

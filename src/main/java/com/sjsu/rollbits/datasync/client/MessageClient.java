@@ -160,7 +160,7 @@ public class MessageClient {
 		// construct the message to send
 		boolean added = false;
 
-		Route.Builder rb = ProtoUtil.addMessageRequest(nextId(), fromUserId, toUserId, message, type,RollbitsConstants.GROUP);
+		Route.Builder rb = ProtoUtil.addMessageRequest(nextId(), fromUserId, toUserId, message, type,messageType);
 		CommConnection conn = CommConnection.getInstance();
 		try {
 			if (async)
