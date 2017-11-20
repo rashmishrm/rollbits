@@ -160,6 +160,7 @@ public class InterClusterUserMessageService implements ResultCollectable<List<Me
 		if (!isResultPublished) {
 			System.out.println(resultList);
 			replyChannel.writeAndFlush(ProtoUtil.createMessageResponseRoute2(routeId, resultList, userName, true));
+			isResultPublished = false;
 		}
 	}
 
