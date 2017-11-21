@@ -7,23 +7,27 @@ import java.util.Random;
 
 import com.sjsu.rollbits.datasync.client.CommListener;
 import com.sjsu.rollbits.datasync.client.MessageClient;
+import com.sjsu.rollbits.discovery.Node;
 
 import routing.Pipe.NetworkDiscoveryPacket;
 
 public class ExternalClientClusterDirectory {
 
 	public static Map<String, Map<String, ExternalClientNode>> clusterMap = new HashMap<String, Map<String, ExternalClientNode>>();
-
+	
 	public static String selectedClusterGroup = null;
-
+		
 	public static synchronized void addToDirectory(NetworkDiscoveryPacket request) {
 		ExternalClientNode node = new ExternalClientNode(request.getNodeId(), request.getNodeAddress(), request.getNodePort() + "",
 				request.getGroupTag(), request.getSender());
+		//System.out.println(request.getNodeId());
 
 		if (clusterMap.containsKey(request.getGroupTag())) {
+			//System.out.println("create node");
 			Map<String, ExternalClientNode> nMap = clusterMap.get(request.getGroupTag());
 			nMap.put(request.getNodeId(), node);
 		} else {
+			//System.out.println("create group");
 			Map<String, ExternalClientNode> nMap = new HashMap<>();
 			nMap.put(request.getNodeId(), node);
 			clusterMap.put(request.getGroupTag(), nMap);
@@ -53,6 +57,7 @@ public class ExternalClientClusterDirectory {
 	public static Map<String, Map<String, ExternalClientNode>> getGroupMap() {
 		return clusterMap;
 	}
+	
 
 	public static void selectClusterGroup(String groupName) {
 		selectedClusterGroup = groupName;
