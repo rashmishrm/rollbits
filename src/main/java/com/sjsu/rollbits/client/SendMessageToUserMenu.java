@@ -33,7 +33,7 @@ public class SendMessageToUserMenu implements Menu, CommListener {
 		String msg = sc.next();
 		System.out.println("Sending Message...");
 		MessageClient mc = ExternalClientClusterDirectory.getMessageClient(this);
-		mc.sendMessage(fromUnm, toUnm, msg, "CLIENT", false,RollbitsConstants.GROUP);
+		mc.sendMessage(fromUnm, toUnm, msg, "CLIENT", false,RollbitsConstants.SINGLE);
 	}
 
 	@Override

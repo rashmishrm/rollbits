@@ -55,15 +55,14 @@ public class CheckMyMessagesMenu implements Menu, CommListener {
 
 	@Override
 	public void onMessage(Route msg) {
-		List<Message> messages = null;
-		if (messages != null) {
+		
+		List<Message> messages = msg.getMessagesResponse().getMessagesList();
+		if (!messages.isEmpty()) {
 
 			for (Message message : messages) {
 				System.out.println("Message from: " + message.getReceiverId() + " : " + message.getPayload());
 			}
-			if (messages.size() == 0) {
-				System.out.println("No Messages for you");
-			}
+			
 
 		} else {
 			System.out.println("No Messages for you");
