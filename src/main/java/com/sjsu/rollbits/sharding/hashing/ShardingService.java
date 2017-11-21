@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
-import com.sjsu.rollbits.datasync.client.CommConnection;
 import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 import com.sjsu.rollbits.discovery.ClusterDirectory;
 import com.sjsu.rollbits.discovery.Node;
@@ -18,8 +16,8 @@ public class ShardingService {
 	private ConsistentHash hash = null;
 
 	// public static ShardingService service;
+	protected static Logger logger = Logger.getLogger("ShardingService");
 
-	protected static Logger logger = LoggerFactory.getLogger("ShardingService");
 
 	protected static AtomicReference<ShardingService> service = new AtomicReference<ShardingService>();
 

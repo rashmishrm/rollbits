@@ -1,7 +1,8 @@
 package com.sjsu.rollbits.datasync.server.resources;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+
+import org.apache.log4j.Logger;
 
 import com.sjsu.rollbits.discovery.ClusterDirectory;
 import com.sjsu.rollbits.sharding.hashing.ShardingService;
@@ -12,7 +13,7 @@ import routing.Pipe.FailoverMessage;
 import routing.Pipe.Route;
 
 public class FailoverResource implements RouteResource {
-	protected static Logger logger = LoggerFactory.getLogger("raft");
+	protected static Logger logger = Logger.getLogger("FailoverResource");
 
 	@Override
 	public Pipe.Route.Path getPath() {

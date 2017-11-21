@@ -1,7 +1,6 @@
 package com.sjsu.rollbits.datasync.server.resources;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import com.sjsu.rollbits.raft.RaftContext;
 import com.sjsu.rollbits.raft.RaftState;
@@ -9,11 +8,11 @@ import com.sjsu.rollbits.raft.RaftState;
 import io.netty.channel.Channel;
 import routing.Pipe;
 import routing.Pipe.RaftMessage;
-import routing.Pipe.Route;
 import routing.Pipe.RaftMessage.RaftMsgType;
+import routing.Pipe.Route;
 
 public class RaftResource implements RouteResource {
-	protected static Logger logger = LoggerFactory.getLogger("raft");
+	protected static Logger logger = Logger.getLogger("RaftResource");
 
 	@Override
 	public Pipe.Route.Path getPath() {

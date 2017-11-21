@@ -18,11 +18,12 @@ package com.sjsu.rollbits.datasync.server;
 import java.beans.Beans;
 import java.util.HashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.log4j.Logger;
 
 import com.sjsu.rollbits.datasync.container.RoutingConf;
 import com.sjsu.rollbits.datasync.server.resources.RouteResource;
+
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -37,8 +38,7 @@ import routing.Pipe.Route;
  * 
  */
 public class ServerHandler extends SimpleChannelInboundHandler<Route> {
-	protected static Logger logger = LoggerFactory.getLogger("connect");
-
+	protected static Logger logger = Logger.getLogger("ServerHandler");
 	private HashMap<String, String> routing;
 
 	public ServerHandler(RoutingConf conf) {
@@ -54,22 +54,21 @@ public class ServerHandler extends SimpleChannelInboundHandler<Route> {
 	 * @param msg
 	 */
 	public void handleMessage(Route msg, Channel channel) {
-		System.out.println("Hello world!");
+
 		if (msg == null) {
 			// TODO add logging
 			System.out.println("ERROR: Unexpected content - " + msg);
 			return;
 		}
 
-		System.out.println("---> " + msg.getId() + ": " + msg.getPath() + ", " );
-		System.out.println("all key set--->" + routing.keySet());
+		logger.info("Got Message on server" + msg.getId() + ": " + msg.getPath() + ", ");
 		try {
 			String clazz = routing.get(msg.getPath().toString());
 			if (clazz != null) {
 				RouteResource rsc = (RouteResource) Beans.instantiate(RouteResource.class.getClassLoader(), clazz);
 				try {
 					Route.Builder reply = (Route.Builder) rsc.process(msg, channel);
-					System.out.println("---> reply: " + reply);
+					logger.info("Sending Reply to" + reply);
 					if (reply != null) {
 						// Route.Builder rb = Route.newBuilder(msg);
 						// rb.setPayload(reply);
@@ -78,20 +77,21 @@ public class ServerHandler extends SimpleChannelInboundHandler<Route> {
 				} catch (Exception e) {
 					// TODO add logging
 					Route.Builder rb = Route.newBuilder(msg);
-				
+
 					e.printStackTrace();
 					channel.write(rb.build());
 				}
 			} else {
-				// TODO add logging
-				System.out.println("ERROR: unknown path - " + msg.getPath());
+
+				logger.error("Error: unknown path - " + msg.getPath());
+
 			}
 		} catch (Exception ex) {
 			// TODO add logging
-			System.out.println("ERROR: processing request - " + ex.getMessage());
+			logger.error("RROR: processing request  " + ExceptionUtils.getMessage(ex));
+
 		}
 
-		System.out.flush();
 	}
 
 	/**

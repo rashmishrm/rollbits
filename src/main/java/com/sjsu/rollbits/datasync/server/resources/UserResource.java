@@ -2,8 +2,7 @@ package com.sjsu.rollbits.datasync.server.resources;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import com.sjsu.rollbits.dao.interfaces.model.User;
 import com.sjsu.rollbits.dao.interfaces.service.Service;
@@ -17,7 +16,7 @@ import routing.Pipe;
 import routing.Pipe.Route;
 
 public class UserResource implements RouteResource {
-	protected static Logger logger = LoggerFactory.getLogger("user");
+	protected static Logger logger = Logger.getLogger("UserResource");
 
 	private ShardingService shardingService;
 

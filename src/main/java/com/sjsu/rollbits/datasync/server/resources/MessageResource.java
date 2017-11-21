@@ -23,8 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import com.sjsu.rollbits.dao.interfaces.service.GroupService;
 import com.sjsu.rollbits.dao.interfaces.service.MessageService;
@@ -47,7 +46,8 @@ import routing.Pipe.Route;
  * 
  */
 public class MessageResource implements RouteResource {
-	protected static Logger logger = LoggerFactory.getLogger("message");
+	protected static Logger logger=Logger.getLogger("MessageResource");
+
 	private ShardingService shardingService;
 	private MessageService dbService = null;
 	private GroupService groupDBService = null;

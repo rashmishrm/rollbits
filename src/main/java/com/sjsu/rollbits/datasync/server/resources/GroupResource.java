@@ -2,8 +2,7 @@ package com.sjsu.rollbits.datasync.server.resources;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import com.sjsu.rollbits.dao.interfaces.model.Group;
 import com.sjsu.rollbits.dao.interfaces.model.GroupUser;
@@ -21,7 +20,9 @@ import routing.Pipe;
 import routing.Pipe.Route;
 
 public class GroupResource implements RouteResource {
-	protected static Logger logger = LoggerFactory.getLogger("group");
+
+	protected static Logger logger = Logger.getLogger("GroupResource");
+
 	private ShardingService shardingService;
 	private GroupService dbService = null;
 	private GroupUserService dbgroupuserService = null;

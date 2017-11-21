@@ -15,13 +15,10 @@
  */
 package com.sjsu.rollbits.datasync.server.resources;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import com.sjsu.rollbits.dao.interfaces.model.GroupUser;
 import com.sjsu.rollbits.dao.interfaces.service.GroupUserService;
@@ -43,7 +40,8 @@ import routing.Pipe.Route;
  * 
  */
 public class UserMessageResource implements RouteResource {
-	protected static Logger logger = LoggerFactory.getLogger("usermessage");
+	protected static Logger logger = Logger.getLogger("UserMessageResource");
+
 	private ShardingService shardingService;
 	private MessageService dbService = null;
 	private GroupUserService gservice = null;

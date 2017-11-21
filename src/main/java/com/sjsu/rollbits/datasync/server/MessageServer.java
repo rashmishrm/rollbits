@@ -21,9 +21,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.sjsu.rollbits.datasync.container.RoutingConf;
 
@@ -35,7 +34,9 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class MessageServer {
-	protected static Logger logger = LoggerFactory.getLogger("server");
+
+	protected static Logger logger = Logger.getLogger("MessageServer");
+
 
 	protected static HashMap<Integer, ServerBootstrap> bootstrap = new HashMap<Integer, ServerBootstrap>();
 

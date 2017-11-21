@@ -19,8 +19,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import com.sjsu.rollbits.exception.ConnectionNotFormedException;
 
@@ -41,8 +40,11 @@ import routing.Pipe.Route;
  * 
  */
 public class CommConnection {
-	protected static Logger logger = LoggerFactory.getLogger("connect");
 
+	
+	protected static Logger logger = Logger.getLogger("CommConnection");
+
+	
 	protected static AtomicReference<CommConnection> instance = new AtomicReference<CommConnection>();
 
 	private String host;
@@ -201,7 +203,7 @@ public class CommConnection {
 
 		} catch (Throwable ex) {
 			created = false;
-			logger.error("failed to initialize the client connection", ExceptionUtils.getMessage(ex));
+			logger.error("failed to initialize the client connection"+ ExceptionUtils.getMessage(ex));
 
 			// release resources
 			release();

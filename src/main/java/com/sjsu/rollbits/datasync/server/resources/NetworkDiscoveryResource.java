@@ -1,22 +1,21 @@
 package com.sjsu.rollbits.datasync.server.resources;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+
+import org.apache.log4j.Logger;
 
 import com.sjsu.rollbits.discovery.ClusterDirectory;
-import com.sjsu.rollbits.discovery.UdpClient;
 import com.sjsu.rollbits.yml.Loadyaml;
 
 import io.netty.channel.Channel;
 import routing.Pipe;
 import routing.Pipe.NetworkDiscoveryPacket;
-import routing.Pipe.Route;
 import routing.Pipe.NetworkDiscoveryPacket.Mode;
 import routing.Pipe.NetworkDiscoveryPacket.Sender;
-import routing.Pipe.Route.Path;
+import routing.Pipe.Route;
 
 public class NetworkDiscoveryResource implements RouteResource {
-	protected static Logger logger = LoggerFactory.getLogger("user");
+	protected static Logger logger=Logger.getLogger("NetworkDiscoveryResource");
 
 	@Override
 	public Pipe.Route.Path getPath() {

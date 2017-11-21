@@ -15,13 +15,12 @@
  */
 package com.sjsu.rollbits.datasync.server.resources;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+
+import org.apache.log4j.Logger;
 
 import io.netty.channel.Channel;
 import routing.Pipe;
-import routing.Pipe.Route;
-import routing.Pipe.Route.Path;
 
 /**
  * responds to request for pinging the service
@@ -30,7 +29,7 @@ import routing.Pipe.Route.Path;
  * 
  */
 public class PingResource implements RouteResource {
-	protected static Logger logger = LoggerFactory.getLogger("ping");
+	protected static Logger logger = Logger.getLogger("PingResource");
 
 	@Override
 	public Pipe.Route.Path getPath() {

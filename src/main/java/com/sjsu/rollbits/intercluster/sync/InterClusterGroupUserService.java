@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import com.sjsu.rollbits.datasync.client.CommListener;
 import com.sjsu.rollbits.datasync.client.MessageClient;
@@ -29,7 +28,7 @@ import routing.Pipe.Route;
  *
  */
 public class InterClusterGroupUserService implements ResultCollectable<Response> {
-	protected static Logger logger = LoggerFactory.getLogger("InterClusterGroupUserService");
+	protected static Logger logger = Logger.getLogger("InterClusterGroupUserService");
 
 	Random rand = new Random();
 	int noOfResultExpected = 0;
@@ -52,7 +51,7 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 	private boolean isResultPublished;
 
 	class AddUserGroupTask implements CommListener {
-		protected Logger gmlogger = LoggerFactory.getLogger("AddUserGroupTask");
+		protected  Logger logger = Logger.getLogger("AddUserGroupTask");
 
 		MessageClient mc;
 		String username;

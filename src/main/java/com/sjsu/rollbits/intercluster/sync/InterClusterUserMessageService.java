@@ -7,10 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+
+import org.apache.log4j.Logger;
 
 import com.sjsu.rollbits.dao.interfaces.service.MessageService;
 import com.sjsu.rollbits.datasync.client.CommListener;
@@ -30,6 +28,7 @@ import routing.Pipe.Route;
  *
  */
 public class InterClusterUserMessageService implements ResultCollectable<List<Message>> {
+	protected static Logger logger = Logger.getLogger("InterClusterUserMessageService");
 
 	Random rand = new Random();
 	int noOfResultExpected = 0;

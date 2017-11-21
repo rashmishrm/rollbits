@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import com.sjsu.rollbits.sharding.hashing.RNode.Type;
 
@@ -16,7 +15,7 @@ public class ConsistentHash {
 	private final HashAlgo hashFunction;
 	private final int numberOfReplicas;
 	private final SortedMap<Long, RNode> circle = new TreeMap<Long, RNode>();
-	protected static Logger logger = LoggerFactory.getLogger("ConsistentHash");
+	protected static Logger logger = Logger.getLogger("ConsistentHash");
 
 	public ConsistentHash(HashAlgo hashFunction, int numberOfReplicas, Collection<RNode> nodes, int virtualNodes) {
 
@@ -47,9 +46,9 @@ public class ConsistentHash {
 	}
 
 	public List<RNode> get(Object key) {
-		//SortedSet<RNode> list = new TreeSet<>();
-		
-		List<RNode> list= new ArrayList<>();
+		// SortedSet<RNode> list = new TreeSet<>();
+
+		List<RNode> list = new ArrayList<>();
 		System.out.println(circle.size());
 		if (circle.isEmpty()) {
 			return null;
@@ -70,7 +69,7 @@ public class ConsistentHash {
 		}
 
 		int k = numberOfReplicas;
-		
+
 		for (Long h : tailMap.keySet()) {
 			RNode rnode = null;
 			rnode = tailMap.get(h);
@@ -83,13 +82,13 @@ public class ConsistentHash {
 
 			list.add(tailMap.get(h));
 			k--;
-			if (0==k) {
+			if (0 == k) {
 				break;
 			}
-			
+
 		}
 
-		//return new ArrayList<>(list);
+		// return new ArrayList<>(list);
 		return list;
 	}
 
