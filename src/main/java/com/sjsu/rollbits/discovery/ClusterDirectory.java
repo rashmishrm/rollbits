@@ -3,6 +3,8 @@ package com.sjsu.rollbits.discovery;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 import com.sjsu.rollbits.yml.Loadyaml;
 
@@ -11,6 +13,7 @@ import routing.Pipe.NetworkDiscoveryPacket;
 public class ClusterDirectory {
 
 	public static Map<String, Map<String, Node>> clusterMap = new HashMap<String, Map<String, Node>>();
+	protected static Logger logger = Logger.getLogger("ClusterDirectory");
 
 	public static synchronized void addToDirectory(NetworkDiscoveryPacket request) {
 		Node node = new Node(request.getNodeId(), request.getNodeAddress(), request.getNodePort()+"",
@@ -29,8 +32,8 @@ public class ClusterDirectory {
 	}
 
 	private static void printDirectory() {
-		System.out.println("Printing Cluster Directory");
-		System.out.println(clusterMap);
+		logger.info("Printing Cluster Directory");
+		logger.info(clusterMap);
 		/*for (Map.Entry<String, Map<String, Node>> entry : clusterMap.entrySet()) {
 			for (Map.Entry<String, Node> entry2 : entry.getValue().entrySet()) {
 				System.out.println("Group " + entry.getKey() + " NodeId " + entry2.getKey() + " IP "

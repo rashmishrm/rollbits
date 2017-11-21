@@ -1,5 +1,7 @@
 package com.sjsu.rollbits.discovery;
 
+import org.apache.log4j.Logger;
+
 import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 import com.sjsu.rollbits.yml.Loadyaml;
 
@@ -11,6 +13,8 @@ import routing.Pipe.NetworkDiscoveryPacket.Sender;
 import routing.Pipe.Route;
 
 public class UdpServerHandler extends SimpleChannelInboundHandler<Route> {
+	
+	protected static Logger logger = Logger.getLogger("UdpServerHandler");
 
 	// private static Map<String, Node> mp = Collections.emptyMap();
 	// private static Map<String, Map<String, Node>> mpMaps =
@@ -25,9 +29,7 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<Route> {
 
 	@Override
 	public void channelRead0(ChannelHandlerContext ctx, Route route) throws Exception {
-		System.out.println("Recieved a packet" + route);
 		NetworkDiscoveryPacket request = route.getNetworkDiscoveryPacket();
-		System.out.println("Recieved a packet from" + request.getNodeAddress());
 		if(request.getMode() == NetworkDiscoveryPacket.Mode.REMOVE_NODE){
 			ClusterDirectory.removeNode(route.getNetworkDiscoveryPacket());
 			return;

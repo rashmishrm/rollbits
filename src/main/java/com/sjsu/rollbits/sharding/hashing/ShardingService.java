@@ -51,9 +51,11 @@ public class ShardingService {
 
 	public static void main(String[] args) {
 		ShardingService service = ShardingService.getInstance();
+		service.reset();
 
 		List<RNode> nodes = service.getNodes(new Message("dsjchskjdgvugdsvks"));
 
+		
 		for (RNode node : nodes) {
 			System.out.println(node.getIpAddress());
 		}
@@ -68,8 +70,8 @@ public class ShardingService {
 	}
 
 	public void reset() {
-		//service = null;
-		//getInstance();
+		service.set(null);
+		getInstance();
 	}
 
 }

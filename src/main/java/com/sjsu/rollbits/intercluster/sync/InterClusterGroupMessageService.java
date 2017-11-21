@@ -205,6 +205,7 @@ public class InterClusterGroupMessageService implements ResultCollectable<Respon
 
 	@Override
 	public void timeout() {
+		logger.info("TIMEOUT ICGMS:"+finalResult);
 		noOfResultExpected = 0;
 		finalResult = true;
 		publishResult();

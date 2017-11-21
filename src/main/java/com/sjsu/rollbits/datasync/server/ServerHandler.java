@@ -88,7 +88,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Route> {
 			}
 		} catch (Exception ex) {
 			// TODO add logging
-			logger.error("RROR: processing request  " + ExceptionUtils.getMessage(ex));
+			logger.error("ERROR: processing request  " + ExceptionUtils.getMessage(ex));
 
 		}
 
