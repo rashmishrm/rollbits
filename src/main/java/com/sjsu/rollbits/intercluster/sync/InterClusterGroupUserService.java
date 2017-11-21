@@ -215,6 +215,7 @@ public class InterClusterGroupUserService implements ResultCollectable<Response>
 
 	@Override
 	public void timeout() {
+		logger.info("TIMEOUT ICUMS:"+finalResult);
 		noOfResultExpected = 0;
 		finalResult = true;
 		publishResult();

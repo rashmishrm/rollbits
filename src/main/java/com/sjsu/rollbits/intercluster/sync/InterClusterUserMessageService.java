@@ -157,14 +157,15 @@ public class InterClusterUserMessageService implements ResultCollectable<List<Me
 	@Override
 	public void publishResult() {
 		if (!isResultPublished) {
-			System.out.println(resultList);
+			logger.info(resultList);
 			replyChannel.writeAndFlush(ProtoUtil.createMessageResponseRoute2(routeId, resultList, userName, true));
-			isResultPublished = false;
+			isResultPublished = true;
 		}
 	}
 
 	@Override
 	public void timeout() {
+		logger.info("TIMEOUT ICUMS:"+resultList);
 		noOfResultExpected = 0;
 		publishResult();
 
