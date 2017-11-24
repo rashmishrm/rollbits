@@ -40,7 +40,7 @@ public class RegisterUserMenu implements Menu, CommListener {
 
 	@Override
 	public void onMessage(Route msg) {
-		System.out.println("User created Successfully\n" + msg);
+		System.out.println("User created Successfully\n");
 		RollbitsClient.getInstance().setMenu(new MainMenu());
 		RollbitsClient.getInstance().play();
 

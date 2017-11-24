@@ -44,6 +44,7 @@ public class SendMessageToGroupMenu implements Menu, CommListener {
 	public void onMessage(Route msg) {
 		System.out.println("Sent message to group Successfully\n"+msg);
 		RollbitsClient.getInstance().setMenu(new MainMenu());
+		RollbitsClient.getInstance().play();
 		
 	}
 
