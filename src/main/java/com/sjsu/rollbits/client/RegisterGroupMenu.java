@@ -41,6 +41,7 @@ public class RegisterGroupMenu implements Menu, CommListener {
 	public void onMessage(Route msg) {
 		System.out.println("Group created Successfully");
 		RollbitsClient.getInstance().setMenu(new MainMenu());
+		RollbitsClient.getInstance().play();
 	}
 
 }

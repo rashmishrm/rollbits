@@ -68,7 +68,9 @@ public class CheckMyMessagesMenu implements Menu, CommListener {
 			System.out.println("No Messages for you");
 		}
 		System.out.println("Fetched Successfully");
-
+		
+		RollbitsClient.getInstance().setMenu(new MainMenu());
+		RollbitsClient.getInstance().play();
 	}
 
 }

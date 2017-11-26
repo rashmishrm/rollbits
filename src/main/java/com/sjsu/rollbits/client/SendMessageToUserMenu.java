@@ -43,7 +43,7 @@ public class SendMessageToUserMenu implements Menu, CommListener {
 
 	@Override
 	public void onMessage(Route msg) {
-		System.out.println("Sent message to user Successfully\n" + msg);
+		System.out.println("Sent message to user Successfully\n");
 		RollbitsClient.getInstance().setMenu(new MainMenu());
 		RollbitsClient.getInstance().play();
 	}
