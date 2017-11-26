@@ -4,17 +4,20 @@ Distributed Chat Server
 
 ## Follow the below steps to deploy the project
 1. To start the application, you need to run MessageApp.java . 
+
 2. This class does the following:  
-  A. Starts UDP Server . 
-  B. UDP Broadcasts its details . 
-  C. Starts Raft Context . 
-  D. Starts Server Request Queue . 
-  E. Starts the netty TCP Server . 
+2.1 Starts UDP Server . 
+2.2 UDP Broadcasts its details . 
+2.3 Starts Raft Context . 
+2.4 Starts Server Request Queue . 
+2.5 Starts the netty TCP Server . 
+
 3. The following configuration files has been used:  
-  A. routing.conf : Contains details regarding tcp port and routing resources . 
-  B. config.yml : Contains constants used project wide including node details like name, ip, group tag etc.  
-  C. hibernate.cfg.xml : Contains mysql and hibernate related configurations . 
-  
+3.1 routing.conf : Contains details regarding tcp port and routing resources . 
+3.2 config.yml : Contains constants used project wide including node details like name, ip, group tag etc.  
+3.3 hibernate.cfg.xml : Contains mysql and hibernate related configurations . 
+
+
 ##Code Walkthrough
 1. UDP: com.sjsu.rollbits.discovery
 2. Raft: com.sjsu.rollbits.raft
