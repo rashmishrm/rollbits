@@ -2,7 +2,7 @@
 Distributed Chat Server
 
 
-## Follow the below steps to deploy the project
+## To deploy the project
 1. To start the application, you need to run MessageApp.java . 
 
 2. This class does the following:  <br/> 
@@ -19,7 +19,7 @@ Distributed Chat Server
    3.3 hibernate.cfg.xml : Contains mysql and hibernate related configurations . <br/>
 
 
-##Code Walkthrough
+## Code Walkthrough
 1. UDP: com.sjsu.rollbits.discovery
 2. Raft: com.sjsu.rollbits.raft
 3. Sharding & Replication: com.sjsu.rollbits.sharding.hashing
