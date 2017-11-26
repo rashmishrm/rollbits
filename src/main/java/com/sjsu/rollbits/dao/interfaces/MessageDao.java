@@ -1,15 +1,13 @@
 package com.sjsu.rollbits.dao.interfaces;
 
-import com.sjsu.rollbits.dao.interfaces.model.Message;
+import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 
-import java.util.List;
+import com.sjsu.rollbits.dao.interfaces.model.Message;
+import com.sjsu.rollbits.dao.interfaces.service.HibernateUtil;
 
 public class MessageDao {
 	private Session currentSession;
@@ -19,12 +17,12 @@ public class MessageDao {
 	}
 
 	public Session openCurrentSession() {
-		currentSession = getSessionFactory().openSession();
+		currentSession = HibernateUtil.getSessionFactory().openSession();
 		return currentSession;
 	}
 
 	public Session openCurrentSessionwithTransaction() {
-		currentSession = getSessionFactory().openSession();
+		currentSession = HibernateUtil.getSessionFactory().openSession();
 		currentTransaction = currentSession.beginTransaction();
 		return currentSession;
 	}
@@ -36,15 +34,6 @@ public class MessageDao {
 	public void closeCurrentSessionwithTransaction() {
 		currentTransaction.commit();
 		currentSession.close();
-
-	}
-
-	private static SessionFactory getSessionFactory() {
-		Configuration configuration = new Configuration().configure();
-		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties());
-		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
-		return sessionFactory;
 
 	}
 
@@ -111,7 +100,7 @@ public class MessageDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Message> findAllMessages(String uname, List<String> groups) {
-		
+
 		String messages = "FROM Message msg WHERE msg.fromuserid = :uname or msg.togroupid in :glist";
 		Query query = getCurrentSession().createQuery(messages);
 		query.setParameter("uname", uname);
