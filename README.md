@@ -5,11 +5,16 @@ Distributed Chat Server
 ## Follow the below steps to deploy the project
 1. To start the application, you need to run MessageApp.java . 
 
-2. This class does the following:  
-2.1 Starts UDP Server . 
-2.2 UDP Broadcasts its details . 
-2.3 Starts Raft Context . 
-2.4 Starts Server Request Queue . 
+2. This class does the following:  
+
+2.1 Starts UDP Server .
+
+2.2 UDP Broadcasts its details .
+
+2.3 Starts Raft Context .
+
+2.4 Starts Server Request Queue .
+
 2.5 Starts the netty TCP Server . 
 
 3. The following configuration files has been used:  
