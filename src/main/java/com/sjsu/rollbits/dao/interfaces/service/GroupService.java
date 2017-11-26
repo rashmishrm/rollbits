@@ -6,35 +6,35 @@ import com.sjsu.rollbits.dao.interfaces.GroupDao;
 import java.util.List;
 public class GroupService {
 
-    private static GroupDao groupDao;
+    private  GroupDao groupDao;
     public GroupService() {
     	groupDao = new GroupDao();
     }
-    public static void persist(Group entity) {
+    public  void persist(Group entity) {
     	groupDao.openCurrentSessionwithTransaction();
     	groupDao.persist(entity);
     	groupDao.closeCurrentSessionwithTransaction();
     }
-    public static void update(Group entity) {
+    public  void update(Group entity) {
     	groupDao.openCurrentSessionwithTransaction();
     	groupDao.update(entity);
     	groupDao.closeCurrentSessionwithTransaction();
     }
 
-    public static Group findById(int id) {
+    public  Group findById(int id) {
     	groupDao.openCurrentSession();
         Group groups = groupDao.findById(id);
         groupDao.closeCurrentSession();
         return groups;
     }
-    public static void delete(int id) {
+    public  void delete(int id) {
     	groupDao.openCurrentSessionwithTransaction();
         Group groups = groupDao.findById(id);
         groupDao.delete(groups);
         groupDao.closeCurrentSessionwithTransaction();
     }
 
-    public static List<Group> findAll() {
+    public  List<Group> findAll() {
     	groupDao.openCurrentSession();
         List<Group> groups = groupDao.findAll();
         groupDao.closeCurrentSession();
@@ -42,7 +42,7 @@ public class GroupService {
     }
     
     
-    public static Boolean findIfAGroupExists(String groupName) {
+    public  Boolean findIfAGroupExists(String groupName) {
     	groupDao.openCurrentSession();
         Boolean ifExists = groupDao.checkIfAGroupExists(groupName);
         groupDao.closeCurrentSession();
@@ -50,7 +50,7 @@ public class GroupService {
     }
     
     
-    public static void deleteAll() {
+    public  void deleteAll() {
     	groupDao.openCurrentSessionwithTransaction();
     	groupDao.deleteAll();
     	groupDao.closeCurrentSessionwithTransaction();
@@ -60,7 +60,7 @@ public class GroupService {
 
     }
     
-    /*public static void main(String[] args){
+    /*public  void main(String[] args){
     	GroupService gs = new GroupService();
     	Group g = new Group("Hey");
     	gs.persist(g);

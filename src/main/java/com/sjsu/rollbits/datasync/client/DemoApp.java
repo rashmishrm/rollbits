@@ -18,11 +18,18 @@ package com.sjsu.rollbits.datasync.client;
 
 import com.sjsu.rollbits.datasync.server.resources.RollbitsConstants;
 
-import routing.Pipe;
 import routing.Pipe.Route;
 
 public class DemoApp implements CommListener {
 	private MessageClient mc;
+
+	long startTime = 0;
+
+	long endTime = 0;
+
+	int count = 0;
+
+	static int requests = 100000;
 
 	public DemoApp(MessageClient mc) {
 		init(mc);
@@ -40,46 +47,75 @@ public class DemoApp implements CommListener {
 
 	@Override
 	public void onMessage(Route msg) {
-		System.out.println("---here1---> " + msg);
+		// System.out.println("---here1---> " + msg);
+		count++;
+		// System.out.println("here"+count);
+		if (count % 1000 == 0)
+			System.out.println("**************************#### count         " + count + " $$$$ "
+					+ (System.currentTimeMillis() - startTime));
+		if (count >= (requests * 5))
+			System.out.println("**************************         " + (System.currentTimeMillis() - startTime));
+		if (msg.hasMessagesResponse()) {
+			System.out.println("MESSAGE SIZE" + msg.getMessagesResponse().getMessagesList().size());
+		}
 	}
 
 	/**
 	 * sample application (client) use of our messaging service
 	 * 
-	 * @param args
+	 * @param argsac
 	 */
 	public static void main(String[] args) {
-		String host = "10.0.0.175";
+		// String host = "10.0.0.2";
+		String host = "127.0.0.1";
 		int port = 4567;
 		long stime = System.currentTimeMillis();
 
 		try {
 			MessageClient mc = new MessageClient(host, port);
+			DemoApp dm = new DemoApp(mc);
+			dm.startTime = System.currentTimeMillis();
 			if (mc.isConnected()) {
+				// mc.sendMessage("user1", "user1", "Message for user1", "CLIENT", true,
+				// RollbitsConstants.SINGLE);
 
-				// mc.addUser("Rashmi", "Rashmi", RollbitsConstants.CLIENT,
-				// false);
-				System.out.println("Sleeping before connecting");
+				for (int i = 0; i < requests; i++) {
+
+					mc.sendMessage("user1", "user1", "Message for user1", "CLIENT", true, RollbitsConstants.SINGLE);
+					mc.sendMessage("user1", "user2", "Message for user1", "CLIENT", true, RollbitsConstants.SINGLE);
+					mc.sendMessage("user1", "user3", "Message for user1", "CLIENT", true, RollbitsConstants.SINGLE);
+
+					mc.sendMessage("user1", "user4", "Message for user1", "CLIENT", true, RollbitsConstants.SINGLE);
+
+					mc.sendMessage("user1", "user5", "Message for user1", "CLIENT", true, RollbitsConstants.SINGLE);
+
+					 if (i % 50000 == 0) {
+					 Thread.sleep(50);
+					 }
+
+				}
+
+				// mc.addUser("user1", "user1", RollbitsConstants.CLIENT,false);
 				// Thread.sleep(10000);
-				mc.sendMessage("rashmishrm", "nishantrathi", "tsdhvsdkcsdkvnvnksnvksndvskvs", "CLIENT", false,RollbitsConstants.GROUP);
-				mc.addGroup("Group6",4, "CLIENT", false);
-				mc.addUsertoGroup(4, "Group6", "dhrumil", "CLIENT", false);
-				//mc.fetchMessages("nishantrathi",RollbitsConstants.CLIENT);
+				// mc.addGroup("Rollbits-App21Nov2017",4, "CLIENT", false);
+				// mc.sendMessage("abcdefnov20", "Rollbits-App21Nov2017", "Send message to group
+				// is working!!! Yay!", "CLIENT", false, RollbitsConstants.GROUP);
+				// Route.Builder msg = ProtoUtil.createMessageRequest(1,
+				// "nishant",true);
 
+				// Route r = mc.sendSyncronousMessage(msg);
+
+				// mc.addGroup("group", 1, RollbitsConstants.CLIENT, false);
+
+				// mc.fetchMessages("user1", RollbitsConstants.CLIENT);
+
+				System.out.println("Sent ALL");
+				long etime = System.currentTimeMillis();
+
+				System.out.println(etime - stime);
 			}
 
-			// Route.Builder msg = ProtoUtil.createMessageRequest(1,
-			// "nishant",true);
-
-			// Route r = mc.sendSyncronousMessage(msg);
-
-			// mc.addGroup("group", 1, RollbitsConstants.CLIENT, false);
-
-			long etime = System.currentTimeMillis();
-
-			System.out.println(etime - stime);
-
-			Thread.sleep(10000);
+			Thread.sleep(100000000000000000L);
 
 		} catch (Exception e) {
 			e.printStackTrace();
