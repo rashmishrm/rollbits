@@ -26,3 +26,6 @@ Distributed Chat Application
 4. DAO: com.sjsu.rollbits.dao.interfaces
 5. InterCluster Services: com.sjsu.rollbits.intercluster.sync
 6. External Client: com.sjsu.rollbits.client
+
+## Report
+Project report submission can be found at https://github.com/rashmishrm/rollbits/blob/master/Rollbits-Project-Report.pdf
