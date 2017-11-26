@@ -41,10 +41,8 @@ import routing.Pipe.Route;
  */
 public class CommConnection {
 
-	
 	protected static Logger logger = Logger.getLogger("CommConnection");
 
-	
 	protected static AtomicReference<CommConnection> instance = new AtomicReference<CommConnection>();
 
 	private String host;
@@ -82,13 +80,23 @@ public class CommConnection {
 	}
 
 	public static CommConnection initConnection(String host, int port) {
-
+		// 3 retries for Connection creation
 		int retries = 1;
 		while (retries <= 3) {
 			try {
 
+				/***
+				 * Have created constructor CommConnection(host, port, true), which just creates
+				 * instance of CommConnection, doesnt actually creates aby connection.
+				 * CommConnection class implements custom equals and hashcode, so that If there
+				 * is already any istance with same host and port, new instance is not created,
+				 * albeit same refernce is used.
+				 */
 				instance.compareAndSet(null, new CommConnection(host, port));
 
+				/**
+				 * Checks whether with same host and port another connection reference exists
+				 */
 				if (!instance.get().equals(new CommConnection(host, port, true))) {
 					instance.set(new CommConnection(host, port));
 				}
@@ -203,7 +211,7 @@ public class CommConnection {
 
 		} catch (Throwable ex) {
 			created = false;
-			logger.error("failed to initialize the client connection"+ ExceptionUtils.getMessage(ex));
+			logger.error("failed to initialize the client connection" + ExceptionUtils.getMessage(ex));
 
 			// release resources
 			release();
