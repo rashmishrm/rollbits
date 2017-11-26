@@ -44,7 +44,10 @@ public class MessageApp {
 		UdpClient.broadcast();
 		// Thread.sleep(15 * 1000L);
 		RaftContext.getInstance();// To Start Raft Engine
-
+		
+		Thread t2 = new Thread(ServerRequestQueue.getInstance());
+		t2.start();
+		
 		File cf = new File("./src/main/resources/routing.conf");
 		try {
 			MessageServer svr = new MessageServer(cf);
