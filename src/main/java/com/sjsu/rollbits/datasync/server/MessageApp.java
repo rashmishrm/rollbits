@@ -17,6 +17,9 @@ package com.sjsu.rollbits.datasync.server;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 import com.sjsu.rollbits.discovery.UdpClient;
 import com.sjsu.rollbits.discovery.UdpServer;
 import com.sjsu.rollbits.raft.RaftContext;
@@ -37,6 +40,12 @@ public class MessageApp {
 		// System.out.println("usage: server <config file>");
 		// System.exit(1);
 		// }
+
+		Logger l = Logger.getLogger("MessageApp");
+		l.info("Starting app");
+
+		PropertyConfigurator.configure("./src/main/resources/log4j.properties");
+
 		Loadyaml.loadYaml();
 		Thread t = new Thread(new UdpServer());
 		t.start();
@@ -44,10 +53,10 @@ public class MessageApp {
 		UdpClient.broadcast();
 		// Thread.sleep(15 * 1000L);
 		RaftContext.getInstance();// To Start Raft Engine
-		
+
 		Thread t2 = new Thread(ServerRequestQueue.getInstance());
 		t2.start();
-		
+
 		File cf = new File("./src/main/resources/routing.conf");
 		try {
 			MessageServer svr = new MessageServer(cf);
