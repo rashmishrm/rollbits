@@ -4,9 +4,9 @@
 package com.sjsu.rollbits.datasync.server;
 
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -19,7 +19,9 @@ public class ServerRequestQueue implements Runnable {
 	
 	Long TIME_BREAK = 1 * 50L;
 	
-	Queue<ServerRequest> serverRequestQueue = new ConcurrentLinkedQueue<>();
+	Integer BURST_SIZE = 1000;
+	
+	Queue<ServerRequest> serverRequestQueue = new LinkedBlockingQueue<>();
 	
 	ExecutorService executorService = Executors.newFixedThreadPool(NO_OF_THREADS);
 
@@ -30,8 +32,13 @@ public class ServerRequestQueue implements Runnable {
 	}
 	
 	private void addToExecutorService(){
+		int i =0;
 		for(ServerRequest req: serverRequestQueue){
+			i++;
 			executorService.submit(req);
+			if(i==BURST_SIZE){
+				break;
+			}
 		}
 	}
 	
@@ -53,7 +60,6 @@ public class ServerRequestQueue implements Runnable {
 				Thread.sleep(TIME_BREAK);
 				addToExecutorService();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
