@@ -1,15 +1,14 @@
 package com.sjsu.rollbits.dao.interfaces;
 
 
+import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import com.sjsu.rollbits.dao.interfaces.model.Group;
 
-import java.util.List;
+import com.sjsu.rollbits.dao.interfaces.model.Group;
+import com.sjsu.rollbits.dao.interfaces.service.HibernateUtil;
 
 
 
@@ -19,11 +18,11 @@ public class GroupDao {
     public GroupDao() {
     }
     public Session openCurrentSession() {
-        currentSession = getSessionFactory().openSession();
+        currentSession = HibernateUtil.getSessionFactory().openSession();
         return currentSession;
     }
     public Session openCurrentSessionwithTransaction() {
-        currentSession = getSessionFactory().openSession();
+        currentSession = HibernateUtil.getSessionFactory().openSession();
         currentTransaction = currentSession.beginTransaction();
         return currentSession;
     }
@@ -35,14 +34,7 @@ public class GroupDao {
         currentSession.close();
 
     }
-    private static SessionFactory getSessionFactory() {
-        Configuration configuration = new Configuration().configure();
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-                .applySettings(configuration.getProperties());
-        SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
-        return sessionFactory;
 
-    }
     public Session getCurrentSession() {
         return currentSession;
     }

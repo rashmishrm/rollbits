@@ -8,97 +8,123 @@ import com.sjsu.rollbits.dao.interfaces.model.Message;
 
 public class MessageService {
 
-    private static MessageDao messageDao;
-    public MessageService() {
-        messageDao = new MessageDao();
-    }
-    public static void persist(Message entity) {
-        messageDao.openCurrentSessionwithTransaction();
-        messageDao.persist(entity);
-        messageDao.closeCurrentSessionwithTransaction();
-    }
-    public static void update(Message entity) {
-        messageDao.openCurrentSessionwithTransaction();
-        messageDao.update(entity);
-        messageDao.closeCurrentSessionwithTransaction();
-    }
+	private static MessageDao messageDao;
 
-    public static Message findById(int id) {
-        messageDao.openCurrentSession();
-        Message message = messageDao.findById(id);
-        messageDao.closeCurrentSession();
-        return message;
-    }
-    public static void delete(int id) {
-        messageDao.openCurrentSessionwithTransaction();
-        Message message = messageDao.findById(id);
-        messageDao.delete(message);
-        messageDao.closeCurrentSessionwithTransaction();
-    }
+	public MessageService() {
+		messageDao = new MessageDao();
+	}
 
-    public static List<Message> findAll() {
-        messageDao.openCurrentSession();
-        List<Message> messages = messageDao.findAll();
-        messageDao.closeCurrentSession();
-        return messages;
-    }
-    
-    public static List<Message> findAllforuname(String uname) {
-        messageDao.openCurrentSession();
-        List<Message> messages = messageDao.findAllForUname(uname);
-        messageDao.closeCurrentSession();
-        return messages;
-    }
+	public static void persist(Message entity) {
+		messageDao.openCurrentSessionwithTransaction();
+		messageDao.persist(entity);
+		messageDao.closeCurrentSessionwithTransaction();
+	}
 
-    public static List<Message> findAllfromuname(String uname) {
-        messageDao.openCurrentSession();
-        List<Message> messages = messageDao.findAllFromUname(uname);
-        messageDao.closeCurrentSession();
-        return messages;
-    }
-    
-    public static List<Message> findAllMessages(String uname,List<String> groups) {
-        messageDao.openCurrentSession();
-        List<Message> messages = messageDao.findAllMessages(uname,groups);
+	public static void update(Message entity) {
+		messageDao.openCurrentSessionwithTransaction();
+		messageDao.update(entity);
+		messageDao.closeCurrentSessionwithTransaction();
+	}
 
-        messageDao.closeCurrentSession();
-        return messages;
-    }
-    
-    public static List<Message> findByUserName(String uname) {
-        messageDao.openCurrentSession();
-        List<Message> messages = messageDao.findAllForUname(uname);
-        messageDao.closeCurrentSession();
-        return messages;
-    }
-    
-    public static void deleteAll() {
-        messageDao.openCurrentSessionwithTransaction();
-        messageDao.deleteAll();
-        messageDao.closeCurrentSessionwithTransaction();
-    }
-    public MessageDao MessageDao() {
-        return messageDao;
+	public static Message findById(int id) {
+		messageDao.openCurrentSession();
+		Message message = messageDao.findById(id);
+		messageDao.closeCurrentSession();
+		return message;
+	}
 
-    }
-    
-    public static void main(String[] args) {
-    	
-		MessageService ms= new MessageService();
-		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] {"Rollbits-App"}));
-		
-		System.out.println("hertererrererre");
-		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] {"Rollbits-App"}));
-		System.out.println("hertererrererre");
-		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] {"Rollbits-App"}));
-		System.out.println("hertererrererre");
-		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] {"Rollbits-App"}));
-		System.out.println("hertererrererre");
-		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] {"Rollbits-App"}));
-		System.out.println("hertererrererre");
-		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] {"Rollbits-App"}));
+	public static void delete(int id) {
+		messageDao.openCurrentSessionwithTransaction();
+		Message message = messageDao.findById(id);
+		messageDao.delete(message);
+		messageDao.closeCurrentSessionwithTransaction();
+	}
 
-		
+	public static List<Message> findAll() {
+		messageDao.openCurrentSession();
+		List<Message> messages = messageDao.findAll();
+		messageDao.closeCurrentSession();
+		return messages;
+	}
+
+	public static List<Message> findAllforuname(String uname) {
+		messageDao.openCurrentSession();
+		List<Message> messages = messageDao.findAllForUname(uname);
+		messageDao.closeCurrentSession();
+		return messages;
+	}
+
+	public static List<Message> findAllfromuname(String uname) {
+		messageDao.openCurrentSession();
+		List<Message> messages = messageDao.findAllFromUname(uname);
+		messageDao.closeCurrentSession();
+		return messages;
+	}
+
+	public static List<Message> findAllMessages(String uname, List<String> groups) {
+		messageDao.openCurrentSession();
+		List<Message> messages = messageDao.findAllMessages(uname, groups);
+
+		messageDao.closeCurrentSession();
+		return messages;
+	}
+
+	public static List<Message> findByUserName(String uname) {
+		messageDao.openCurrentSession();
+		List<Message> messages = messageDao.findAllForUname(uname);
+		messageDao.closeCurrentSession();
+		return messages;
+	}
+
+	public static void deleteAll() {
+		messageDao.openCurrentSessionwithTransaction();
+		messageDao.deleteAll();
+		messageDao.closeCurrentSessionwithTransaction();
+	}
+
+	public MessageDao MessageDao() {
+		return messageDao;
+
+	}
+
+	public static void main(String[] args) throws InterruptedException {
+
+		MessageService ms = new MessageService();
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] { "Rollbits-App" }));
+
+		Thread.sleep(10000);
+
+		MessageService ms1 = new MessageService();
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] { "Rollbits-App" }));
+
+		MessageService ms2 = new MessageService();
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] { "Rollbits-App" }));
+
+		Thread.sleep(10000);
+
+		MessageService ms3 = new MessageService();
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] { "Rollbits-App" }));
+
+		Thread.sleep(10000);
+
+		MessageService ms4 = new MessageService();
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] { "Rollbits-App" }));
+
+		Thread.sleep(10000);
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] { "Rollbits-App" }));
+
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] { "Rollbits-App" }));
+
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] { "Rollbits-App" }));
+
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] { "Rollbits-App" }));
+
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] { "Rollbits-App" }));
+
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] { "Rollbits-App" }));
+
+		ms.findAllMessages("abcdefnov20", Arrays.asList(new String[] { "Rollbits-App" }));
+
 	}
 
 }
