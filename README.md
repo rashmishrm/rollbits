@@ -1,5 +1,5 @@
 # rollbits
-Distributed Chat Server
+Distributed Chat Application
 
 
 ## To deploy the project
